@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+
+<HBox prefWidth="800" prefHeight="700" xmlns:fx="http://javafx.com/fxml/1">
+	
+	<MenuBar>
+		<menus>
+			<Menu text="홈">
+				<items>
+					<MenuItem text="로그아웃" fx:id="menuLogout" />
+					<MenuItem text="종료" fx:id="menuExit" />
+				</items>
+			</Menu>
+
+
+			<Menu text="판매">
+				<items>
+					<MenuItem text="판매 입력" fx:id="menuInputSale" />
+					<MenuItem text="판매 현황" fx:id="menuSaleState" />
+				</items>
+			</Menu>
+			
+			<Menu text="재고">
+				<items>
+					<MenuItem text="재고 현황" fx:id="menuP_ea" />
+				</items>
+			</Menu>
+			
+			<Menu text="주문">
+				<items>
+					<MenuItem text="주문 등록" fx:id="menuOrderRegiste" />
+					<MenuItem text="주문 현황" fx:id="menuOrderState" />
+				</items>
+			</Menu>
+			
+			<Menu text="반품">
+				<items>
+					<MenuItem text="반품 등록" fx:id="menuReturnRegiste" />
+					<MenuItem text="반품 현황" fx:id="menuReturnState" />
+				</items>
+			</Menu>
+			
+			<Menu text="고객">
+				<items>
+					<MenuItem text="고객 등록" fx:id="menuCustomerRegiste" />
+					<MenuItem text="고객 현황" fx:id="menuCustomerList" />
+				</items>
+			</Menu>
+			
+			<Menu text="정보">
+				<items>
+					<MenuItem text="매장 정보 변경" fx:id="menuStoreInfoEdit" />
+					<MenuItem text="직원 등록" fx:id="menuEmployeeRegiste" />
+					<MenuItem text="직원 정보 변경" fx:id="menuEmployeeInfoEdit" />
+				</items>
+			</Menu>
+		</menus>
+	</MenuBar>
+	
+</HBox>
+
