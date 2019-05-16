@@ -4,6 +4,8 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
 
 <HBox prefWidth="800" prefHeight="700" xmlns:fx="http://javafx.com/fxml/1">
 	
@@ -13,41 +15,6 @@
 				<items>
 					<MenuItem text="로그아웃" fx:id="menuLogout" />
 					<MenuItem text="종료" fx:id="menuExit" />
-				</items>
-			</Menu>
-
-
-			<Menu text="판매">
-				<items>
-					<MenuItem text="판매 입력" fx:id="menuInputSale" />
-					<MenuItem text="판매 현황" fx:id="menuSaleState" />
-				</items>
-			</Menu>
-			
-			<Menu text="재고">
-				<items>
-					<MenuItem text="재고 현황" fx:id="menuP_ea" />
-				</items>
-			</Menu>
-			
-			<Menu text="주문">
-				<items>
-					<MenuItem text="주문 등록" fx:id="menuOrderRegiste" />
-					<MenuItem text="주문 현황" fx:id="menuOrderState" />
-				</items>
-			</Menu>
-			
-			<Menu text="반품">
-				<items>
-					<MenuItem text="반품 등록" fx:id="menuReturnRegiste" />
-					<MenuItem text="반품 현황" fx:id="menuReturnState" />
-				</items>
-			</Menu>
-			
-			<Menu text="고객">
-				<items>
-					<MenuItem text="고객 등록" fx:id="menuCustomerRegiste" />
-					<MenuItem text="고객 현황" fx:id="menuCustomerList" />
 				</items>
 			</Menu>
 			
@@ -60,6 +27,40 @@
 			</Menu>
 		</menus>
 	</MenuBar>
+	
+	<TabPane tabClosingPolicy="UNAVAILABLE" fx:id="mainPane">
+		<tabs>
+			<Tab text="판 매" fx:id="sale">
+				<content>
+					<fx:include fx:id="saleTab" source="saleTab.fxml"/>
+				</content>
+			</Tab>
+			
+			<Tab text="재 고" fx:id="product">
+				<content>
+					<fx:include fx:id="productTab" source="productTab.fxml"/>
+				</content>
+			</Tab>
+			
+			<Tab text="주 문" fx:id="order">
+				<content>
+					<fx:include fx:id="orderTab" source="orderTab.fxml"/>
+				</content>
+			</Tab>
+			
+			<Tab text="반 품" fx:id="return">
+				<content>
+					<fx:include fx:id="returnTab" source="returnTab.fxml"/>
+				</content>
+			</Tab>
+			
+			<Tab text="고 객" fx:id="customer">
+				<content>
+					<fx:include fx:id="customerTab" source="customerTab.fxml"/>
+				</content>
+			</Tab>
+		</tabs>
+	</TabPane>
 	
 </HBox>
 
