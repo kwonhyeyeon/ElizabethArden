@@ -1,8 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1">
-	<!-- TODO Add Nodes -->
+<VBox prefWidth="500" xmlns:fx="http://javafx.com/fxml/1">
+
+	<MenuBar>
+		<menus>
+			<Menu text="홈">
+				<items>
+					<MenuItem text="종료" fx:id="menuExit" />
+				</items>
+			</Menu>
+
+
+			<Menu text="등록">
+				<items>
+					<MenuItem text="매장 등록" fx:id="menuStoreRegiste" />
+				</items>
+			</Menu>
+		</menus>
+	</MenuBar>
+	
+	<VBox alignment="CENTER">
+		<padding>
+			<Insets top="20" bottom="40"/>
+		</padding>
+		
+		<ImageView pickOnBounds="true" preserveRatio="true">
+			<image>
+				<Image url="@../image/logo.png"/>
+			</image>
+		</ImageView>
+	</VBox>
+	
+	<HBox alignment="CENTER">
+		<padding>
+			<Insets bottom="20"/>
+		</padding>
+		<spacing>10</spacing>
+		
+		<VBox>
+			<spacing>10</spacing>
+			<HBox>
+				<Label prefWidth="70" prefHeight="23" text="매장 코드"/>
+				<TextField fx:id="txtStoreCode"/>
+			</HBox>
+			
+			<HBox>
+				<Label prefWidth="70" prefHeight="23" text="비밀번호"/>
+				<PasswordField fx:id="txtPassword"/>
+			</HBox>
+		</VBox>
+		<VBox>
+			<Button prefWidth="70" prefHeight="55" fx:id="btnLogin" text="로그인"/>
+		</VBox>
+	</HBox>
+
 </VBox>
 
