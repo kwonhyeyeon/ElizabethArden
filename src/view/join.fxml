@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Button?>
+
+<VBox  prefWidth="400" prefHeight="350"
+	xmlns:fx="http://javafx.com/fxml/1">
+
+	<HBox alignment="CENTER">
+		<padding>
+			<Insets top="20" right="10" bottom="10" />
+		</padding>
+		<spacing>25</spacing>
+
+		<Label id="title" text="매  장  등  록" />
+
+	</HBox>
+	<Separator prefHeight="15" prefWidth="400" />
+	<HBox alignment="CENTER">
+		<padding>
+			<Insets top="20" />
+		</padding>
+		<Label text="매장코드     " />
+		<TextField fx:id="txtStoreCode" />
+	</HBox>
+	<HBox alignment="CENTER">
+		<padding>
+			<Insets top="20" />
+		</padding>
+		<Label text="비밀번호     " />
+		<PasswordField promptText="숫자 4자리" fx:id="txtPassword" />
+	</HBox>
+
+	<HBox alignment="CENTER">
+		<padding>
+			<Insets top="20" />
+		</padding>
+		<Label text="매장명        " />
+		<TextField fx:id="txtStoreName" />
+	</HBox>
+
+	<HBox alignment="CENTER">
+		<padding>
+			<Insets top="20" />
+		</padding>
+		<Label text="주 소           " />
+		<TextField fx:id="txtStoreAddress" />
+	</HBox>
+
+
+	<HBox alignment="CENTER">
+		<padding>
+			<Insets top="20" />
+		</padding>
+		<Label text="매장번호     " />
+		<TextField promptText="-제외 숫자만 입력" fx:id="txtStoreTel" />
+	</HBox>
+
+	<HBox alignment="CENTER">
+		<padding>
+			<Insets top="30" />
+		</padding>
+		<spacing>50</spacing>
+		<Button text="취   소" fx:id="btnCancle" />
+		<Button text="등  록" fx:id="btnRegiste" />
+
+	</HBox>
+
+
+
+</VBox>
+
