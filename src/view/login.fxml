@@ -13,7 +13,7 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Button?>
 
-<VBox prefWidth="500" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefWidth="500" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
 
 	<MenuBar>
 		<menus>
