@@ -7,7 +7,7 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
 
-<BorderPane prefWidth="1200" prefHeight="700" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefWidth="1200" prefHeight="700" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
 
 	<top>
 		<MenuBar>
@@ -39,19 +39,13 @@
 					</content>
 				</Tab>
 				
-				<Tab text="재 고" fx:id="product">
-					<content>
-						<fx:include fx:id="productTab" source="productTab.fxml"/>
-					</content>
-				</Tab>
-				
 				<Tab text="주 문" fx:id="order">
 					<content>
 						<fx:include fx:id="orderTab" source="orderTab.fxml"/>
 					</content>
 				</Tab>
 				
-				<Tab text="반 품" fx:id="return">
+				<Tab text="반 품" fx:id="rtrn">
 					<content>
 						<fx:include fx:id="returnTab" source="returnTab.fxml"/>
 					</content>
@@ -67,9 +61,3 @@
 	</center>
 
 </BorderPane>
-
-	
-	
-	
-
-
