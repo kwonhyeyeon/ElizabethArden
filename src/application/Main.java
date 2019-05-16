@@ -11,8 +11,9 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/view/join.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/view/login.fxml"));
 			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("application.css").toString());
 			primaryStage.setTitle("엘리자베스 아덴 매장관리 프로그램");
 			primaryStage.setScene(scene);
 			primaryStage.setResizable(false);
