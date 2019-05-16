@@ -17,34 +17,108 @@
 	</padding>
 	<spacing>10</spacing>
 	
-	<VBox>
-		<spacing>10</spacing>
-		<Label text="재고 현황"/>
+	<VBox prefWidth="350">
+		<Label text="고객 등록"/>	
 		
-		<TableView prefWidth="350" prefHeight="680" fx:id="tableProduct"></TableView>
+		<VBox>
+			<padding>
+				<Insets top="43"/>
+			</padding>
+			<spacing>10</spacing>
+			
+			<HBox>
+				<spacing>10</spacing>
+				
+				<Label prefWidth="80" prefHeight="23" text="고객코드"/>
+				<TextField prefWidth="180" fx:id="txtCustomerCode"/>
+			</HBox>
+			
+			<HBox>
+				<spacing>10</spacing>
+				
+				<Label prefWidth="80" prefHeight="23" text="고 객 명"/>
+				<TextField prefWidth="180" fx:id="txtCustomerName"/>
+			</HBox>
+			
+			<HBox>
+				<spacing>10</spacing>
+				
+				<Label prefWidth="80" prefHeight="23" text="생년월일"/>
+				<DatePicker prefWidth="175" fx:id="dpCustomerBirth"/>
+			</HBox>
+			
+			<HBox>
+				<spacing>10</spacing>
+				
+				<Label prefWidth="80" prefHeight="23" text="핸드폰번호"/>
+				<TextField prefWidth="180" fx:id="txtCustomerCodePhone" promptText="(-)을 빼고 입력하세요"/>
+			</HBox>
+			
+			<HBox>
+				<spacing>10</spacing>
+				
+				<Label prefWidth="80" prefHeight="23" text="주 소"/>
+				<TextField prefWidth="180" fx:id="txtCustomerAddress"/>
+			</HBox>
+			
+			<HBox>
+				<spacing>10</spacing>
+				
+				<Label prefWidth="80" prefHeight="23" text="이 메 일"/>
+				<TextField prefWidth="180" fx:id="txtCustomerEmail"/>
+			</HBox>
+			
+			<VBox>
+				<spacing>10</spacing>
+				
+				<Label prefHeight="23" text="비고"/>
+				<TextArea fx:id="txtAreaEtc"/>
+			</VBox>
+			
+			<HBox alignment="CENTER">
+				<padding>
+					<Insets top="20"/>
+				</padding>
+				<spacing>10</spacing>
+				
+				<Button prefWidth="50" prefHeight="30" fx:id="btnCancle" text="취소"/>
+				<Button prefWidth="50" prefHeight="30" fx:id="btnRegiste" text="등록"/>
+			</HBox>
+		</VBox>
 	</VBox>
 	
 	<VBox>
 		<spacing>10</spacing>
-		<Label text="판매 입력"/>
+		<Label text="고객 조회"/>
 		
 		<HBox>
 			<spacing>10</spacing>
-			<DatePicker fx:id="dpDate"/>
-			
-			<ComboBox fx:id="cbxE_name" promptText="직원명"/>
 			
 			<TextField fx:id="txtC_name" promptText="고객명"/>
 			<Button fx:id="btnC_search" text="검색"/>
 		</HBox>
 		
-		<TableView prefWidth="840" prefHeight="250" fx:id="tableProduct"></TableView>
+		<TableView prefWidth="840" prefHeight="250" fx:id="tableCustomer"></TableView>
 		
-		<Label text="판매 내역"/>
-		<TableView prefWidth="840" prefHeight="200" fx:id="tableProductList"></TableView>
+		<VBox>
+			<padding>
+				<Insets top="20"/>
+			</padding>
+			<spacing>10</spacing>
+	
+			<Label text="구매 내역"/>
+			<TableView prefWidth="840" prefHeight="180" fx:id="tableProductList"></TableView>
+		</VBox>
 		
-		<Label text="비 고"/>
-		<TextArea prefWidth="840"/>
+		<VBox>
+			<padding>
+				<Insets top="20"/>
+			</padding>
+			<spacing>10</spacing>
+			
+			<Label text="비 고"/>
+			<TextArea prefWidth="840"/>
+		</VBox>
 	</VBox>
 	
 </HBox>

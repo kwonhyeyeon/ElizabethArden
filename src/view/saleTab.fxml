@@ -38,13 +38,34 @@
 			<Button fx:id="btnC_search" text="검색"/>
 		</HBox>
 		
+		<!-- 컨트롤러에서 한 줄로 수정 -->
+		<HBox>
+			<Label text="생년월일 : " fx:id="lblBirth"/>
+			<Label text="핸드폰번호 : " fx:id="lblPhone"/>
+			<Label text="주 소 : " fx:id="lblAddress"/>
+		</HBox>
+
 		<TableView prefWidth="840" prefHeight="250" fx:id="tableProduct"></TableView>
+
+		<VBox>
+			<padding>
+				<Insets top="20"/>
+			</padding>
+			<spacing>10</spacing>
+	
+			<Label text="구매 내역"/>
+			<TableView prefWidth="840" prefHeight="180" fx:id="tableProductList"></TableView>
+		</VBox>
 		
-		<Label text="판매 내역"/>
-		<TableView prefWidth="840" prefHeight="200" fx:id="tableProductList"></TableView>
-		
-		<Label text="비 고"/>
-		<TextArea prefWidth="840"/>
+		<VBox>
+			<padding>
+				<Insets top="20"/>
+			</padding>
+			<spacing>10</spacing>
+			
+			<Label text="비 고"/>
+			<TextArea prefWidth="840"/>
+		</VBox>
 	</VBox>
 	
 </HBox>
