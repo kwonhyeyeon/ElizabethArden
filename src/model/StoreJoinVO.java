@@ -5,7 +5,7 @@ public class StoreJoinVO {
 	private String s_address; // 매장주소
 	private String s_name; // 매장명
 	private int s_pw; // 매장비밀번호
-	private String s_phonenumber; // 매장번호
+	private int s_phonenumber; // 매장번호
 
 	// 디폴트 생성자
 	public StoreJoinVO() {
@@ -19,8 +19,8 @@ public class StoreJoinVO {
 		this.s_pw = s_pw;
 	}
 
-	// 전체필드 생성자
-	public StoreJoinVO(String s_code, String s_address, String s_name, int s_pw, String s_phonenumber) {
+	// 전체 필드 생성자
+	public StoreJoinVO(String s_code, String s_address, String s_name, int s_pw, int s_phonenumber) {
 		super();
 		this.s_code = s_code;
 		this.s_address = s_address;
@@ -29,7 +29,7 @@ public class StoreJoinVO {
 		this.s_phonenumber = s_phonenumber;
 	}
 
-	// GET, SET
+	// get, set
 	public String getS_code() {
 		return s_code;
 	}
@@ -62,11 +62,11 @@ public class StoreJoinVO {
 		this.s_pw = s_pw;
 	}
 
-	public String getS_phonenumber() {
+	public int getS_phonenumber() {
 		return s_phonenumber;
 	}
 
-	public void setS_phonenumber(String s_phonenumber) {
+	public void setS_phonenumber(int s_phonenumber) {
 		this.s_phonenumber = s_phonenumber;
 	}
 
