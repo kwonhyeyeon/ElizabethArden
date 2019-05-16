@@ -11,58 +11,54 @@
 <?import javafx.scene.control.ComboBox?>
 
 <VBox xmlns:fx="http://javafx.com/fxml/1">
+	<padding>
+		<Insets top="30" right="10" bottom="10" left="10" />
+	</padding>
+	
+	<VBox alignment="CENTER">
+		<Label text="직원 정보 변경" />
+		<Separator prefHeight="50" prefWidth="400" />
+	</VBox>
+	
 	<HBox alignment="CENTER">
 		<padding>
-			<Insets top="20" right="10" bottom="10" />
+			<Insets top="10" />
 		</padding>
-		<Label id="title" text="직원정보 변경 " />
-	</HBox>
-
-	<Separator prefHeight="15" prefWidth="400" />
-	<HBox>
-		<padding>
-			<Insets top="20" left="50" />
-		</padding>
-		<spacing>15</spacing>
-		<Label prefWidth="80" text="직원명" />
+		<Label prefHeight="24" prefWidth="80" text="직원명" />
 		<ComboBox prefWidth="120" fx:id="cbxEmployeeName" />
 	</HBox>
 
 
-	<HBox>
+	<HBox alignment="CENTER">
 		<padding>
-			<Insets top="20" left="50" />
+			<Insets top="20" />
 		</padding>
-		<spacing>15</spacing>
-		<Label prefWidth="80" text="비밀번호     " />
-		<PasswordField promptText="숫자 4자리" fx:id="txtPassword" />
+		<Label prefHeight="24" prefWidth="80" text="비밀번호" />
+		<PasswordField prefWidth="120" promptText="숫자 4자리" fx:id="txtPassword" />
 	</HBox>
 
-	<HBox>
+	<HBox alignment="CENTER">
 		<padding>
-			<Insets top="20" left="50" />
+			<Insets top="20" />
 		</padding>
-		<spacing>15</spacing>
-		<Label prefWidth="80" text="핸드폰 번호" />
-		<TextField promptText="(-)제외 입력" fx:id="txtEmployeePhone" />
+		<Label prefHeight="24" prefWidth="80" text="핸드폰 번호" />
+		<TextField prefWidth="120" promptText="(-)제외 입력" fx:id="txtEmployeePhone" />
 	</HBox>
 
-	<HBox>
+	<HBox alignment="CENTER">
 		<padding>
-			<Insets top="20" left="50" />
+			<Insets top="20" />
 		</padding>
-		<spacing>15</spacing>
-		<Label prefWidth="80" text="주 소" />
-		<TextField fx:id="txtEmployeeAddress" />
+		<Label prefHeight="24" prefWidth="80" text="주 소" />
+		<TextField prefWidth="120" fx:id="txtEmployeeAddress" />
 	</HBox>
 
 
-	<HBox>
+	<HBox alignment="CENTER">
 		<padding>
-			<Insets top="20" left="50" />
+			<Insets top="20" />
 		</padding>
-		<spacing>15</spacing>
-		<Label prefWidth="80" text="직원등급" />
+		<Label prefHeight="24" prefWidth="80" text="직원등급" />
 		<ComboBox prefWidth="120" fx:id="cbxEmployeeRank" />
 	</HBox>
 
@@ -71,8 +67,8 @@
 			<Insets top="30" />
 		</padding>
 		<spacing>30</spacing>
-		<Button prefWidth="70" text="취   소" fx:id="btnCancle" />
-		<Button prefWidth="70" text="변  경" fx:id="btnEdit" />
+		<Button prefWidth="50" prefHeight="30" text="취 소" fx:id="btnCancle" />
+		<Button prefWidth="50" prefHeight="30" text="변 경" fx:id="btnEdit" />
 
 	</HBox>
 </VBox>
