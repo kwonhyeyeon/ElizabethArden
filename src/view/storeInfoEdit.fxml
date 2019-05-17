@@ -9,7 +9,8 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Button?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1">
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+fx:controller="controller.StoreInfoEditController">
 <HBox alignment="CENTER">
 		<padding>
 			<Insets top="20" right="10" bottom="10" />

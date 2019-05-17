@@ -74,8 +74,25 @@ public class StoreInfoEditController implements Initializable {
 		btnCancle.setOnAction(event -> handlerBtnCancelAction(event)); // 수정창 닫기 이벤트 메소드
 
 		
-		btnEdit.setDisable(true); // 변경 버튼 비활성화
+		// btnEdit.setDisable(true); // 변경 버튼 비활성화
 		
+	}
+	// 변경버튼 이벤트 메소드
+	public void handlerBtnEditAction(ActionEvent event) {
+		// TODO Auto-generated method stub
+		// sdao인스턴스 생성
+		StoreDAO sdao = new StoreDAO();
+		StoreVO svo = new StoreVO();
+		
+		
+		svo = new StoreVO(txtStoreAddress.getText().trim(), txtStoreName.getText().trim(), 
+				Integer.parseInt(txtPwEdit.getText().trim()), Integer.parseInt(txtStoreTel.getText().trim()));
+		
+		sdao.InfoEdit(svo);
+	
+	
+	
+	
 	}
 	// 수정창 닫기 이벤트 메소드
 	public void handlerBtnCancelAction(ActionEvent event) {
