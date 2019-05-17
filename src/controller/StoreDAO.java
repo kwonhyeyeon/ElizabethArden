@@ -169,11 +169,14 @@ public class StoreDAO {
 	// 매장 정보수정후 저장하는 메소드
 	public boolean InfoEdit(StoreVO svo) {
 
-		String sql = "update store set s_address = ?, s_name = ?, s_pw = ?, s_phonenumber = ?";
+		String sql = "update store set s_address = ?, s_name = ?, s_pw = ?, s_phonenumber = ? where s_code = ?";
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		boolean storeUpdateSucess = false;
-
+		// 로그인 컨트롤러에서 로그인된 코드를 저장하고 호출하여 사용.
+		LoginController sc = new LoginController();
+		// sc에서 static변수에 저장된 로그인 코드를 가져옴
+		String scode = sc.loginStoreCode;
 		try {
 			con = DBUtil.getConnection(); // DBUtil 연결
 			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
@@ -182,6 +185,7 @@ public class StoreDAO {
 			pstmt.setString(2, svo.getS_name());
 			pstmt.setInt(3, svo.getS_pw());
 			pstmt.setInt(4, svo.getS_phonenumber());
+			pstmt.setString(5, scode);
 			// 업데이트 성공시 1을 반환
 			int i = pstmt.executeUpdate();
 
