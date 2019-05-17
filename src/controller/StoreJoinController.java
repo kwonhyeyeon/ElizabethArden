@@ -41,10 +41,20 @@ public class StoreJoinController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		// TODO Auto-generated method stub
 
 		btnRegiste.setOnAction(event -> handlerBtnRegisteAction(event)); // 관리자 등록 이벤트
 		btnCancle.setOnAction(event -> handlerBtnCancelAction(event)); // 등록창 닫기 이벤트
+		StoreJoinVO sjvo = null;
+		StoreJoinDAO sjdao = null;
 		
+		sjdao = new StoreJoinDAO();
+		try {
+			txtStoreCode.setText(sjdao.getStoreSequence(sjvo));
+		} catch (Exception e) {
+		}
+		
+		txtStoreCode.setEditable(false); // 매장코드 수정불가
 	}
 
 	// 매장등록 메소드
