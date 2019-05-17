@@ -22,7 +22,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import model.StoreJoinVO;
+import model.StoreVO;
 
 public class StoreJoinController implements Initializable {
 	@FXML
@@ -58,10 +58,10 @@ public class StoreJoinController implements Initializable {
 		btnRegiste.setOnAction(event -> handlerBtnRegisteAction(event)); // 관리자 등록 이벤트
 		btnCancle.setOnAction(event -> handlerBtnCancelAction(event)); // 등록창 닫기 이벤트
 
-		StoreJoinVO sjvo = null;
-		StoreJoinDAO sjdao = null;
+		StoreVO sjvo = null;
+		StoreDAO sjdao = null;
 
-		sjdao = new StoreJoinDAO();
+		sjdao = new StoreDAO();
 		try {
 			txtStoreCode.setText(sjdao.getStoreSequence(sjvo));
 		} catch (Exception e) {
@@ -75,8 +75,8 @@ public class StoreJoinController implements Initializable {
 	public void handlerBtnRegisteAction(ActionEvent event) {
 
 		// 인스턴스 생성
-		StoreJoinVO sjvo = null;
-		StoreJoinDAO sjdao = null;
+		StoreVO sjvo = null;
+		StoreDAO sjdao = null;
 
 		// 등록성공여부 판단변수
 		boolean joinSuccess = false;
@@ -118,12 +118,12 @@ public class StoreJoinController implements Initializable {
 
 		try {
 			if (txtPassword.getText().trim().length() <= 4 && !(txtPassword.getText().trim().equals(""))) {
-				sjvo = new StoreJoinVO(txtStoreCode.getText().trim(), txtStoreAddress.getText().trim(),
+				sjvo = new StoreVO(txtStoreCode.getText().trim(), txtStoreAddress.getText().trim(),
 						txtStoreName.getText().trim(), Integer.parseInt(txtPassword.getText().trim()),
 						Integer.parseInt(txtStoreTel.getText().trim()));
 			}
 
-			sjdao = new StoreJoinDAO();
+			sjdao = new StoreDAO();
 
 			joinSuccess = sjdao.getStoreRegiste(sjvo);
 

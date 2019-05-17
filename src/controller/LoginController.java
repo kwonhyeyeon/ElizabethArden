@@ -43,6 +43,8 @@ public class LoginController implements Initializable {
 	@FXML
 	private Button btnLogin; // 로그인 버튼
 
+	public static String loginStoreCode; // 로그인된 매장코드를 저장하는 변수
+
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 
@@ -56,15 +58,14 @@ public class LoginController implements Initializable {
 		txtPassword.setOnKeyPressed(event -> handerTxtPasswordKeyPressed(event));
 		// 로그인버튼 이벤트
 		btnLogin.setOnAction(event -> handlerBtnLoginAction(event));
-
 	}
 
 	// 매장 등록 이벤트 메소드
 	public void handlerMenuStoreRegisteAction(ActionEvent event) {
-		
+
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/storeRegiste.fxml")); // 레이아웃 불러오기		
-			Parent mainView = (Parent)loader.load(); // 부모창을 login.fxml로 로드
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/storeRegiste.fxml")); // 레이아웃 불러오기
+			Parent mainView = (Parent) loader.load(); // 부모창을 login.fxml로 로드
 			Scene scene = new Scene(mainView); // Scene 객체 생성
 			Stage mainStage = new Stage(); // Stage 객체 생성
 			mainStage.setTitle("매장 등록"); // 타이틀 설정
@@ -73,11 +74,11 @@ public class LoginController implements Initializable {
 			mainStage.setResizable(false); // 리사이즈 불가
 			mainStage.setScene(scene); // 씬 설정
 			mainStage.show(); // 로그인 창 열기
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	// 프로그램 종료 메뉴 이벤트 메소드
@@ -95,15 +96,16 @@ public class LoginController implements Initializable {
 		// LoginDAO 인스턴스화
 		LoginDAO login = new LoginDAO();
 		// 로그인 성공여부 변수
-		boolean sucess = false;
-		
+		boolean success = false;
+
 		try {
-			
+
 			// LoginDAO에서 getLogin메소드에 아이디와 비밀번호를 공백제거후 넣어주고 성공여부를 반환받는다
-			sucess = login.getLogin(txtStoreCode.getText().trim(), txtPassword.getText().trim());
-			
-			if(sucess) {
+			success = login.getLogin(txtStoreCode.getText().trim(), txtPassword.getText().trim());
+			if (success) {
 				// 로그인 성공여부가 true일 경우
+				// 로그인한 매장코드를 static변수에 넣는다.
+				loginStoreCode = txtStoreCode.getText();
 				try {
 					// 메인뷰를 불러온다
 					FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/mainView.fxml"));
@@ -125,10 +127,11 @@ public class LoginController implements Initializable {
 					oldStage.close();
 					// 등록창 열기
 					mainStage.show();
+
 				} catch (Exception e) {
 					System.out.println("오류 : " + e);
 				}
-			} else if(txtStoreCode.getText().equals("") || txtPassword.getText().equals("")) {
+			} else if (txtStoreCode.getText().equals("") || txtPassword.getText().equals("")) {
 				// 경고창을 보여준다
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
@@ -142,7 +145,7 @@ public class LoginController implements Initializable {
 				// 입력한 아이디와 비밀번호를 지워준다
 				txtStoreCode.clear();
 				txtPassword.clear();
-			} else if(!sucess){
+			} else if (!success) {
 				// 로그인 성공여부가 false일 경우
 				// 경고창을 보여준다
 				Alert alert;
