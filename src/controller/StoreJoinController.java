@@ -2,11 +2,12 @@ package controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.DecimalFormat;
-import java.text.ParsePosition;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -41,10 +42,22 @@ public class StoreJoinController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+		
+		// 매장 전화번호에 숫자만 입력되게 적용
+		txtStoreTel.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (!newValue.matches("\\d*")) {
+					txtStoreTel.setText(newValue.replaceAll("[^\\d]", ""));
+		        }
+			}
+			
+		});
 
 		btnRegiste.setOnAction(event -> handlerBtnRegisteAction(event)); // 관리자 등록 이벤트
 		btnCancle.setOnAction(event -> handlerBtnCancelAction(event)); // 등록창 닫기 이벤트
+		
 		StoreJoinVO sjvo = null;
 		StoreJoinDAO sjdao = null;
 		
@@ -55,6 +68,7 @@ public class StoreJoinController implements Initializable {
 		}
 		
 		txtStoreCode.setEditable(false); // 매장코드 수정불가
+		txtStoreCode.setDisable(true);
 	}
 
 	// 매장등록 메소드
