@@ -91,17 +91,7 @@ public class StoreJoinDAO {
 			}
 
 		} catch (SQLException e) {
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("매장 등록");
-			alert.setHeaderText("매장등록 실패..");
-			alert.setContentText("다시 입력하십시오");
-			alert.showAndWait();
 		} catch (Exception e) {
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("매장 등록");
-			alert.setHeaderText("매장등록 실패..");
-			alert.setContentText("다시 입력하십시오");
-			alert.showAndWait();
 		} finally {
 			try {
 				if (pstmt != null)
