@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -58,6 +59,9 @@ public class EmployeeRegisteController implements Initializable {
 			txtEmployeeCode.setText(edao.getEmployeeSequence(evo));
 		} catch (Exception e) {
 		}
+		
+		// 직원 등급 콤보박스 설정
+		cbxEmployeeRank.setItems(FXCollections.observableArrayList("매니저", "부매니저", "사원"));
 
 		// 엔터키 이벤트 적용
 		txtEmployeeName.setOnKeyPressed(event -> handlerEmployeeNamePressed(event));
@@ -81,48 +85,59 @@ public class EmployeeRegisteController implements Initializable {
 		boolean registeResult = false;
 
 		// 필드 미입력 오류
-		if (txtEmployeeName.getText().trim().equals("")) { // 직원명 입력
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("직원 등록");
-			alert.setHeaderText("직원명 미입력");
-			alert.setContentText("다시 입력해주세요");
-			alert.showAndWait();
-		} else if(txtEmployeePhone.getText().trim().equals("")) { 
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("직원 등록");
-			alert.setHeaderText("직원 핸드폰번호 미입력");
-			alert.setContentText("다시 입력해주세요");
-			alert.showAndWait();
-		} else if(txtEmpolyeeAddress.getText().trim().equals("")) { 
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("직원 등록");
-			alert.setHeaderText("직원 주소 미입력");
-			alert.setContentText("다시 입력해주세요");
-			alert.showAndWait();
-		} else if(dpEmployeeBirth.getValue().toString().isEmpty()) { 
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("직원 등록");
-			alert.setHeaderText("직원 생년월일 미입력");
-			alert.setContentText("다시 입력해주세요");
-			alert.showAndWait();
-		} else if(cbxEmployeeRank.getSelectionModel().getSelectedItem().isEmpty()) { 
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("직원 등록");
-			alert.setHeaderText("직원 등급 미선택");
-			alert.setContentText("다시 선택해주세요");
-			alert.showAndWait();
-		} else if(dpEmployeeHiredate.getValue().toString().isEmpty()) { 
-			Alert alert = new Alert(AlertType.WARNING);
-			alert.setTitle("직원 등록");
-			alert.setHeaderText("직원 입사일 미입력");
-			alert.setContentText("다시 입력해주세요");
-			alert.showAndWait();
+		try {
+			if (txtEmployeeName.getText().trim().equals("")) { // 직원명 입력
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("직원 등록");
+				alert.setHeaderText("직원명 미입력");
+				alert.setContentText("다시 입력해주세요");
+				alert.showAndWait();
+			} else if(txtEmployeePhone.getText().trim().equals("")) { 
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("직원 등록");
+				alert.setHeaderText("직원 핸드폰번호 미입력");
+				alert.setContentText("다시 입력해주세요");
+				alert.showAndWait();
+			} else if(dpEmployeeBirth.getValue() == null) { 
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("직원 등록");
+				alert.setHeaderText("직원 생년월일 미입력");
+				alert.setContentText("다시 입력해주세요");
+				alert.showAndWait();
+			} else if(txtEmpolyeeAddress.getText().trim().equals("")) { 
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("직원 등록");
+				alert.setHeaderText("직원 주소 미입력");
+				alert.setContentText("다시 입력해주세요");
+				alert.showAndWait();
+			} else if(dpEmployeeHiredate.getValue() == null) { 
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("직원 등록");
+				alert.setHeaderText("직원 입사일 미입력");
+				alert.setContentText("다시 입력해주세요");
+				alert.showAndWait();
+			} else if(cbxEmployeeRank.getSelectionModel().getSelectedItem() == null) { 
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("직원 등록");
+				alert.setHeaderText("직원 등급 미선택");
+				alert.setContentText("다시 선택해주세요");
+				alert.showAndWait();
+			}
+			 
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+			System.out.println("넘버");
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
+		
+//		String employeeRank; // 직원 등급
+//		employeeRank = cbxEmployeeRank.getSelectionModel().getSelectedItem();
+		
 		// JoinVO에 입력받은 id, ps, name을 공백제거후 넣어준다
 		evo = new EmployeeVO(txtEmployeeCode.getText().trim(), txtEmployeeName.getText().trim(),
 				Integer.parseInt(txtEmployeePhone.getText().trim()), txtEmpolyeeAddress.getText().trim(),
-				dpEmployeeBirth.getValue().toString(), cbxEmployeeRank.getSelectionModel().getSelectedItem(),
+				dpEmployeeBirth.getValue().toString(), cbxEmployeeRank.getSelectionModel().getSelectedItem().toString(),
 				dpEmployeeHiredate.getValue().toString());
 		// 인스턴스화
 		edao = new EmployeeDAO();
