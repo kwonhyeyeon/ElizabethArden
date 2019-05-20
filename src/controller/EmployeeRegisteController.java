@@ -71,7 +71,7 @@ public class EmployeeRegisteController implements Initializable {
 		cbxEmployeeRank.setOnKeyPressed(event -> handlerEmployeeRankPressed(event));
 
 		// 등록 버튼 이벤트 핸들러
-		btnRegiste.setOnAction(event -> handlerBtnEditAction(event));
+		btnRegiste.setOnAction(event -> handlerBtnRegisteAction(event));
 		// 닫기 버튼 이벤트 핸들러
 		btnCancle.setOnAction(event -> handlerBtnCancleAction(event));
 
@@ -131,9 +131,6 @@ public class EmployeeRegisteController implements Initializable {
 			e.printStackTrace();
 		}
 		
-//		String employeeRank; // 직원 등급
-//		employeeRank = cbxEmployeeRank.getSelectionModel().getSelectedItem();
-		
 		// JoinVO에 입력받은 id, ps, name을 공백제거후 넣어준다
 		evo = new EmployeeVO(txtEmployeeCode.getText().trim(), txtEmployeeName.getText().trim(),
 				Integer.parseInt(txtEmployeePhone.getText().trim()), txtEmpolyeeAddress.getText().trim(),
@@ -171,7 +168,7 @@ public class EmployeeRegisteController implements Initializable {
 	}
 
 	// 등록 버튼 이벤트 메소드
-	private void handlerBtnEditAction(ActionEvent event) {
+	private void handlerBtnRegisteAction(ActionEvent event) {
 		employeeRegiste();
 	}
 

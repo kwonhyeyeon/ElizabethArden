@@ -112,7 +112,8 @@ public class MainController implements Initializable {
 			menuStoreInfoEdit.setOnAction(event -> handlerMenuStoreInfoEditAction(event));
 			menuEmployeeRegiste.setOnAction(event -> handlerMenuEmployeeRegisteAction(event));
 			menuEmployeeInfoEdit.setOnAction(event -> handlerMenuEmployeeInfoEdit(event));
-
+			
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

@@ -12,6 +12,9 @@ public class DBUtil {
 
 		Class.forName(driver);
 		Connection con = DriverManager.getConnection(url, "scott", "tiger");
+		
+		System.out.println("DB연동");
+		
 		return con;
 
 	}

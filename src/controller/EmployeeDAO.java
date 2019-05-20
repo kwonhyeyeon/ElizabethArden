@@ -80,71 +80,6 @@ public class EmployeeDAO {
 		return registeResult;
 
 	}
-	
-	// 매니저 등록
-	public boolean getEmployeeManager(EmployeeVO evo) throws Exception {
-
-		// 직원 등록 쿼리문
-		String sql = "insert into employee values(?, ?, ?, ?, ?, '매니저', ?)";
-		Connection con = null;
-		PreparedStatement pstmt = null;
-
-		// 등록 성공 판단 변수
-		boolean registeResult = false;
-		try {
-
-			// DB연동
-			con = DBUtil.getConnection();
-			// sql문을 담아줄 그릇
-			pstmt = con.prepareStatement(sql);
-			// jvo에서 변수들을 가져와서 sql문에 넣어준다.
-			pstmt.setString(1, evo.getE_code());
-			pstmt.setString(2, evo.getE_name());
-			pstmt.setInt(3, evo.getE_phonenumber());
-			pstmt.setString(4, evo.getE_address());
-			pstmt.setString(5, evo.getE_birth());
-			pstmt.setString(6, evo.getE_rank());
-			pstmt.setString(7, evo.getE_hiredate());
-			// insert문이 성공적으로 입력되면 1을 반환
-			int i = pstmt.executeUpdate();
-
-			if (i == 1) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("직원 등록");
-				alert.setHeaderText("직원 등록 성공");
-				alert.setContentText(evo.getE_name() + "직원이 등록되었습니다");
-				alert.showAndWait();
-				// 등록성공 판단변수 true
-				registeResult = true;
-			} else {
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("직원 등록");
-				alert.setHeaderText("직원 등록 실패");
-				alert.setContentText("직원의 정보를 다시 입력해주세요");
-				alert.showAndWait();
-			}
-
-		} catch (SQLException e) {
-			System.out.println("e=[" + e + "]");
-		} catch (Exception e) {
-			System.out.println("e=[" + e + "]");
-		} finally {
-			try {
-				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (con != null) {
-					con.close();
-				}
-			} catch (SQLException e) {
-				System.out.println(e);
-			}
-		}
-
-		return registeResult;
-
-	}
 
 	// 직원 정보 수정 메소드
 	public boolean getEmployeeUpdate(String e_name, int e_phonenumber, String e_address, String e_rank)
@@ -202,20 +137,23 @@ public class EmployeeDAO {
 	}
 
 	// 직원명 가져오는 메소드(직원 정보 변경)
-	public ArrayList<EmployeeVO> employeeTotalList() throws Exception {
+	public ArrayList<EmployeeVO> getEmployeeTotalList() throws Exception {
 
 		ArrayList<EmployeeVO> list = new ArrayList<>();
 
-		String sql = "select e_name from employee";
+		String sql = "select e_name from employee where s_code = ?";
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		EmployeeVO evo = null;
 
 		try {
-
+			LoginController sc = new LoginController(); // 매장 코드
+			
 			con = DBUtil.getConnection(); // DBUtil 연결
+			
 			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
+			pstmt.setString(1, sc.loginStoreCode);
 			rs = pstmt.executeQuery(); // 쿼리 실행
 
 			while (rs.next()) {
@@ -270,7 +208,7 @@ public class EmployeeDAO {
 			SimpleDateFormat df = new SimpleDateFormat("yy");
 			hiredateYear = df.format(new Date());
 			
-			if (rs.next()) {
+			if(rs.next()) {
 				String seq = rs.getString("nextval");
 				ecode = hiredateYear + seq; // 직원코드 = 입사년도 뒤 2자리 + 시퀀스 3자리
 			}
@@ -291,7 +229,53 @@ public class EmployeeDAO {
 			} catch (SQLException e) {
 			}
 		}
+		
 		return ecode;
+	}
+	
+	// 직원명 선택시 직원 정보 가져오기
+	public String getEmployeePhone(String e_name) throws Exception {
+		
+		String sql = "select e_phonenumber from employee where e_name = ?";
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		EmployeeVO evo = null;
+		
+		try {
+			// DB연동
+			con = DBUtil.getConnection();
+			// sql문을 담아줄 그릇
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, e_name);
+			// jvo에서 변수들을 가져와서 sql문에 넣어준다.
+			rs = pstmt.executeQuery();
+			// sql을 날리고 불러온 값이 있으면 로그인결과변수 true
+			while(rs.next()) {
+				evo = new EmployeeVO();
+				evo.setE_phonenumber(rs.getInt("e_phonenumber"));
+			}
+			
+		} catch (SQLException e) {
+			System.out.println(e);
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (rs != null)
+					rs.close();
+				if (pstmt != null)
+					pstmt.close();
+				if (con != null)
+					con.close();
+			} catch (SQLException e) {
+			}
+		}
+		
+		return e_name;
+		
 	}
 
 }

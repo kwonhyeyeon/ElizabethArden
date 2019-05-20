@@ -9,10 +9,15 @@ public class EmployeeVO {
 	private String e_birth; // 생년월일
 	private String e_rank; // 직원등급
 	private String e_hiredate; // 입사일
-	private int s_code; // 매장 코드
-	
+	private String s_code; // 매장 코드
+
 	public EmployeeVO() {
 		super();
+	}
+
+	public EmployeeVO(String e_name) {
+		super();
+		this.e_name = e_name;
 	}
 
 	// 매장코드 제외 생성자
@@ -30,7 +35,7 @@ public class EmployeeVO {
 
 	// 전체 생성자
 	public EmployeeVO(String e_code, String e_name, int e_phonenumber, String e_address, String e_birth, String e_rank,
-			String e_hiredate, int s_code) {
+			String e_hiredate, String s_code) {
 		super();
 		this.e_code = e_code;
 		this.e_name = e_name;
@@ -40,6 +45,22 @@ public class EmployeeVO {
 		this.e_rank = e_rank;
 		this.e_hiredate = e_hiredate;
 		this.s_code = s_code;
+	}
+
+	// 이름, 핸드폰번호, 주소, 직원등급 생성자
+	public EmployeeVO(String e_name, int e_phonenumber, String e_address, String e_rank) {
+		super();
+		this.e_name = e_name;
+		this.e_phonenumber = e_phonenumber;
+		this.e_address = e_address;
+		this.e_rank = e_rank;
+	}
+
+	public EmployeeVO(int e_phonenumber, String e_address, String e_rank) {
+		super();
+		this.e_phonenumber = e_phonenumber;
+		this.e_address = e_address;
+		this.e_rank = e_rank;
 	}
 
 	public String getE_code() {
@@ -98,19 +119,17 @@ public class EmployeeVO {
 		this.e_hiredate = e_hiredate;
 	}
 
-	public int getS_code() {
+	public String getS_code() {
 		return s_code;
 	}
 
-	public void setS_code(int s_code) {
+	public void setS_code(String s_code) {
 		this.s_code = s_code;
 	}
 
 	@Override
 	public String toString() {
-		return "EmployeeVO [e_code=" + e_code + ", e_name=" + e_name + ", e_phonenumber=" + e_phonenumber
-				+ ", e_address=" + e_address + ", e_birth=" + e_birth + ", e_rank=" + e_rank + ", e_hiredate="
-				+ e_hiredate + ", s_code=" + s_code + "]";
+		return e_name;
 	}
-	
+
 }
