@@ -19,14 +19,14 @@ public class EmployeeDAO {
 	public boolean getEmployeeRegiste(EmployeeVO evo) throws Exception {
 
 		// 직원 등록 쿼리문
-		String sql = "insert into employee values(?, ?, ?, ?, ?, ?, ?)";
+		String sql = "insert into employee values(?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection con = null;
 		PreparedStatement pstmt = null;
 
 		// 등록 성공 판단 변수
 		boolean registeResult = false;
 		try {
-
+			LoginController sc = new LoginController();
 			// DB연동
 			con = DBUtil.getConnection();
 			// sql문을 담아줄 그릇
@@ -39,6 +39,7 @@ public class EmployeeDAO {
 			pstmt.setString(5, evo.getE_birth());
 			pstmt.setString(6, evo.getE_rank());
 			pstmt.setString(7, evo.getE_hiredate());
+			pstmt.setString(8, sc.loginStoreCode);
 			// insert문이 성공적으로 입력되면 1을 반환
 			int i = pstmt.executeUpdate();
 
