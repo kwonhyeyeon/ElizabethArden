@@ -23,7 +23,7 @@
 
 	<HBox alignment="CENTER">
 		<Label prefWidth="80" text="직원 코드" />
-		<TextField prefWidth="120" fx:id="txtEmployeeCode" />
+		<TextField prefWidth="180" fx:id="txtEmployeeCode" />
 	</HBox>
 
 	<HBox alignment="CENTER">
@@ -31,7 +31,7 @@
 			<Insets top="20" />
 		</padding>
 		<Label prefWidth="80" text="직원명" />
-		<TextField prefWidth="120" fx:id="txtEmployeeName" />
+		<TextField prefWidth="180" fx:id="txtEmployeeName" />
 	</HBox>
 
 	<HBox alignment="CENTER">
@@ -39,7 +39,7 @@
 			<Insets top="20" />
 		</padding>
 		<Label prefWidth="80" text="생년월일" />
-		<DatePicker prefWidth="117" fx:id="dpEmployeeBirth" />
+		<DatePicker prefWidth="177" fx:id="dpEmployeeBirth" />
 	</HBox>
 
 	<HBox alignment="CENTER">
@@ -47,7 +47,7 @@
 			<Insets top="20" />
 		</padding>
 		<Label prefWidth="80" text="핸드폰 번호" />
-		<TextField prefWidth="120" promptText="-제외 입력" fx:id="txtEmployeePhone" />
+		<TextField prefWidth="180" promptText="-제외 입력" fx:id="txtEmployeePhone" />
 	</HBox>
 
 	<HBox alignment="CENTER">
@@ -55,7 +55,7 @@
 			<Insets top="20" />
 		</padding>
 		<Label prefWidth="80" text="주소" />
-		<TextField prefWidth="120" fx:id="txtEmpolyeeAddress" />
+		<TextField prefWidth="180" fx:id="txtEmpolyeeAddress" />
 	</HBox>
 
 	<HBox alignment="CENTER">
@@ -63,7 +63,7 @@
 			<Insets top="20" />
 		</padding>
 		<Label prefWidth="80" text="입사일" />
-		<DatePicker prefWidth="117" fx:id="dpEmployeeHiredate" />
+		<DatePicker prefWidth="177" fx:id="dpEmployeeHiredate" />
 	</HBox>
 
 	<HBox alignment="CENTER">
@@ -71,7 +71,7 @@
 			<Insets top="20" />
 		</padding>
 		<Label prefWidth="80" text="직원 등급" />
-		<ComboBox prefWidth="120" fx:id="cbxEmployeeRank" />
+		<ComboBox prefWidth="180" fx:id="cbxEmployeeRank" />
 	</HBox>
 
 	<HBox alignment="CENTER">
@@ -79,8 +79,8 @@
 			<Insets top="30" />
 		</padding>
 		<spacing>50</spacing>
-		<Button prefWidth="50" prefHeight="30" text="취 소" fx:id="btnCancle" />
-		<Button prefWidth="50" prefHeight="30" text="변 경" fx:id="btnRegiste" />
+		<Button prefWidth="80" prefHeight="30" text="취 소" fx:id="btnCancle" />
+		<Button prefWidth="80" prefHeight="30" text="등 록" fx:id="btnRegiste" />
 	</HBox>
 </VBox>
 
