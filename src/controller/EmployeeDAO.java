@@ -81,8 +81,6 @@ public class EmployeeDAO {
 		return registeResult;
 
 	}
-<<<<<<< HEAD
-=======
 
 	// 매니저 등록
 	public boolean getEmployeeManager(EmployeeVO evo) throws Exception {
@@ -148,7 +146,6 @@ public class EmployeeDAO {
 		return registeResult;
 
 	}
->>>>>>> ecb205dfa8cdd48cae78addbcfc883f9f31f5cf0
 
 	// 직원 정보 수정 메소드
 	public boolean getEmployeeUpdate(String e_name, int e_phonenumber, String e_address, String e_rank)
@@ -276,13 +273,8 @@ public class EmployeeDAO {
 			// 입사년도 뒤 2자리 가져오기
 			SimpleDateFormat df = new SimpleDateFormat("yy");
 			hiredateYear = df.format(new Date());
-<<<<<<< HEAD
 			
-			if(rs.next()) {
-=======
-
 			if (rs.next()) {
->>>>>>> ecb205dfa8cdd48cae78addbcfc883f9f31f5cf0
 				String seq = rs.getString("nextval");
 				ecode = hiredateYear + seq; // 직원코드 = 입사년도 뒤 2자리 + 시퀀스 3자리
 			}
