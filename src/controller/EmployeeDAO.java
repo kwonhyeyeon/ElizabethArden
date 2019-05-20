@@ -26,6 +26,7 @@ public class EmployeeDAO {
 		// 등록 성공 판단 변수
 		boolean registeResult = false;
 		try {
+			// 매장코드를 가져오기 위해 인스턴스화
 			LoginController sc = new LoginController();
 			// DB연동
 			con = DBUtil.getConnection();
@@ -80,7 +81,7 @@ public class EmployeeDAO {
 		return registeResult;
 
 	}
-	
+
 	// 매니저 등록
 	public boolean getEmployeeManager(EmployeeVO evo) throws Exception {
 
@@ -265,11 +266,11 @@ public class EmployeeDAO {
 			// jvo에서 변수들을 가져와서 sql문에 넣어준다.
 			rs = pstmt.executeQuery();
 			// sql을 날리고 불러온 값이 있으면 로그인결과변수 true
-			
+
 			// 입사년도 뒤 2자리 가져오기
 			SimpleDateFormat df = new SimpleDateFormat("yy");
 			hiredateYear = df.format(new Date());
-			
+
 			if (rs.next()) {
 				String seq = rs.getString("nextval");
 				ecode = hiredateYear + seq; // 직원코드 = 입사년도 뒤 2자리 + 시퀀스 3자리
