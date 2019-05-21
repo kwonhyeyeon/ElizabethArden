@@ -2,7 +2,7 @@ package model;
 
 public class ProductVO {
 	private String p_code; // 상품 코드
-	private String p_no; // 상품 일련번호
+	private int p_no; // 상품 일련번호
 	private String p_name; // 상품명
 	private int p_ea; // 상품 수량
 	private int p_price; // 상품 단가
@@ -35,7 +35,7 @@ public class ProductVO {
 	}
 
 	// 총액과 포인트를 제외한 생성자
-	public ProductVO(String p_code, String p_no, String p_name, int p_ea, int p_price) {
+	public ProductVO(String p_code, int p_no, String p_name, int p_ea, int p_price) {
 		super();
 		this.p_code = p_code;
 		this.p_no = p_no;
@@ -45,7 +45,7 @@ public class ProductVO {
 	}
 
 	// 전체필드 생성자
-	public ProductVO(String p_code, String p_no, String p_name, int p_ea, int p_price, int p_total, int p_point) {
+	public ProductVO(String p_code, int p_no, String p_name, int p_ea, int p_price, int p_total, int p_point) {
 		super();
 		this.p_code = p_code;
 		this.p_no = p_no;
@@ -64,11 +64,11 @@ public class ProductVO {
 		this.p_code = p_code;
 	}
 
-	public String getP_no() {
+	public int getP_no() {
 		return p_no;
 	}
 
-	public void setP_no(String p_no) {
+	public void setP_no(int p_no) {
 		this.p_no = p_no;
 	}
 
