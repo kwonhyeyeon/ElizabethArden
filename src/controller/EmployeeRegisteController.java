@@ -133,7 +133,7 @@ public class EmployeeRegisteController implements Initializable {
 		
 		// JoinVO에 입력받은 id, ps, name을 공백제거후 넣어준다
 		evo = new EmployeeVO(txtEmployeeCode.getText().trim(), txtEmployeeName.getText().trim(),
-				Integer.parseInt(txtEmployeePhone.getText().trim()), txtEmpolyeeAddress.getText().trim(),
+				txtEmployeePhone.getText().trim(), txtEmpolyeeAddress.getText().trim(),
 				dpEmployeeBirth.getValue().toString(), cbxEmployeeRank.getSelectionModel().getSelectedItem().toString(),
 				dpEmployeeHiredate.getValue().toString());
 		// 인스턴스화

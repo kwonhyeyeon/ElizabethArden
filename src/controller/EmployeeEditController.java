@@ -34,8 +34,8 @@ public class EmployeeEditController implements Initializable {
 	private Button btnCancle; // 취소 버튼
 	@FXML
 	private Button btnEdit; // 변경 버튼
-	
-	private String selectedEmployeeName; // 선택한 직원명
+
+	private static String selectedName;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -61,22 +61,31 @@ public class EmployeeEditController implements Initializable {
 
 	// 직원명 콤보박스 이벤트 메소드
 	public void handlerCbxEmployeeNameAction(ActionEvent event) {
-		
-		//ArrayList<EmployeeVO> list = new ArrayList();
-		
-		EmployeeDAO edao = new EmployeeDAO();
-		EmployeeVO evo = new EmployeeVO();
-		//String a = "이인섭";
-		try {	
-			selectedEmployeeName = edao.getEmployeePhone(cbxEmployeeName.getSelectionModel().getSelectedItem() + "");
+
+		try {
+
+			EmployeeDAO edao = new EmployeeDAO();
+			// 선택된 직원명 인덱스값 
+			int selectedNameIndex = cbxEmployeeName.getSelectionModel().getSelectedIndex();
+			// 배열 생성
+			ArrayList<EmployeeVO> list = new ArrayList();
+			// 직원명을 가져오는 메소드를 list에 저장
+			list = edao.getEmployeeTotalList();
+
+			// 선택된 직원명
+			selectedName = list.remove(selectedNameIndex).toString();
+
+			EmployeeVO evo = new EmployeeVO();
+
+			list = edao.getEmployeeInfo(selectedName);
+
+			txtEmployeePhone.setText(list.get(0).getE_phonenumber() + "");
+			txtEmployeeAddress.setText(list.get(0).getE_address());
+			cbxEmployeeRank.setValue(list.get(0).getE_rank());
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		txtEmployeePhone.setText(evo.getE_phonenumber()+ "");
-		txtEmployeeAddress.setText(evo.getE_address());
-		cbxEmployeeRank.setValue(evo.getE_rank());
-		
 	}
 
 	// 직원명 가져오기
@@ -107,7 +116,7 @@ public class EmployeeEditController implements Initializable {
 		boolean employeeUpdateSucess = false; // 정보 변경 성공 여부
 
 		try {
-
+			// 미입력시 오류
 			if (cbxEmployeeName.getSelectionModel().getSelectedItem() == null) {
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 정보 수정");
@@ -133,10 +142,16 @@ public class EmployeeEditController implements Initializable {
 				alert.setContentText("다시 선택해주세요");
 				alert.showAndWait();
 			}
-
+			
+			// 받아온 값 evo 객체에 저장
+			evo.setE_name(selectedName);
+			evo.setE_phonenumber(txtEmployeePhone.getText());
+			evo.setE_address(txtEmployeeAddress.getText());
+			evo.setE_rank(cbxEmployeeRank.getSelectionModel().getSelectedItem());
+			
 			// JoinDAO에서 getEmployeeRegiste메소드를 호출하여 등록후 성공여부를 확인한다.
-			employeeUpdateSucess = edao.getEmployeeRegiste(evo);
-
+			employeeUpdateSucess = edao.getEmployeeUpdate(evo.getE_name(), evo.getE_phonenumber(), evo.getE_address(), evo.getE_rank());
+			
 			// 등록이 성공하였을 경우
 			if (employeeUpdateSucess) {
 				// 닫기 버튼을 호출하여 창을 닫아준다

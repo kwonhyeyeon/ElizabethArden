@@ -35,7 +35,7 @@ public class EmployeeDAO {
 			// jvo에서 변수들을 가져와서 sql문에 넣어준다.
 			pstmt.setString(1, evo.getE_code());
 			pstmt.setString(2, evo.getE_name());
-			pstmt.setInt(3, evo.getE_phonenumber());
+			pstmt.setString(3, evo.getE_phonenumber());
 			pstmt.setString(4, evo.getE_address());
 			pstmt.setString(5, evo.getE_birth());
 			pstmt.setString(6, evo.getE_rank());
@@ -83,7 +83,7 @@ public class EmployeeDAO {
 	}
 
 	// 직원 정보 수정 메소드
-	public boolean getEmployeeUpdate(String e_name, int e_phonenumber, String e_address, String e_rank)
+	public boolean getEmployeeUpdate(String e_name, String e_phonenumber, String e_address, String e_rank)
 			throws Exception {
 
 		String sql = "update employee set e_phonenumber = ?, e_address = ?, e_rank = ? where e_name = ?";
@@ -94,7 +94,7 @@ public class EmployeeDAO {
 		try {
 			con = DBUtil.getConnection(); // DBUtil 연결
 			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
-			pstmt.setInt(1, e_phonenumber);
+			pstmt.setString(1, e_phonenumber);
 			pstmt.setString(2, e_address);
 			pstmt.setString(3, e_rank);
 			pstmt.setString(4, e_name);
@@ -150,9 +150,9 @@ public class EmployeeDAO {
 
 		try {
 			LoginController sc = new LoginController(); // 매장 코드
-			
+
 			con = DBUtil.getConnection(); // DBUtil 연결
-			
+
 			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
 			pstmt.setString(1, sc.loginStoreCode);
 			rs = pstmt.executeQuery(); // 쿼리 실행
@@ -208,7 +208,7 @@ public class EmployeeDAO {
 			// 입사년도 뒤 2자리 가져오기
 			SimpleDateFormat df = new SimpleDateFormat("yy");
 			hiredateYear = df.format(new Date());
-			
+
 			if (rs.next()) {
 				String seq = rs.getString("nextval");
 				ecode = hiredateYear + seq; // 직원코드 = 입사년도 뒤 2자리 + 시퀀스 3자리
@@ -230,19 +230,21 @@ public class EmployeeDAO {
 			} catch (SQLException e) {
 			}
 		}
-		
+
 		return ecode;
 	}
-	
+
 	// 직원명 선택시 직원 정보 가져오기
-	public String getEmployeePhone(String e_name) throws Exception {
-		
-		String sql = "select e_phonenumber from employee where e_name = ?";
+	public ArrayList<EmployeeVO> getEmployeeInfo(String e_name) throws Exception {
+
+		ArrayList<EmployeeVO> list = new ArrayList();
+
+		String sql = "select e_phonenumber, e_address, e_rank from employee where e_name = ?";
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		EmployeeVO evo = null;
-		
+
 		try {
 			// DB연동
 			con = DBUtil.getConnection();
@@ -252,11 +254,14 @@ public class EmployeeDAO {
 			// jvo에서 변수들을 가져와서 sql문에 넣어준다.
 			rs = pstmt.executeQuery();
 			// sql을 날리고 불러온 값이 있으면 로그인결과변수 true
-			while(rs.next()) {
+			while (rs.next()) {
 				evo = new EmployeeVO();
-				evo.setE_phonenumber(rs.getInt("e_phonenumber"));
+				evo.setE_phonenumber(rs.getString("e_phonenumber"));
+				evo.setE_address(rs.getString("e_address"));
+				evo.setE_rank(rs.getString("e_rank"));
+				list.add(evo);
 			}
-			
+
 		} catch (SQLException e) {
 			System.out.println(e);
 		} catch (Exception e) {
@@ -274,9 +279,9 @@ public class EmployeeDAO {
 			} catch (SQLException e) {
 			}
 		}
-		
-		return e_name;
-		
+
+		return list;
+
 	}
 
 }

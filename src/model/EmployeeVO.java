@@ -4,7 +4,7 @@ public class EmployeeVO {
 
 	private String e_code; // 직원 코드
 	private String e_name; // 직원명
-	private int e_phonenumber; // 핸드폰번호
+	private String e_phonenumber; // 핸드폰번호
 	private String e_address; // 주소
 	private String e_birth; // 생년월일
 	private String e_rank; // 직원등급
@@ -21,7 +21,7 @@ public class EmployeeVO {
 	}
 
 	// 매장코드 제외 생성자
-	public EmployeeVO(String e_code, String e_name, int e_phonenumber, String e_address, String e_birth, String e_rank,
+	public EmployeeVO(String e_code, String e_name, String e_phonenumber, String e_address, String e_birth, String e_rank,
 			String e_hiredate) {
 		super();
 		this.e_code = e_code;
@@ -34,7 +34,7 @@ public class EmployeeVO {
 	}
 
 	// 전체 생성자
-	public EmployeeVO(String e_code, String e_name, int e_phonenumber, String e_address, String e_birth, String e_rank,
+	public EmployeeVO(String e_code, String e_name, String e_phonenumber, String e_address, String e_birth, String e_rank,
 			String e_hiredate, String s_code) {
 		super();
 		this.e_code = e_code;
@@ -48,7 +48,7 @@ public class EmployeeVO {
 	}
 
 	// 이름, 핸드폰번호, 주소, 직원등급 생성자
-	public EmployeeVO(String e_name, int e_phonenumber, String e_address, String e_rank) {
+	public EmployeeVO(String e_name, String e_phonenumber, String e_address, String e_rank) {
 		super();
 		this.e_name = e_name;
 		this.e_phonenumber = e_phonenumber;
@@ -56,7 +56,7 @@ public class EmployeeVO {
 		this.e_rank = e_rank;
 	}
 
-	public EmployeeVO(int e_phonenumber, String e_address, String e_rank) {
+	public EmployeeVO(String e_phonenumber, String e_address, String e_rank) {
 		super();
 		this.e_phonenumber = e_phonenumber;
 		this.e_address = e_address;
@@ -79,11 +79,11 @@ public class EmployeeVO {
 		this.e_name = e_name;
 	}
 
-	public int getE_phonenumber() {
+	public String getE_phonenumber() {
 		return e_phonenumber;
 	}
 
-	public void setE_phonenumber(int e_phonenumber) {
+	public void setE_phonenumber(String e_phonenumber) {
 		this.e_phonenumber = e_phonenumber;
 	}
 
