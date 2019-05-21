@@ -1,11 +1,13 @@
 package controller;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -45,20 +47,22 @@ public class SaleTabController implements Initializable {
 	private TableView<SaleVO> tableSaleList = new TableView<>(); // 판매현황 테이블
 	@FXML
 	private TextArea taBigo; // 비고
-	
+
 	SaleDAO sdao = new SaleDAO();
 
 	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+
 		try {
-			productTotalList();
+			productTotalList(); // 재고 현황 리스트
+			employeeName(); // 직원명 콤보박스
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
+		dpDate.setValue(LocalDate.now()); // 오늘 날짜로 설정
 		tableProduct.setEditable(false); // 재고현황 테이블 수정 금지
 
 		@SuppressWarnings("rawtypes") // 제네릭을 사용하는 클래스 매개 변수가 불특정일 때의 경고 억제
@@ -95,6 +99,28 @@ public class SaleTabController implements Initializable {
 		tableProduct.setItems(productDataList);
 		tableProduct.getColumns().addAll(colProductCode, colProductName, colProductEa, colProductPrice, colProductTotal,
 				colProductPoint);
+		
+		// 고객명 검색 버튼 이벤트 핸들러
+		btnC_search.setOnAction(event -> handlerBtnCSearchAction(event));
+	}
+
+	// 고객명 검색 버튼 이벤트 메소드
+	public void handlerBtnCSearchAction(ActionEvent event) {
+		
+		// 고객명 검색 텍스트 필드 값
+		String SearchName = "";
+		SearchName = txtC_name.getText().trim();
+		
+		try {
+			
+			if(SearchName.equals("")) {
+				
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 
 	// 재고 현황 리스트
@@ -112,10 +138,25 @@ public class SaleTabController implements Initializable {
 
 		list = sDao.getProductTotalList();
 		int rowCount = list.size();
-		
+
 		for (int index = 0; index < rowCount; index++) {
 			pVo = list.get(index);
 			productDataList.add(pVo);
+		}
+
+	}
+
+	// 직원명 가져오기
+	public void employeeName() {
+
+		EmployeeDAO edao = new EmployeeDAO();
+		ArrayList employeeName = new ArrayList<>();
+
+		try {
+			employeeName = edao.getEmployeeTotalList();
+			cbxE_name.setItems(FXCollections.observableArrayList(employeeName));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 	}
