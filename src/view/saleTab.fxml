@@ -10,8 +10,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.cell.TextFieldTableCell?>
 
-<HBox prefHeight="700" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SaleTabController">
+<HBox prefHeight="800" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SaleTabController">
 	<padding>
 		<Insets top="10" right="10" bottom="10" left="10"/>
 	</padding>
@@ -45,7 +46,21 @@
 			<Label text="주 소 : " fx:id="lblAddress"/>
 		</HBox>
 
-		<TableView prefWidth="840" prefHeight="250" fx:id="tableSaleInsert"></TableView>
+		<TableView prefWidth="972" prefHeight="250" fx:id="tableSaleInsert">
+			
+		</TableView>
+		
+		<HBox alignment="CENTER_RIGHT">
+			<padding>
+				<Insets top="10"/>
+			</padding>
+			<spacing>10</spacing>
+			
+			<ComboBox promptText="상 태"/>
+			<TextField promptText="포인트 사용금액"/>
+			<ComboBox promptText="반품 사유"/>
+			<Button fx:id="btnP_regi" text="등 록" prefWidth="80" prefHeight="30"/>
+		</HBox>
 
 		<VBox>
 			<padding>
