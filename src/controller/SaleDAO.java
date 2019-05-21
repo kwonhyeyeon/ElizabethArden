@@ -18,26 +18,22 @@ public class SaleDAO {
 		// lesson테이블에 있는 모든 정보를 일련번호로 정렬해서 가져오는 sql문
 		String sql = "select p_code, p_name, p_ea, p_price, p_ea*p_price as p_total, p_price/100 as p_point from product";
 
-		// 객체 인스턴스화
-		ProductVO pvo = new ProductVO();
-
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		// 인스턴스 선언
-		ProductVO pVo = null;
 
 		try {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
+				ProductVO pvo = new ProductVO();
 				pvo.setP_code(rs.getString("p_code"));
 				pvo.setP_name(rs.getString("p_name"));
 				pvo.setP_ea(rs.getInt("p_ea"));
 				pvo.setP_price(rs.getInt("p_price"));
 				pvo.setP_total(rs.getInt("p_total"));
-				pvo.setP_point(rs.getDouble("p_point"));
+				pvo.setP_point(rs.getInt("p_point"));
 
 				list.add(pvo);
 			}

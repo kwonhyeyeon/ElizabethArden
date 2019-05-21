@@ -7,7 +7,7 @@ public class ProductVO {
 	private int p_ea; // 상품 수량
 	private int p_price; // 상품 단가
 	private int p_total; // 상품 총액
-	private double p_point; // 포인트
+	private int p_point; // 포인트
 
 	// 디폴트 생성자
 	public ProductVO() {
@@ -24,7 +24,7 @@ public class ProductVO {
 	}
 
 	// 일련번호를 제외한 생성자
-	public ProductVO(String p_code, String p_name, int p_ea, int p_price, int p_total, double p_point) {
+	public ProductVO(String p_code, String p_name, int p_ea, int p_price, int p_total, int p_point) {
 		super();
 		this.p_code = p_code;
 		this.p_name = p_name;
@@ -45,7 +45,7 @@ public class ProductVO {
 	}
 
 	// 전체필드 생성자
-	public ProductVO(String p_code, String p_no, String p_name, int p_ea, int p_price, int p_total, double p_point) {
+	public ProductVO(String p_code, String p_no, String p_name, int p_ea, int p_price, int p_total, int p_point) {
 		super();
 		this.p_code = p_code;
 		this.p_no = p_no;
@@ -104,11 +104,11 @@ public class ProductVO {
 		this.p_total = p_total;
 	}
 
-	public double getP_point() {
+	public int getP_point() {
 		return p_point;
 	}
 
-	public void setP_point(double p_point) {
+	public void setP_point(int p_point) {
 		this.p_point = p_point;
 	}
 

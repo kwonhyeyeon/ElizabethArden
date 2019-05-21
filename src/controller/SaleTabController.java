@@ -40,30 +40,36 @@ public class SaleTabController implements Initializable {
 	@FXML
 	private Label lblAddress; // 고객주소
 	@FXML
-	private TableView<SaleVO> tableProduct2 = new TableView<>(); // 판매입력 테이블
+	private TableView<SaleVO> tableSaleInsert = new TableView<>(); // 판매입력 테이블
 	@FXML
-	private TableView<SaleVO> tableProductList = new TableView<>(); // 판매현황 테이블
+	private TableView<SaleVO> tableSaleList = new TableView<>(); // 판매현황 테이블
 	@FXML
 	private TextArea taBigo; // 비고
+	
 	SaleDAO sdao = new SaleDAO();
 
 	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
-
-		tableProduct.setEditable(false);
+		
+		try {
+			productTotalList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		tableProduct.setEditable(false); // 재고현황 테이블 수정 금지
 
 		@SuppressWarnings("rawtypes") // 제네릭을 사용하는 클래스 매개 변수가 불특정일 때의 경고 억제
 		TableColumn colProductCode = new TableColumn("상품코드");
-		colProductCode.setPrefWidth(70);
+		colProductCode.setPrefWidth(80);
 		colProductCode.setStyle("-fx-alignment:CENTER");
 		colProductCode.setCellValueFactory(new PropertyValueFactory<>("p_code"));
 
 		TableColumn colProductName = new TableColumn("상품명");
-		colProductName.setPrefWidth(70);
-		colProductName.setStyle("-fx-alignment:CENTER");
+		colProductName.setPrefWidth(200);
+		colProductName.setStyle("-fx-alignment:CENTER_LEFT");
 		colProductName.setCellValueFactory(new PropertyValueFactory<>("p_name"));
 
 		TableColumn colProductEa = new TableColumn("재고");
@@ -72,12 +78,12 @@ public class SaleTabController implements Initializable {
 		colProductEa.setCellValueFactory(new PropertyValueFactory<>("p_ea"));
 
 		TableColumn colProductPrice = new TableColumn("단가");
-		colProductPrice.setPrefWidth(50);
+		colProductPrice.setPrefWidth(80);
 		colProductPrice.setStyle("-fx-alignment:CENTER");
 		colProductPrice.setCellValueFactory(new PropertyValueFactory<>("p_price"));
 
 		TableColumn colProductTotal = new TableColumn("총액");
-		colProductTotal.setPrefWidth(50);
+		colProductTotal.setPrefWidth(80);
 		colProductTotal.setStyle("-fx-alignment:CENTER");
 		colProductTotal.setCellValueFactory(new PropertyValueFactory<>("p_total"));
 
@@ -91,7 +97,7 @@ public class SaleTabController implements Initializable {
 				colProductPoint);
 	}
 
-	// 상품 전체 목록
+	// 재고 현황 리스트
 	public void productTotalList() throws Exception {
 
 		productDataList.removeAll(productDataList);
@@ -106,11 +112,10 @@ public class SaleTabController implements Initializable {
 
 		list = sDao.getProductTotalList();
 		int rowCount = list.size();
-
+		
 		for (int index = 0; index < rowCount; index++) {
 			pVo = list.get(index);
 			productDataList.add(pVo);
-			
 		}
 
 	}
