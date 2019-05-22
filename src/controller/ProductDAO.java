@@ -62,7 +62,7 @@ public class ProductDAO {
 		return list;
 	}
 
-	// 데이터베이스에서 학생 테이블의 컬럼의 갯수
+	// 데이터베이스에서 제품 테이블의 컬럼의 갯수
 	public ArrayList<String> getProductColumnName() throws Exception {
 
 		ArrayList<String> columnName = new ArrayList<String>();

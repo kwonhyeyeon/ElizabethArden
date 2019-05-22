@@ -56,9 +56,10 @@
 			</padding>
 			<spacing>10</spacing>
 			
-			<ComboBox promptText="상 태"/>
-			<TextField promptText="포인트 사용금액"/>
-			<ComboBox promptText="반품 사유"/>
+			<TextField fx:id="p_ea" promptText="수 량"/>
+			<ComboBox fx:id="cbxState" promptText="상 태"/>
+			<TextField fx:id="txtUsedPoint" promptText="포인트 사용금액"/>
+			<ComboBox fx:id="cbxReturnReason" promptText="반품 사유"/>
 			<Button fx:id="btnP_regi" text="등 록" prefWidth="80" prefHeight="30"/>
 		</HBox>
 

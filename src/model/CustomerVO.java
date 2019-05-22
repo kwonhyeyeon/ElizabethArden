@@ -41,6 +41,25 @@ public class CustomerVO {
 		this.c_point = c_point;
 		this.c_etc = c_etc;
 	}
+	
+	// 고객코드, 고객명, 핸드폰번호, 생년월일, 이메일
+	public CustomerVO(int c_code, String c_name, String c_phoneNumber, String c_birth, String c_email, String c_address) {
+		super();
+		this.c_code = c_code;
+		this.c_name = c_name;
+		this.c_phoneNumber = c_phoneNumber;
+		this.c_birth = c_birth;
+		this.c_email = c_email;
+		this.c_address = c_address;
+	}
+	// 고객코드, 고객명, 고객 핸드폰번호, 고객 생년월일 생성자
+	public CustomerVO(int c_code, String c_name, String c_phoneNumber, String c_birth) {
+		super();
+		this.c_code = c_code;
+		this.c_name = c_name;
+		this.c_phoneNumber = c_phoneNumber;
+		this.c_birth = c_birth;
+	}
 	// get,set
 	public int getC_code() {
 		return c_code;

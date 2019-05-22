@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+
+<BorderPane prefWidth="500" prefHeight="400" xmlns:fx="http://javafx.com/fxml/1">
+	<padding>
+		<Insets top="20" right="20" bottom="20" left="20"/>
+	</padding>
+
+	<top>
+		<HBox>
+			<padding>
+				<Insets bottom="10"/>
+			</padding>
+			<spacing>10</spacing>
+			<TextField id="c_name" promptText="고객명"/>
+			<Button id="btnSearch" text="검 색"/>
+		</HBox>
+	</top>
+	
+	<center>
+		<TableView id="tableCustomerList"></TableView>
+	</center>
+
+</BorderPane>
+

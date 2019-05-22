@@ -61,50 +61,52 @@ public class SaleDAO {
 
 		return list;
 	}
-	
-	// 데이터베이스에서 학생 테이블의 컬럼의 갯수
-		public ArrayList<String> getProductColumnName() throws Exception {
 
-			ArrayList<String> columnName = new ArrayList<String>();
+	// 데이터베이스에서 판매 입력 테이블의 컬럼의 갯수
+	public ArrayList<String> getProductColumnName() throws Exception {
 
-			String sql = "select p_code, p_name, p_ea, p_price, p_ea*p_price as p_total, p_price/100 as p_point from product order by P_no";
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			// ResultSetMetaData 객체 변수 선언
-			ResultSetMetaData rsmd = null;
+		ArrayList<String> columnName = new ArrayList<String>();
 
-			try {
-				con = DBUtil.getConnection(); // DBUtil 연결
-				pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
-				rs = pstmt.executeQuery(); // 쿼리 실행
-				rsmd = rs.getMetaData();
+		String sql = "select p.p_code, p.p_name, sr.sr_state, p.p_ea, p.p_price, p.p_ea * p.p_price as sr_total, p.p_price/100 as p_point, sr.sr_used_point, sr.sr_return_reason "
+				+ "from product p, sale_return sr "
+				+ "where p.p_code = sr.p_code";
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		// ResultSetMetaData 객체 변수 선언
+		ResultSetMetaData rsmd = null;
 
-				int cols = rsmd.getColumnCount();
+		try {
+			con = DBUtil.getConnection(); // DBUtil 연결
+			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
+			rs = pstmt.executeQuery(); // 쿼리 실행
+			rsmd = rs.getMetaData();
 
-				for (int i = 1; i <= cols; i++) {
-					columnName.add(rsmd.getCatalogName(i));
-				}
+			int cols = rsmd.getColumnCount();
 
-			} catch (SQLException se) {
-				System.out.println(se);
-			} catch (Exception e) {
-				System.out.println(e);
-			} finally {
-				try {
-					// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
-					if (rs != null) {
-						rs.close();
-					}
-					if (pstmt != null) {
-						pstmt.close();
-					}
-					if (con != null) {
-						con.close();
-					}
-				} catch (SQLException se) {
-				}
+			for (int i = 1; i <= cols; i++) {
+				columnName.add(rsmd.getCatalogName(i));
 			}
-			return columnName;
+
+		} catch (SQLException se) {
+			System.out.println(se);
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException se) {
+			}
 		}
+		return columnName;
+	}
 }
