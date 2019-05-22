@@ -81,7 +81,7 @@ public class CustomerDAO {
 
 		ArrayList<CustomerVO> list = new ArrayList<>();
 
-		String sql = "select c_code, c_name, c_birth, c_phonenumber, c_email, c_address from customer where c_name = ?";
+		String sql = "select c_code, c_name, c_birth, c_phonenumber, c_email, c_address from customer where c_name like ?";
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -92,7 +92,7 @@ public class CustomerDAO {
 		try {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, cvo.getC_name());
+			pstmt.setString(1, "%" + c_name + "%");
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {

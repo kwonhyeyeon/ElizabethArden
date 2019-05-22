@@ -348,7 +348,7 @@ public class SaleTabController implements Initializable {
 		try {
 
 			if (SearchName.equals("")) { // 검색어 필드 값이 공백일 때
-				
+
 				FXMLLoader loader = new FXMLLoader(); // fxml에서 객체를 로드
 				loader.setLocation(getClass().getResource("/view/customerSearchList.fxml")); // 수정 모달창을 호출한다
 
@@ -395,7 +395,7 @@ public class SaleTabController implements Initializable {
 				tableCustomerList.setItems(customerDataList);
 				tableCustomerList.getColumns().addAll(colCustomerCode, colCustomerName, colCustomerPhone,
 						colCustomerBirth);
-				
+
 				customerDataList.removeAll(customerDataList);
 
 				// 고객 전체 리스트를 테이블뷰에 보임
@@ -415,7 +415,7 @@ public class SaleTabController implements Initializable {
 					cvo = list.get(index);
 					customerDataList.add(cvo);
 				}
-				
+
 			} else {
 
 				FXMLLoader loader = new FXMLLoader(); // fxml에서 객체를 로드
@@ -465,7 +465,7 @@ public class SaleTabController implements Initializable {
 				tableCustomerList.getColumns().addAll(colCustomerCode, colCustomerName, colCustomerPhone,
 						colCustomerBirth);
 
-				String selectName = c_name.getText().trim();
+				customerDataList.removeAll(customerDataList);
 
 				// 검색 버튼 이벤트
 				btnSearch.setOnAction(e -> {
@@ -475,25 +475,55 @@ public class SaleTabController implements Initializable {
 
 							customerDataList.removeAll(customerDataList);
 
-							CustomerDAO cdao = new CustomerDAO();
-							CustomerVO cvo = null;
+							CustomerDAO cDao = new CustomerDAO();
+							CustomerVO cVo = null;
 
 							ArrayList<String> title;
 							ArrayList<CustomerVO> list;
 
-							title = cdao.getCustomerColumnName();
+							title = cDao.getCustomerColumnName();
 							int columnCount = title.size();
 
-							list = cdao.getCustomerTotalList();
+							list = cDao.getCustomerTotalList();
 							int rowCount = list.size();
 
 							for (int index = 0; index < rowCount; index++) {
-								cvo = list.get(index);
-								customerDataList.add(cvo);
+								cVo = list.get(index);
+								customerDataList.add(cVo);
 							}
 
 						} else {
+							ArrayList<CustomerVO> searchList = new ArrayList<CustomerVO>();
+							CustomerVO cvo = null;
+							CustomerDAO cdao = null;
+							boolean searchResult = false; // 검색 결과
+							String getCname = c_name.getText().trim();
 
+							cdao = new CustomerDAO();
+							searchList = cdao.getCustomerSearch(getCname);
+
+							if (searchList != null) {
+								int rowCount = searchList.size();
+								c_name.clear();
+								// .removeAll(customerDataList);
+
+								for (int index = 0; index < rowCount; index++) {
+									cvo = searchList.get(index);
+									customerDataList.add(cvo);
+									searchResult = true;
+								}
+								System.out.println(searchList);
+							}
+							
+							if(!searchResult) {
+								c_name.clear(); // 검색 텍스트 필드의 값을 지운다
+								Alert alert = new Alert(AlertType.INFORMATION);
+								alert.setTitle("고객 검색");
+								alert.setHeaderText(c_name + "고객이 리스트에 없습니다");
+								alert.setContentText("고객명을 다시 입력하세요");
+								alert.showAndWait(); // 확인 창 누르기 전까지 대기
+								cdao.getCustomerTotalList();
+							}
 						}
 					} catch (Exception e1) {
 						e1.printStackTrace();
