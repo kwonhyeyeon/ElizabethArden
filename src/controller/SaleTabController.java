@@ -37,48 +37,48 @@ import model.SaleVO;
 
 public class SaleTabController implements Initializable {
 
-   @FXML
-   private TableView<ProductVO> tableProduct = new TableView<>(); // 재고 테이블
-   @FXML
-   private DatePicker dpDate; // 입력 날짜
-   @FXML
-   private ComboBox<EmployeeVO> cbxE_name; // 직원명 콤보박스
-   @FXML
-   private TextField txtC_name; // 고객명
-   @FXML
-   private Button btnC_search; // 검색 버튼
-   @FXML
-   private Label lblBirth; // 고객 생일 라벨
-   @FXML
-   private Label lblPhone; // 고객 폰번
-   @FXML
-   private Label lblAddress; // 고객주소
-   @FXML
-   private TableView<ProductVO> tableSaleInsert = new TableView<>(); // 판매입력 테이블
-   @FXML
-   private TableView<SaleVO> tableSaleList = new TableView<>(); // 판매현황 테이블
-   @FXML
-   private TextArea taBigo; // 비고
-   @FXML
-   private Button btnP_regi; // 등록 버튼
-   @FXML
-   private TextField p_ea; // 수량
-   @FXML
-   private ComboBox<String> cbxState; // 상태 콤보박스
-   @FXML
-   private TextField txtUsedPoint; // 포인트 사용금액
-   @FXML
-   private ComboBox<String> cbxReturnReason; // 반품사유 콤보박스
+	@FXML
+	private TableView<ProductVO> tableProduct = new TableView<>(); // 재고 테이블
+	@FXML
+	private DatePicker dpDate; // 입력 날짜
+	@FXML
+	private ComboBox<EmployeeVO> cbxE_name; // 직원명 콤보박스
+	@FXML
+	private TextField txtC_name; // 고객명
+	@FXML
+	private Button btnC_search; // 검색 버튼
+	@FXML
+	private Label lblBirth; // 고객 생일 라벨
+	@FXML
+	private Label lblPhone; // 고객 폰번
+	@FXML
+	private Label lblAddress; // 고객주소
+	@FXML
+	private TableView<ProductVO> tableSaleInsert = new TableView<>(); // 판매입력 테이블
+	@FXML
+	private TableView<SaleVO> tableSaleList = new TableView<>(); // 판매현황 테이블
+	@FXML
+	private TextArea taBigo; // 비고
+	@FXML
+	private Button btnP_regi; // 등록 버튼
+	@FXML
+	private TextField p_ea; // 수량
+	@FXML
+	private ComboBox<String> cbxState; // 상태 콤보박스
+	@FXML
+	private TextField txtUsedPoint; // 포인트 사용금액
+	@FXML
+	private ComboBox<String> cbxReturnReason; // 반품사유 콤보박스
 
-   ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
-   ObservableList<ProductVO> saleInsertDataList = FXCollections.observableArrayList(); // 판매입력 테이블
-   ObservableList<SaleVO> saleListDataList = FXCollections.observableArrayList(); // 판매내역 테이블
+	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
+	ObservableList<ProductVO> saleInsertDataList = FXCollections.observableArrayList(); // 판매입력 테이블
+	ObservableList<SaleVO> saleListDataList = FXCollections.observableArrayList(); // 판매내역 테이블
 
-   ObservableList<ProductVO> selectProduct = null; // 재고 테이블에서 선택한 정보 저장
-   int selectedIndex; // 재고 테이블에서 선택한 상품 정보 인덱스 저장
+	ObservableList<ProductVO> selectProduct = null; // 재고 테이블에서 선택한 정보 저장
+	int selectedIndex; // 재고 테이블에서 선택한 상품 정보 인덱스 저장
 
-   ObservableList<ProductVO> selectInsert = null; // 판매입력 테이블에서 선택한 정보 저장
-   int selectedSaleIndex; // 판매입력 테이블에서 선택한 상품 정보 인덱스 저장
+	ObservableList<ProductVO> selectInsert = null; // 판매입력 테이블에서 선택한 정보 저장
+	int selectedSaleIndex; // 판매입력 테이블에서 선택한 상품 정보 인덱스 저장
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -137,42 +137,41 @@ public class SaleTabController implements Initializable {
 		tableProduct.getColumns().addAll(colProductCode, colProductName, colProductEa, colProductPrice, colProductTotal,
 				colProductPoint);
 
-		 // 판매 입력 테이블 컬럼 지정
-	      TableColumn colInsertP_Code = new TableColumn("상품코드");
-	      colInsertP_Code.setPrefWidth(100);
-	      colInsertP_Code.setStyle("-fx-alignment:CENTER");
-	      colInsertP_Code.setCellValueFactory(new PropertyValueFactory<>("p_code"));
+		// 판매 입력 테이블 컬럼 지정
+		TableColumn colInsertP_Code = new TableColumn("상품코드");
+		colInsertP_Code.setPrefWidth(100);
+		colInsertP_Code.setStyle("-fx-alignment:CENTER");
+		colInsertP_Code.setCellValueFactory(new PropertyValueFactory<>("p_code"));
 
-	      TableColumn colInsertP_Name = new TableColumn("상품명");
-	      colInsertP_Name.setPrefWidth(230);
-	      colInsertP_Name.setStyle("-fx-alignment:CENTER");
-	      colInsertP_Name.setCellValueFactory(new PropertyValueFactory<>("p_name"));
+		TableColumn colInsertP_Name = new TableColumn("상품명");
+		colInsertP_Name.setPrefWidth(230);
+		colInsertP_Name.setStyle("-fx-alignment:CENTER");
+		colInsertP_Name.setCellValueFactory(new PropertyValueFactory<>("p_name"));
 
-	      TableColumn colInsertP_ea = new TableColumn("수량");
-	      colInsertP_ea.setPrefWidth(50);
-	      colInsertP_ea.setStyle("-fx-alignment:CENTER");
-	      colInsertP_ea.setCellValueFactory(new PropertyValueFactory<>("p_ea"));
+		TableColumn colInsertP_ea = new TableColumn("수량");
+		colInsertP_ea.setPrefWidth(50);
+		colInsertP_ea.setStyle("-fx-alignment:CENTER");
+		colInsertP_ea.setCellValueFactory(new PropertyValueFactory<>("p_ea"));
 
-	      TableColumn colInsertP_Price = new TableColumn("단가");
-	      colInsertP_Price.setPrefWidth(90);
-	      colInsertP_Price.setStyle("-fx-alignment:CENTER");
-	      colInsertP_Price.setCellValueFactory(new PropertyValueFactory<>("p_price"));
+		TableColumn colInsertP_Price = new TableColumn("단가");
+		colInsertP_Price.setPrefWidth(90);
+		colInsertP_Price.setStyle("-fx-alignment:CENTER");
+		colInsertP_Price.setCellValueFactory(new PropertyValueFactory<>("p_price"));
 
-	      TableColumn colInsertP_total = new TableColumn("총액");
-	      colInsertP_total.setPrefWidth(90);
-	      colInsertP_total.setStyle("-fx-alignment:CENTER");
-	      colInsertP_total.setCellValueFactory(new PropertyValueFactory<>("p_total"));
+		TableColumn colInsertP_total = new TableColumn("총액");
+		colInsertP_total.setPrefWidth(90);
+		colInsertP_total.setStyle("-fx-alignment:CENTER");
+		colInsertP_total.setCellValueFactory(new PropertyValueFactory<>("p_total"));
 
-	      TableColumn colInsertP_Point = new TableColumn("포인트");
-	      colInsertP_Point.setPrefWidth(90);
-	      colInsertP_Point.setStyle("-fx-alignment:CENTER");
-	      colInsertP_Point.setCellValueFactory(new PropertyValueFactory<>("p_point"));
+		TableColumn colInsertP_Point = new TableColumn("포인트");
+		colInsertP_Point.setPrefWidth(90);
+		colInsertP_Point.setStyle("-fx-alignment:CENTER");
+		colInsertP_Point.setCellValueFactory(new PropertyValueFactory<>("p_point"));
 
-	      tableSaleInsert.setItems(saleInsertDataList);
-	      tableSaleInsert.getColumns().addAll(colInsertP_Code, colInsertP_Name, colInsertP_ea,
-	            colInsertP_Price, colInsertP_total, colInsertP_Point);
-	      
-	      
+		tableSaleInsert.setItems(saleInsertDataList);
+		tableSaleInsert.getColumns().addAll(colInsertP_Code, colInsertP_Name, colInsertP_ea, colInsertP_Price,
+				colInsertP_total, colInsertP_Point);
+
 		// 판매 내역 테이블 컬럼 지정
 		TableColumn colListNo = new TableColumn("NO");
 		colListNo.setPrefWidth(30);
@@ -243,53 +242,58 @@ public class SaleTabController implements Initializable {
 
 	// 등록 버튼 이벤트 메소드
 	public void handlerBtnPRegiAction(ActionEvent event) {
+		
+		
+		try {
 		// 테이블에서 선택한 정보를 selectSubject에 저장
-        selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
-        selectedSaleIndex = selectInsert.get(0).getP_no();
-        
-        
-        selectInsert.get(0).getP_code();
-        selectInsert.get(0).getP_ea();
-        selectInsert.get(0).getP_price();
-        selectInsert.get(0).getP_point();
-        selectInsert.get(0).getP_total();
-        selectInsert.get(0).getP_name();
-        
-        String e_name = cbxE_name.getSelectionModel().getSelectedItem().toString();
-        String e_code;
-        String sr_state;
-        int c_code = 0;
-        int p_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
-        int p_point = p_total / 100;
-        
-        EmployeeDAO edao = new EmployeeDAO();
-       e_code = edao.getEmployeeCode(e_name.trim());
-       sr_state = cbxState.getSelectionModel().getSelectedItem().toString();
-       
-       SaleVO svo = new SaleVO(c_code, e_code, selectInsert.get(0).getP_code(), selectInsert.get(0).getP_name(), sr_state.trim(), 
-    		   Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), p_total, p_point);
-         
-       saleListDataList.add(svo);
+		selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
+		selectedSaleIndex = selectInsert.get(0).getP_no();
+
+		selectInsert.get(0).getP_code();
+		selectInsert.get(0).getP_ea();
+		selectInsert.get(0).getP_price();
+		selectInsert.get(0).getP_point();
+		selectInsert.get(0).getP_total();
+		selectInsert.get(0).getP_name();
+		CustomerDAO cdao = new CustomerDAO();
+		ArrayList<CustomerVO> list = new ArrayList<>();
+
+		String e_name = cbxE_name.getSelectionModel().getSelectedItem().toString();
+		String e_code;
+		String sr_state;
+		list = cdao.getCustomerSearch(txtC_name.getText().trim());
+		int c_code = list.get(0).getC_code();
+
+		int p_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
+		int p_point = p_total / 100;
+
+		EmployeeDAO edao = new EmployeeDAO();
+		e_code = edao.getEmployeeCode(e_name.trim());
+		sr_state = cbxState.getSelectionModel().getSelectedItem().toString();
+
+		SaleVO svo = new SaleVO(c_code, e_code, selectInsert.get(0).getP_code(), selectInsert.get(0).getP_name(),
+				sr_state.trim(), Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), p_total, p_point);
+
+		saleListDataList.add(svo);
+		}catch(Exception e) {
+			System.out.println(e);
+		}
 	}
 
-	 // 판매 입력 클릭 이벤트 메소드
-	   public void handlerTableSaleInsertAction(MouseEvent event) {
+	// 판매 입력 클릭 이벤트 메소드
+	public void handlerTableSaleInsertAction(MouseEvent event) {
 
-	      if (event.getClickCount() == 1) { // 판매 입력 클릭시
-	         try {
+		if (event.getClickCount() == 1) { // 판매 입력 클릭시
+			try {
 
-	            cbxState.setDisable(false); // 상태 콤보박스 활성화
-	            
-	           
-	             
-	           
-	            
-	         } catch (Exception e) {
-	            e.printStackTrace();
-	         }
-	      }
+				cbxState.setDisable(false); // 상태 콤보박스 활성화
 
-	   }
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
 
 	// 상태 콤보박스 이벤트 메소드
 	public void handlerCbxStateAction(ActionEvent event) {
@@ -313,44 +317,42 @@ public class SaleTabController implements Initializable {
 
 	}
 
-	 // 재고 테이블뷰 더블 클릭 이벤트 메소드
-	   public void handlerTableProductAction(MouseEvent event) {
+	// 재고 테이블뷰 더블 클릭 이벤트 메소드
+	public void handlerTableProductAction(MouseEvent event) {
 
-	      if (event.getClickCount() == 2) { // 더블클릭시
-	         try {
+		if (event.getClickCount() == 2) { // 더블클릭시
+			try {
 
-	            // 테이블에서 선택한 정보를 selectSubject에 저장
-	            selectProduct = tableProduct.getSelectionModel().getSelectedItems();
-	            selectedIndex = selectProduct.get(0).getP_no();
+				// 테이블에서 선택한 정보를 selectSubject에 저장
+				selectProduct = tableProduct.getSelectionModel().getSelectedItems();
+				selectedIndex = selectProduct.get(0).getP_no();
 
-	            String selectedP_code = selectProduct.get(0).getP_code();
-	            String selectedP_name = selectProduct.get(0).getP_name();
-	            int selecetedP_ea = selectProduct.get(0).getP_ea();
-	            int selectedP_price = selectProduct.get(0).getP_price();
-	            int selectedP_total = selecetedP_ea * selectedP_price;
-	            int selectedP_point = selectedP_total / 100;
-	            EmployeeDAO edao = new EmployeeDAO();
-	            //edao.getemployeeCode(cbx)
-	            // saleInsertDataList.removeAll();
-	            ProductVO pvo = new ProductVO(selectedP_code, selectedP_name, selecetedP_ea, selectedP_price, selectedP_total,
-	                  selectedP_point);
-	            
-	            saleInsertDataList.add(pvo);
-	            
-	            /*ArrayList<SaleVO> selectedInfo = new ArrayList();
-	            selectedInfo.add(svo);
-	            
-	            selected = selectedInfo;*/
-	            
-	            
-	            
+				String selectedP_code = selectProduct.get(0).getP_code();
+				String selectedP_name = selectProduct.get(0).getP_name();
+				int selecetedP_ea = selectProduct.get(0).getP_ea();
+				int selectedP_price = selectProduct.get(0).getP_price();
+				int selectedP_total = selecetedP_ea * selectedP_price;
+				int selectedP_point = selectedP_total / 100;
+				EmployeeDAO edao = new EmployeeDAO();
+				// edao.getemployeeCode(cbx)
+				// saleInsertDataList.removeAll();
+				ProductVO pvo = new ProductVO(selectedP_code, selectedP_name, selecetedP_ea, selectedP_price,
+						selectedP_total, selectedP_point);
 
-	         } catch (Exception e) {
-	            e.printStackTrace();
-	         }
-	      }
+				saleInsertDataList.add(pvo);
 
-	   }
+				/*
+				 * ArrayList<SaleVO> selectedInfo = new ArrayList(); selectedInfo.add(svo);
+				 * 
+				 * selected = selectedInfo;
+				 */
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+	}
 
 	// 고객명 검색 버튼 이벤트 메소드
 	/**
