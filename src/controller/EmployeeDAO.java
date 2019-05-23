@@ -285,55 +285,49 @@ public class EmployeeDAO {
 	}
 
 	// 직원명으로 직원코드를 가져오는 메소드
-		public String getEmployeeCode(String e_name) throws Exception {
+	public String getEmployeeCode(String e_name) throws Exception {
 
+		String sql = "select e_code from employee where e_name = ?";
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		EmployeeVO evo = null;
+		String e_code = "";
 
-			String sql = "select e_code from employee where e_name = ?";
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			EmployeeVO evo = null;
-			String e_code = "";
-			
-			
-			try {
+		try {
 
-				con = DBUtil.getConnection(); // DBUtil 연결
+			con = DBUtil.getConnection(); // DBUtil 연결
 
-				pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
-				pstmt.setString(1, e_name);
-				rs = pstmt.executeQuery(); // 쿼리 실행
+			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
+			pstmt.setString(1, e_name);
+			rs = pstmt.executeQuery(); // 쿼리 실행
 
-				while (rs.next()) {
-					e_code = rs.getString("e_code");
-				}
-
-			} catch (SQLException se) {
-				System.out.println(se);
-			} catch (Exception e) {
-				System.out.println(e);
-			} finally {
-				try {
-					// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
-					if (rs != null) {
-						rs.close();
-					}
-					if (pstmt != null) {
-						pstmt.close();
-					}
-					if (con != null) {
-						con.close();
-					}
-				} catch (SQLException se) {
-				}
+			while (rs.next()) {
+				e_code = rs.getString("e_code");
 			}
 
-			return e_code;
-
+		} catch (SQLException se) {
+			System.out.println(se);
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException se) {
+			}
 		}
 
-	
-	
-	
-	
+		return e_code;
+
+	}
+
 }

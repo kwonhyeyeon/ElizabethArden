@@ -16,7 +16,7 @@ public class SaleVO {
 	private int p_point; // 포인트
 	private int sr_used_point; // 포인트사용금액
 	private String sr_return_reason; // 반품 사유
-	private String p_build_date; // 판매일자
+	private String build_date; // 판매일자
 	
 	public SaleVO() {
 		super();
@@ -39,7 +39,7 @@ public class SaleVO {
 	
 	public SaleVO(String e_name, String c_name, int c_code, String e_code, int no, String p_code, String p_name,
 			String sr_state, int sr_ea, int p_price, int sr_total, int p_point, int sr_used_point,
-			String sr_return_reason, String p_build_date) {
+			String sr_return_reason, String build_date) {
 		super();
 		this.e_name = e_name;
 		this.c_name = c_name;
@@ -55,7 +55,7 @@ public class SaleVO {
 		this.p_point = p_point;
 		this.sr_used_point = sr_used_point;
 		this.sr_return_reason = sr_return_reason;
-		this.p_build_date = p_build_date;
+		this.build_date = build_date;
 	}
 
 	// sr_return 테이블 생성자
@@ -75,7 +75,7 @@ public class SaleVO {
 	// 반품 사유 제외 생성자
 	public SaleVO(String e_name, String c_name, int c_code, String e_code, int no, String p_code, String p_name,
 			String sr_state, int sr_ea, int p_price, int sr_total, int p_point, int sr_used_point,
-			String p_build_date) {
+			String build_date) {
 		super();
 		this.e_name = e_name;
 		this.c_name = c_name;
@@ -90,7 +90,7 @@ public class SaleVO {
 		this.sr_total = sr_total;
 		this.p_point = p_point;
 		this.sr_used_point = sr_used_point;
-		this.p_build_date = p_build_date;
+		this.build_date = build_date;
 	}	
 
 	// 상품코드, 상품명, 단가, 포인트 생성자
@@ -104,6 +104,21 @@ public class SaleVO {
 		this.p_point = p_point;
 	}
 	
+	// 고객 조회시 구매 내역 생성자
+	public SaleVO(String p_code, String p_name, String sr_state, int sr_ea, int p_price, int sr_total, int p_point,
+			int sr_used_point, String build_date) {
+		super();
+		this.p_code = p_code;
+		this.p_name = p_name;
+		this.sr_state = sr_state;
+		this.sr_ea = sr_ea;
+		this.p_price = p_price;
+		this.sr_total = sr_total;
+		this.p_point = p_point;
+		this.sr_used_point = sr_used_point;
+		this.build_date = build_date;
+	}
+
 	public String getE_name() {
 		return e_name;
 	}
@@ -216,12 +231,12 @@ public class SaleVO {
 		this.sr_return_reason = sr_return_reason;
 	}
 
-	public String getP_build_date() {
-		return p_build_date;
+	public String getBuild_date() {
+		return build_date;
 	}
 
-	public void setP_build_date(String p_build_date) {
-		this.p_build_date = p_build_date;
+	public void setBuild_date(String build_date) {
+		this.build_date = build_date;
 	}
 
 	@Override
@@ -229,7 +244,7 @@ public class SaleVO {
 		return "SaleVO [e_name=" + e_name + ", c_name=" + c_name + ", no=" + no + ", p_code=" + p_code + ", p_name="
 				+ p_name + ", sr_state=" + sr_state + ", sr_ea=" + sr_ea + ", p_price=" + p_price + ", sr_total="
 				+ sr_total + ", p_point=" + p_point + ", sr_used_point=" + sr_used_point + ", sr_return_reason="
-				+ sr_return_reason + ", p_build_date=" + p_build_date + "]";
+				+ sr_return_reason + ", build_date=" + build_date + "]";
 	}
 	
 }

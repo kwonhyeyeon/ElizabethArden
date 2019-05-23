@@ -18,7 +18,7 @@ public class CustomerDAO {
 	public boolean customerRegiste(CustomerVO ct) throws Exception {
 
 		// 고객 등록을 위한 sql문
-		String sql = "insert into CUSTOMER values(?, ?, ?, ?, to_date(?, 'YYYYMMDD'), ?, 0, ?)";
+		String sql = "insert into CUSTOMER values(?, ?, ?, ?, ?, ?, 0, ?)";
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		// 등록 성공 판단 변수
@@ -279,4 +279,59 @@ public class CustomerDAO {
 		return list;
 	}
 
+	public boolean getCustomerUpdate(String c_phoneNumber, String c_address, String c_email, String c_etc, int c_code) throws Exception {
+		
+		String sql = "update customer set c_phoneNumber = ?, c_address = ?, c_email = ?, c_etc = ? where c_code = ?";
+		
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		boolean customerUpdateSucess = false;
+
+		try {
+			con = DBUtil.getConnection(); // DBUtil 연결
+			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
+			pstmt.setString(1, c_phoneNumber);
+			pstmt.setString(2, c_address);
+			pstmt.setString(3, c_email);
+			pstmt.setString(4, c_etc);
+			pstmt.setInt(5, c_code);
+
+			int i = pstmt.executeUpdate();
+
+			if (i == 1) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("고객 정보 수정");
+				alert.setHeaderText("고객 정보 수정 완료");
+				alert.setContentText("성공적으로 고객 정보를 수정했습니다");
+				alert.showAndWait();
+				customerUpdateSucess = true;
+			} else {
+				Alert alert = new Alert(AlertType.WARNING);
+				alert.setTitle("고객 정보 수정");
+				alert.setHeaderText("고객 정보 수정 실패");
+				alert.setContentText("다시 입력해주세요");
+				alert.showAndWait();
+			}
+
+		} catch (SQLException e) {
+			System.out.println("e=[" + e + "]");
+		} catch (Exception e) {
+			System.out.println("e=[" + e + "]");
+		} finally {
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+			}
+		}
+
+		return customerUpdateSucess;
+		
+	}
+	
 }

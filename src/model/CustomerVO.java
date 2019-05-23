@@ -60,6 +60,17 @@ public class CustomerVO {
 		this.c_phoneNumber = c_phoneNumber;
 		this.c_birth = c_birth;
 	}
+	
+	// 고객 수정 생성자
+	public CustomerVO(String c_phoneNumber, String c_address, String c_email, String c_etc, int c_code) {
+		super();
+		this.c_phoneNumber = c_phoneNumber;
+		this.c_address = c_address;
+		this.c_email = c_email;
+		this.c_etc = c_etc;
+		this.c_code = c_code;
+	}
+	
 	// get,set
 	public int getC_code() {
 		return c_code;
