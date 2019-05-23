@@ -242,40 +242,40 @@ public class SaleTabController implements Initializable {
 
 	// 등록 버튼 이벤트 메소드
 	public void handlerBtnPRegiAction(ActionEvent event) {
-		
-		
+
 		try {
-		// 테이블에서 선택한 정보를 selectSubject에 저장
-		selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
-		selectedSaleIndex = selectInsert.get(0).getP_no();
+			// 테이블에서 선택한 정보를 selectSubject에 저장
+			selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
+			selectedSaleIndex = selectInsert.get(0).getP_no();
 
-		selectInsert.get(0).getP_code();
-		selectInsert.get(0).getP_ea();
-		selectInsert.get(0).getP_price();
-		selectInsert.get(0).getP_point();
-		selectInsert.get(0).getP_total();
-		selectInsert.get(0).getP_name();
-		CustomerDAO cdao = new CustomerDAO();
-		ArrayList<CustomerVO> list = new ArrayList<>();
+			selectInsert.get(0).getP_code();
+			selectInsert.get(0).getP_ea();
+			selectInsert.get(0).getP_price();
+			selectInsert.get(0).getP_point();
+			selectInsert.get(0).getP_total();
+			selectInsert.get(0).getP_name();
+			CustomerDAO cdao = new CustomerDAO();
+			ArrayList<CustomerVO> list = new ArrayList<>();
 
-		String e_name = cbxE_name.getSelectionModel().getSelectedItem().toString();
-		String e_code;
-		String sr_state;
-		list = cdao.getCustomerSearch(txtC_name.getText().trim());
-		int c_code = list.get(0).getC_code();
+			String e_name = cbxE_name.getSelectionModel().getSelectedItem().toString();
+			String e_code;
+			String sr_state;
+			list = cdao.getCustomerSearch(txtC_name.getText().trim());
+			int c_code = list.get(0).getC_code();
 
-		int p_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
-		int p_point = p_total / 100;
+			int p_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
+			int p_point = p_total / 100;
 
-		EmployeeDAO edao = new EmployeeDAO();
-		e_code = edao.getEmployeeCode(e_name.trim());
-		sr_state = cbxState.getSelectionModel().getSelectedItem().toString();
+			EmployeeDAO edao = new EmployeeDAO();
+			e_code = edao.getEmployeeCode(e_name.trim());
+			sr_state = cbxState.getSelectionModel().getSelectedItem().toString();
 
-		SaleVO svo = new SaleVO(c_code, e_code, selectInsert.get(0).getP_code(), selectInsert.get(0).getP_name(),
-				sr_state.trim(), Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), p_total, p_point);
+			SaleVO svo = new SaleVO(c_code, e_code, selectInsert.get(0).getP_code(), selectInsert.get(0).getP_name(),
+					sr_state.trim(), Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), p_total,
+					p_point);
 
-		saleListDataList.add(svo);
-		}catch(Exception e) {
+			saleListDataList.add(svo);
+		} catch (Exception e) {
 			System.out.println(e);
 		}
 	}
@@ -434,6 +434,85 @@ public class SaleTabController implements Initializable {
 					cvo = list.get(index);
 					customerDataList.add(cvo);
 				}
+
+				// 검색 버튼 이벤트
+				btnSearch.setOnAction(e -> {
+
+					try {
+						if (c_name.getText().equals("")) {
+
+							customerDataList.removeAll(customerDataList);
+
+							CustomerDAO cDao = new CustomerDAO();
+							CustomerVO cVo = null;
+
+							ArrayList<String> emptyTitle;
+							ArrayList<CustomerVO> emptyList;
+
+							emptyTitle = cDao.getCustomerColumnName();
+							int emptyColumnCount = title.size();
+
+							emptyList = cDao.getCustomerTotalList();
+							int emptyRowCount = list.size();
+
+							for (int index = 0; index < emptyRowCount; index++) {
+								cVo = emptyList.get(index);
+								customerDataList.add(cVo);
+							}
+
+						} else {
+							customerDataList.removeAll(customerDataList);
+
+							ArrayList<CustomerVO> newSearchList = new ArrayList<CustomerVO>();
+							CustomerVO cVo = null;
+							CustomerDAO cDao = null;
+							boolean newSearchResult = false; // 검색 결과
+							String getCname = c_name.getText().trim();
+
+							cDao = new CustomerDAO();
+							newSearchList = cDao.getCustomerSearch(getCname);
+
+							if (newSearchList != null) {
+								int emptyRowCount = newSearchList.size();
+								c_name.clear();
+
+								for (int index = 0; index < emptyRowCount; index++) {
+									cVo = newSearchList.get(index);
+									customerDataList.add(cVo);
+									newSearchResult = true;
+								}
+							}
+
+							if (!newSearchResult) {
+								c_name.clear(); // 검색 텍스트 필드의 값을 지운다
+								Alert alert = new Alert(AlertType.INFORMATION);
+								alert.setTitle("고객 검색");
+								alert.setHeaderText(getCname + "고객이 리스트에 없습니다");
+								alert.setContentText("고객명을 다시 입력하세요");
+								alert.showAndWait(); // 확인 창 누르기 전까지 대기
+
+								customerDataList.removeAll(customerDataList);
+
+								ArrayList<String> emptyTitle;
+								ArrayList<CustomerVO> emptyList;
+
+								emptyTitle = cDao.getCustomerColumnName();
+								int emptyColumnCount = title.size();
+
+								emptyList = cDao.getCustomerTotalList();
+								int emptyRowCount = list.size();
+
+								for (int index = 0; index < emptyRowCount; index++) {
+									cVo = list.get(index);
+									customerDataList.add(cVo);
+								}
+							}
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+
+				});
 
 			} else {
 
