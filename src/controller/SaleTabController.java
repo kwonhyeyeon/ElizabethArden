@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.SelectionModel;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -30,6 +32,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import model.CustomerVO;
 import model.EmployeeVO;
 import model.ProductVO;
@@ -46,14 +49,15 @@ public class SaleTabController implements Initializable {
 	@FXML
 	private TextField txtC_name; // 고객명
 	@FXML
-	private Button btnC_search; // 검색 버튼
-	@FXML
-	private Label lblBirth; // 고객 생일 라벨
-	@FXML
-	private Label lblPhone; // 고객 폰번
-	@FXML
-	private Label lblAddress; // 고객주소
-	@FXML
+	private Button btnC_search;
+	// 검색 버튼
+	/*
+	 * @FXML private TextField txtAddress; // 고객주소
+	 * 
+	 * @FXML private TextField txtPhone; // 고객 핸드폰 번호
+	 * 
+	 * @FXML private TextField txtBirth; // 고객 생년월일
+	 */ @FXML
 	private TableView<ProductVO> tableSaleInsert = new TableView<>(); // 판매입력 테이블
 	@FXML
 	private TableView<SaleVO> tableSaleList = new TableView<>(); // 판매현황 테이블
@@ -69,6 +73,8 @@ public class SaleTabController implements Initializable {
 	private TextField txtUsedPoint; // 포인트 사용금액
 	@FXML
 	private ComboBox<String> cbxReturnReason; // 반품사유 콤보박스
+	@FXML
+	private Label lblCInfo;
 
 	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
 	ObservableList<ProductVO> saleInsertDataList = FXCollections.observableArrayList(); // 판매입력 테이블
@@ -92,9 +98,16 @@ public class SaleTabController implements Initializable {
 			cbxState.setItems(FXCollections.observableArrayList("판매", "반품", "포인트 사용"));
 			cbxReturnReason.setItems(FXCollections.observableArrayList("제조날짜초과", "변질", "트러블", "기타"));
 
+			// txtAddress.setDisable(true); // 고객정보상자 비활성화
+			// txtBirth.setDisable(true);
+			// txtPhone.setDisable(true);
 			cbxState.setDisable(true); // 상태 콤보박스 비활성화
 			txtUsedPoint.setDisable(true); // 포인트 사용금액 비활성화
 			cbxReturnReason.setDisable(true); // 반품사유 콤보박스 비활성화
+			p_ea.setDisable(false); // 수량 텍스트필드 비활성화
+			btnP_regi.setDisable(false);
+			txtC_name.setText("FREE");
+			txtC_name.setDisable(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -218,14 +231,14 @@ public class SaleTabController implements Initializable {
 		colListSr_Used_Point.setStyle("-fx-alignment:CENTER");
 		colListSr_Used_Point.setCellValueFactory(new PropertyValueFactory<>("sr_used_point"));
 
-		TableColumn colListP_Build_Date = new TableColumn("판매 일자");
-		colListP_Build_Date.setPrefWidth(100);
-		colListP_Build_Date.setStyle("-fx-alignment:CENTER");
-		colListP_Build_Date.setCellValueFactory(new PropertyValueFactory<>("p_build_date"));
+		TableColumn colListBuild_Date = new TableColumn("판매 일자");
+		colListBuild_Date.setPrefWidth(100);
+		colListBuild_Date.setStyle("-fx-alignment:CENTER");
+		colListBuild_Date.setCellValueFactory(new PropertyValueFactory<>("build_date"));
 
 		tableSaleList.setItems(saleListDataList);
 		tableSaleList.getColumns().addAll(colListNo, colListP_Code, colListP_Name, colListSr_State, colListSr_ea,
-				colListP_Price, colListSr_Total, colListP_Point, colListSr_Used_Point, colListP_Build_Date);
+				colListP_Price, colListSr_Total, colListP_Point, colListSr_Used_Point, colListBuild_Date);
 
 		// 재고 테이블뷰 더블 클릭 선택 이벤트 핸들러
 		tableProduct.setOnMouseClicked(event -> handlerTableProductAction(event));
@@ -238,16 +251,47 @@ public class SaleTabController implements Initializable {
 		cbxState.setOnAction(event -> handlerCbxStateAction(event));
 		// 등록 버튼 이벤트 핸들러
 		btnP_regi.setOnAction(event -> handlerBtnPRegiAction(event));
+		// 달력에서 클릭 선택 이벤트 핸들러
+		dpDate.setOnAction(event -> handlerdpDateAction(event));
+
+	}
+
+	// 달력에서 마우스 이벤트 발생시
+	public void handlerdpDateAction(ActionEvent event) {
+
+		// 해당 날짜의 데이터를 받는 배열 생성
+		ArrayList<SaleVO> list = new ArrayList();
+		SaleReturnDAO sdao = new SaleReturnDAO();
+		try {
+
+			String buildDate = dpDate.getValue().toString();
+			list = sdao.getSaleReturndpdate(buildDate);
+
+			saleListDataList.removeAll(saleListDataList);
+			for (int index = 0; index < list.size(); index++) {
+				SaleVO svo = new SaleVO(list.get(index).getNo(), list.get(index).getP_code(),
+						list.get(index).getP_name(), list.get(index).getSr_state(), list.get(index).getSr_ea(),
+						list.get(index).getP_price(), list.get(index).getSr_total(), list.get(index).getP_point(),
+						list.get(index).getSr_used_point(), list.get(index).getBuild_date());
+				saleListDataList.add(svo);
+			}
+			// saleReturnTotalList();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 
 	// 등록 버튼 이벤트 메소드
 	public void handlerBtnPRegiAction(ActionEvent event) {
 
 		try {
+			// 선택한 행의 인덱스
+			int index = tableSaleInsert.getSelectionModel().getSelectedIndex();
+
 			// 테이블에서 선택한 정보를 selectSubject에 저장
 			selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
 			selectedSaleIndex = selectInsert.get(0).getP_no();
-
 			selectInsert.get(0).getP_code();
 			selectInsert.get(0).getP_ea();
 			selectInsert.get(0).getP_price();
@@ -263,18 +307,38 @@ public class SaleTabController implements Initializable {
 			list = cdao.getCustomerSearch(txtC_name.getText().trim());
 			int c_code = list.get(0).getC_code();
 
-			int p_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
-			int p_point = p_total / 100;
-
+			int sr_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
+			int sr_point = sr_total / 100;
+			int used_point = 0;
 			EmployeeDAO edao = new EmployeeDAO();
+			SaleReturnDAO srdao = new SaleReturnDAO();
+
+			int saleRetrunNo = srdao.getSale_returnNO();
 			e_code = edao.getEmployeeCode(e_name.trim());
 			sr_state = cbxState.getSelectionModel().getSelectedItem().toString();
+			String buildDate = dpDate.getValue().toString();
 
-			SaleVO svo = new SaleVO(c_code, e_code, selectInsert.get(0).getP_code(), selectInsert.get(0).getP_name(),
-					sr_state.trim(), Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), p_total,
-					p_point);
+			dpDate.getValue().toString();
+			if (sr_state.equals("판매")) {
+				SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(), selectInsert.get(0).getP_name(),
+						sr_state.trim(), Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), sr_total,
+						sr_point, 0, buildDate);
+				saleListDataList.add(svo);
 
-			saleListDataList.add(svo);
+				// 판매등록후 테이블에 값 입력
+				srdao.insertSale_return(c_code, selectInsert.get(0).getP_code(), e_code, sr_total, sr_state,
+						Integer.parseInt(p_ea.getText()), buildDate);
+				// 판매등록후 재고테이블 수량변경
+				srdao.setProductTable(Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_code());
+				// 재고테이블 새로고침
+				productTotalList();
+				// 판매등록후 고객 포인트 변경
+				srdao.setCustomerPoint(sr_point, c_code);
+
+				// 선택한 행의 정보 삭제
+				saleInsertDataList.remove(index);
+			}
+
 		} catch (Exception e) {
 			System.out.println(e);
 		}
@@ -301,7 +365,6 @@ public class SaleTabController implements Initializable {
 		String state = cbxState.getSelectionModel().getSelectedItem();
 
 		if (state.equals("판매")) {
-			txtUsedPoint.setDisable(true); // 포인트 사용금액 비활성화
 			cbxReturnReason.setDisable(true); // 반품사유 콤보박스 비활성화
 		}
 
@@ -354,11 +417,8 @@ public class SaleTabController implements Initializable {
 
 	}
 
-	// 고객명 검색 버튼 이벤트 메소드
-	/**
-	 * @param event
-	 */
-	public void handlerBtnCSearchAction(ActionEvent event) {
+	// 고객명 검색 메소드
+	public void customerSearch() {
 
 		// 고객명 검색 텍스트 필드 값
 		String SearchName = "";
@@ -416,6 +476,40 @@ public class SaleTabController implements Initializable {
 						colCustomerBirth);
 
 				customerDataList.removeAll(customerDataList);
+
+				// 여기하는중
+				tableCustomerList.setOnMouseClicked(e -> {
+					if (e.getClickCount() == 2) {
+						// Stage stage = (Stage) btnSearch.getScene().getWindow();
+						String selectedCustomerName = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_name();
+						String selectedCustomerAddress = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_address();
+						int selectedCustomerCode = tableCustomerList.getSelectionModel().getSelectedItem().getC_code();
+						String selectedCustomerBirth = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_birth();
+						String selectedCustomerPhonenumber = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_phoneNumber();
+						String seletedCustomerEtc = tableCustomerList.getSelectionModel().getSelectedItem().getC_etc();
+
+						if (!(selectedCustomerName.contentEquals(""))) {
+							dialog.close();
+
+							txtC_name.setText(selectedCustomerName);
+							// 선택된 고객정보로 라벨과 텍스트상자 설정
+							lblCInfo.setText("주소 : " + selectedCustomerAddress + "\t생년월일 : " + selectedCustomerBirth
+									+ "\t핸드폰번호 : " + selectedCustomerPhonenumber);
+							/*
+							 * txtC_name.setText(selectedCustomerName);
+							 * txtBirth.setText(selectedCustomerBirth);
+							 * txtPhone.setText(selectedCustomerPhonenumber);
+							 * txtAddress.setText(selectedCustomerAddress);
+							 */
+							taBigo.setText(seletedCustomerEtc);
+
+						}
+					}
+				});
 
 				// 고객 전체 리스트를 테이블뷰에 보임
 				CustomerDAO cdao = new CustomerDAO();
@@ -573,6 +667,39 @@ public class SaleTabController implements Initializable {
 				cdao = new CustomerDAO();
 				searchList = cdao.getCustomerSearch(SearchName);
 
+				// 여기다 복붙해
+				tableCustomerList.setOnMouseClicked(e -> {
+					if (e.getClickCount() == 2) {
+						// Stage stage = (Stage) btnSearch.getScene().getWindow();
+						String selectedCustomerName = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_name();
+						String selectedCustomerAddress = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_address();
+						int selectedCustomerCode = tableCustomerList.getSelectionModel().getSelectedItem().getC_code();
+						String selectedCustomerBirth = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_birth();
+						String selectedCustomerPhonenumber = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_phoneNumber();
+						String seletedCustomerEtc = tableCustomerList.getSelectionModel().getSelectedItem().getC_etc();
+						if (!(selectedCustomerName.contentEquals(""))) {
+							dialog.close();
+
+							txtC_name.setText(selectedCustomerName);
+							// 선택된 고객정보로 라벨과 텍스트상자 설정
+							lblCInfo.setText("주소 : " + selectedCustomerAddress + "\t생년월일 : " + selectedCustomerBirth
+									+ "\t핸드폰번호 : " + selectedCustomerPhonenumber);
+							/*
+							 * txtC_name.setText(selectedCustomerName);
+							 * txtBirth.setText(selectedCustomerBirth);
+							 * txtPhone.setText(selectedCustomerPhonenumber);
+							 * txtAddress.setText(selectedCustomerAddress);
+							 */
+							taBigo.setText(seletedCustomerEtc);
+
+						}
+					}
+				});
+
 				if (searchList != null) {
 					int rowCount = searchList.size();
 					c_name.clear();
@@ -697,7 +824,11 @@ public class SaleTabController implements Initializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
 
+	// 고객명 검색 버튼 이벤트 메소드
+	public void handlerBtnCSearchAction(ActionEvent event) {
+		customerSearch();
 	}
 
 	// 재고 현황 리스트
@@ -719,6 +850,25 @@ public class SaleTabController implements Initializable {
 		for (int index = 0; index < rowCount; index++) {
 			pVo = list.get(index);
 			productDataList.add(pVo);
+		}
+
+	}
+
+	// 판매 내역 리스트
+	public void saleReturnTotalList() throws Exception {
+		saleListDataList.removeAll(productDataList);
+
+		SaleReturnDAO sdao = new SaleReturnDAO();
+		SaleVO svo = null;
+
+		ArrayList<SaleVO> list;
+
+		list = sdao.getSaleReturndpdate(dpDate.getValue().toString());
+		int rowCount = list.size();
+
+		for (int index = 0; index < rowCount; index++) {
+			svo = list.get(index);
+			saleListDataList.add(svo);
 		}
 
 	}
