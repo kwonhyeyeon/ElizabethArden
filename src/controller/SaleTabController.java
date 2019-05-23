@@ -313,38 +313,44 @@ public class SaleTabController implements Initializable {
 
 	}
 
-	// 재고 테이블뷰 더블 클릭 이벤트 메소드
-	public void handlerTableProductAction(MouseEvent event) {
+	 // 재고 테이블뷰 더블 클릭 이벤트 메소드
+	   public void handlerTableProductAction(MouseEvent event) {
 
-		if (event.getClickCount() == 2) { // 더블클릭시
-			try {
+	      if (event.getClickCount() == 2) { // 더블클릭시
+	         try {
 
-				// 테이블에서 선택한 정보를 selectSubject에 저장
-				selectProduct = tableProduct.getSelectionModel().getSelectedItems();
-				selectedIndex = selectProduct.get(0).getP_no();
+	            // 테이블에서 선택한 정보를 selectSubject에 저장
+	            selectProduct = tableProduct.getSelectionModel().getSelectedItems();
+	            selectedIndex = selectProduct.get(0).getP_no();
 
-				String selectedP_code = selectProduct.get(0).getP_code();
-				String selectedP_name = selectProduct.get(0).getP_name();
-				int selecetedP_ea = selectProduct.get(0).getP_ea();
-				int selectedP_price = selectProduct.get(0).getP_price();
-				int selectedP_total = selectProduct.get(0).getP_total();
-				int selectedP_point = selectProduct.get(0).getP_point();
-				selecetedP_ea = 1;
-				selectedP_total = selecetedP_ea * selectedP_price;
-				selectedP_point = selectedP_total / 100;
+	            String selectedP_code = selectProduct.get(0).getP_code();
+	            String selectedP_name = selectProduct.get(0).getP_name();
+	            int selecetedP_ea = selectProduct.get(0).getP_ea();
+	            int selectedP_price = selectProduct.get(0).getP_price();
+	            int selectedP_total = selecetedP_ea * selectedP_price;
+	            int selectedP_point = selectedP_total / 100;
+	            EmployeeDAO edao = new EmployeeDAO();
+	            //edao.getemployeeCode(cbx)
+	            // saleInsertDataList.removeAll();
+	            ProductVO pvo = new ProductVO(selectedP_code, selectedP_name, selecetedP_ea, selectedP_price, selectedP_total,
+	                  selectedP_point);
+	            
+	            saleInsertDataList.add(pvo);
+	            
+	            /*ArrayList<SaleVO> selectedInfo = new ArrayList();
+	            selectedInfo.add(svo);
+	            
+	            selected = selectedInfo;*/
+	            
+	            
+	            
 
-				// saleInsertDataList.removeAll();
-				SaleVO svo = new SaleVO(selectedP_code, selectedP_name, selecetedP_ea, selectedP_price, selectedP_total,
-						selectedP_point);
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	         }
+	      }
 
-				saleInsertDataList.add(svo);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
+	   }
 
 	// 고객명 검색 버튼 이벤트 메소드
 	/**
