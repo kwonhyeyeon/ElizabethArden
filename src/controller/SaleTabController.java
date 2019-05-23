@@ -26,6 +26,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -467,6 +469,54 @@ public class SaleTabController implements Initializable {
 
 				customerDataList.removeAll(customerDataList);
 
+				ArrayList<CustomerVO> searchList = new ArrayList<CustomerVO>();
+				CustomerVO cvo = null;
+				CustomerDAO cdao = null;
+				boolean searchResult = false; // 검색 결과
+
+				cdao = new CustomerDAO();
+				searchList = cdao.getCustomerSearch(SearchName);
+
+				if (searchList != null) {
+					int rowCount = searchList.size();
+					c_name.clear();
+
+					for (int index = 0; index < rowCount; index++) {
+						cvo = searchList.get(index);
+						customerDataList.add(cvo);
+						searchResult = true;
+					}
+				}
+
+				if (!searchResult) {
+					c_name.clear(); // 검색 텍스트 필드의 값을 지운다
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("고객 검색");
+					alert.setHeaderText(SearchName + "고객이 리스트에 없습니다");
+					alert.setContentText("고객명을 다시 입력하세요");
+					alert.showAndWait(); // 확인 창 누르기 전까지 대기
+
+					customerDataList.removeAll(customerDataList);
+
+					CustomerDAO cDao = new CustomerDAO();
+					CustomerVO cVo = null;
+
+					ArrayList<String> title;
+					ArrayList<CustomerVO> list;
+
+					title = cDao.getCustomerColumnName();
+					int columnCount = title.size();
+
+					list = cDao.getCustomerTotalList();
+					int rowCount = list.size();
+
+					for (int index = 0; index < rowCount; index++) {
+						cVo = list.get(index);
+						customerDataList.add(cVo);
+						searchResult = false;
+					}
+				}
+
 				// 검색 버튼 이벤트
 				btnSearch.setOnAction(e -> {
 
@@ -493,36 +543,51 @@ public class SaleTabController implements Initializable {
 							}
 
 						} else {
-							ArrayList<CustomerVO> searchList = new ArrayList<CustomerVO>();
-							CustomerVO cvo = null;
-							CustomerDAO cdao = null;
-							boolean searchResult = false; // 검색 결과
+							customerDataList.removeAll(customerDataList);
+
+							ArrayList<CustomerVO> newSearchList = new ArrayList<CustomerVO>();
+							CustomerVO cVo = null;
+							CustomerDAO cDao = null;
+							boolean newSearchResult = false; // 검색 결과
 							String getCname = c_name.getText().trim();
 
-							cdao = new CustomerDAO();
-							searchList = cdao.getCustomerSearch(getCname);
+							cDao = new CustomerDAO();
+							newSearchList = cDao.getCustomerSearch(getCname);
 
-							if (searchList != null) {
-								int rowCount = searchList.size();
+							if (newSearchList != null) {
+								int rowCount = newSearchList.size();
 								c_name.clear();
-								// .removeAll(customerDataList);
 
 								for (int index = 0; index < rowCount; index++) {
-									cvo = searchList.get(index);
-									customerDataList.add(cvo);
-									searchResult = true;
+									cVo = newSearchList.get(index);
+									customerDataList.add(cVo);
+									newSearchResult = true;
 								}
-								System.out.println(searchList);
 							}
-							
-							if(!searchResult) {
+
+							if (!newSearchResult) {
 								c_name.clear(); // 검색 텍스트 필드의 값을 지운다
 								Alert alert = new Alert(AlertType.INFORMATION);
 								alert.setTitle("고객 검색");
-								alert.setHeaderText(c_name + "고객이 리스트에 없습니다");
+								alert.setHeaderText(getCname + "고객이 리스트에 없습니다");
 								alert.setContentText("고객명을 다시 입력하세요");
 								alert.showAndWait(); // 확인 창 누르기 전까지 대기
-								cdao.getCustomerTotalList();
+
+								customerDataList.removeAll(customerDataList);
+
+								ArrayList<String> title;
+								ArrayList<CustomerVO> list;
+
+								title = cDao.getCustomerColumnName();
+								int columnCount = title.size();
+
+								list = cDao.getCustomerTotalList();
+								int rowCount = list.size();
+
+								for (int index = 0; index < rowCount; index++) {
+									cVo = list.get(index);
+									customerDataList.add(cVo);
+								}
 							}
 						}
 					} catch (Exception e1) {
