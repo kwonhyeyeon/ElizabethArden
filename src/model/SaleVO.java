@@ -22,6 +22,21 @@ public class SaleVO {
 		super();
 	}
 	
+	public SaleVO(int c_code, String e_code, String p_code, String p_name, String sr_state, int sr_ea, int p_price,
+			int sr_total, int p_point) {
+		super();
+		this.c_code = c_code;
+		this.e_code = e_code;
+		this.p_code = p_code;
+		this.p_name = p_name;
+		this.sr_state = sr_state;
+		this.sr_ea = sr_ea;
+		this.p_price = p_price;
+		this.sr_total = sr_total;
+		this.p_point = p_point;
+	} 
+	
+	
 	public SaleVO(String e_name, String c_name, int c_code, String e_code, int no, String p_code, String p_name,
 			String sr_state, int sr_ea, int p_price, int sr_total, int p_point, int sr_used_point,
 			String sr_return_reason, String p_build_date) {

@@ -26,8 +26,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,48 +37,48 @@ import model.SaleVO;
 
 public class SaleTabController implements Initializable {
 
-	@FXML
-	private TableView<ProductVO> tableProduct = new TableView<>(); // 재고 테이블
-	@FXML
-	private DatePicker dpDate; // 입력 날짜
-	@FXML
-	private ComboBox<EmployeeVO> cbxE_name; // 직원명 콤보박스
-	@FXML
-	private TextField txtC_name; // 고객명
-	@FXML
-	private Button btnC_search; // 검색 버튼
-	@FXML
-	private Label lblBirth; // 고객 생일 라벨
-	@FXML
-	private Label lblPhone; // 고객 폰번
-	@FXML
-	private Label lblAddress; // 고객주소
-	@FXML
-	private TableView<SaleVO> tableSaleInsert = new TableView<>(); // 판매입력 테이블
-	@FXML
-	private TableView<SaleVO> tableSaleList = new TableView<>(); // 판매현황 테이블
-	@FXML
-	private TextArea taBigo; // 비고
-	@FXML
-	private Button btnP_regi; // 등록 버튼
-	@FXML
-	private TextField p_ea; // 수량
-	@FXML
-	private ComboBox<String> cbxState; // 상태 콤보박스
-	@FXML
-	private TextField txtUsedPoint; // 포인트 사용금액
-	@FXML
-	private ComboBox<String> cbxReturnReason; // 반품사유 콤보박스
+   @FXML
+   private TableView<ProductVO> tableProduct = new TableView<>(); // 재고 테이블
+   @FXML
+   private DatePicker dpDate; // 입력 날짜
+   @FXML
+   private ComboBox<EmployeeVO> cbxE_name; // 직원명 콤보박스
+   @FXML
+   private TextField txtC_name; // 고객명
+   @FXML
+   private Button btnC_search; // 검색 버튼
+   @FXML
+   private Label lblBirth; // 고객 생일 라벨
+   @FXML
+   private Label lblPhone; // 고객 폰번
+   @FXML
+   private Label lblAddress; // 고객주소
+   @FXML
+   private TableView<ProductVO> tableSaleInsert = new TableView<>(); // 판매입력 테이블
+   @FXML
+   private TableView<SaleVO> tableSaleList = new TableView<>(); // 판매현황 테이블
+   @FXML
+   private TextArea taBigo; // 비고
+   @FXML
+   private Button btnP_regi; // 등록 버튼
+   @FXML
+   private TextField p_ea; // 수량
+   @FXML
+   private ComboBox<String> cbxState; // 상태 콤보박스
+   @FXML
+   private TextField txtUsedPoint; // 포인트 사용금액
+   @FXML
+   private ComboBox<String> cbxReturnReason; // 반품사유 콤보박스
 
-	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
-	ObservableList<SaleVO> saleInsertDataList = FXCollections.observableArrayList(); // 판매입력 테이블
-	ObservableList<SaleVO> saleListDataList = FXCollections.observableArrayList(); // 판매내역 테이블
+   ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
+   ObservableList<ProductVO> saleInsertDataList = FXCollections.observableArrayList(); // 판매입력 테이블
+   ObservableList<SaleVO> saleListDataList = FXCollections.observableArrayList(); // 판매내역 테이블
 
-	ObservableList<ProductVO> selectProduct = null; // 재고 테이블에서 선택한 정보 저장
-	int selectedIndex; // 재고 테이블에서 선택한 상품 정보 인덱스 저장
+   ObservableList<ProductVO> selectProduct = null; // 재고 테이블에서 선택한 정보 저장
+   int selectedIndex; // 재고 테이블에서 선택한 상품 정보 인덱스 저장
 
-	ObservableList<SaleVO> selectInsert = null; // 판매입력 테이블에서 선택한 정보 저장
-	int selectedSaleIndex; // 판매입력 테이블에서 선택한 상품 정보 인덱스 저장
+   ObservableList<ProductVO> selectInsert = null; // 판매입력 테이블에서 선택한 정보 저장
+   int selectedSaleIndex; // 판매입력 테이블에서 선택한 상품 정보 인덱스 저장
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -139,57 +137,42 @@ public class SaleTabController implements Initializable {
 		tableProduct.getColumns().addAll(colProductCode, colProductName, colProductEa, colProductPrice, colProductTotal,
 				colProductPoint);
 
-		// 판매 입력 테이블 컬럼 지정
-		TableColumn colInsertP_Code = new TableColumn("상품코드");
-		colInsertP_Code.setPrefWidth(100);
-		colInsertP_Code.setStyle("-fx-alignment:CENTER");
-		colInsertP_Code.setCellValueFactory(new PropertyValueFactory<>("p_code"));
+		 // 판매 입력 테이블 컬럼 지정
+	      TableColumn colInsertP_Code = new TableColumn("상품코드");
+	      colInsertP_Code.setPrefWidth(100);
+	      colInsertP_Code.setStyle("-fx-alignment:CENTER");
+	      colInsertP_Code.setCellValueFactory(new PropertyValueFactory<>("p_code"));
 
-		TableColumn colInsertP_Name = new TableColumn("상품명");
-		colInsertP_Name.setPrefWidth(230);
-		colInsertP_Name.setStyle("-fx-alignment:CENTER");
-		colInsertP_Name.setCellValueFactory(new PropertyValueFactory<>("p_name"));
+	      TableColumn colInsertP_Name = new TableColumn("상품명");
+	      colInsertP_Name.setPrefWidth(230);
+	      colInsertP_Name.setStyle("-fx-alignment:CENTER");
+	      colInsertP_Name.setCellValueFactory(new PropertyValueFactory<>("p_name"));
 
-		TableColumn colInsertSr_State = new TableColumn("상태");
-		colInsertSr_State.setPrefWidth(80);
-		colInsertSr_State.setStyle("-fx-alignment:CENTER");
-		colInsertSr_State.setCellValueFactory(new PropertyValueFactory<>("sr_state"));
+	      TableColumn colInsertP_ea = new TableColumn("수량");
+	      colInsertP_ea.setPrefWidth(50);
+	      colInsertP_ea.setStyle("-fx-alignment:CENTER");
+	      colInsertP_ea.setCellValueFactory(new PropertyValueFactory<>("p_ea"));
 
-		TableColumn colInsertSr_ea = new TableColumn("수량");
-		colInsertSr_ea.setPrefWidth(50);
-		colInsertSr_ea.setStyle("-fx-alignment:CENTER");
-		colInsertSr_ea.setCellValueFactory(new PropertyValueFactory<>("sr_ea"));
+	      TableColumn colInsertP_Price = new TableColumn("단가");
+	      colInsertP_Price.setPrefWidth(90);
+	      colInsertP_Price.setStyle("-fx-alignment:CENTER");
+	      colInsertP_Price.setCellValueFactory(new PropertyValueFactory<>("p_price"));
 
-		TableColumn colInsertP_Price = new TableColumn("단가");
-		colInsertP_Price.setPrefWidth(90);
-		colInsertP_Price.setStyle("-fx-alignment:CENTER");
-		colInsertP_Price.setCellValueFactory(new PropertyValueFactory<>("p_price"));
+	      TableColumn colInsertP_total = new TableColumn("총액");
+	      colInsertP_total.setPrefWidth(90);
+	      colInsertP_total.setStyle("-fx-alignment:CENTER");
+	      colInsertP_total.setCellValueFactory(new PropertyValueFactory<>("p_total"));
 
-		TableColumn colInsertSr_Total = new TableColumn("총액");
-		colInsertSr_Total.setPrefWidth(90);
-		colInsertSr_Total.setStyle("-fx-alignment:CENTER");
-		colInsertSr_Total.setCellValueFactory(new PropertyValueFactory<>("sr_total"));
+	      TableColumn colInsertP_Point = new TableColumn("포인트");
+	      colInsertP_Point.setPrefWidth(90);
+	      colInsertP_Point.setStyle("-fx-alignment:CENTER");
+	      colInsertP_Point.setCellValueFactory(new PropertyValueFactory<>("p_point"));
 
-		TableColumn colInsertP_Point = new TableColumn("포인트");
-		colInsertP_Point.setPrefWidth(90);
-		colInsertP_Point.setStyle("-fx-alignment:CENTER");
-		colInsertP_Point.setCellValueFactory(new PropertyValueFactory<>("p_point"));
-
-		TableColumn colInsertSr_Used_Point = new TableColumn("포인트 사용금액");
-		colInsertSr_Used_Point.setPrefWidth(120);
-		colInsertSr_Used_Point.setStyle("-fx-alignment:CENTER");
-		colInsertSr_Used_Point.setCellValueFactory(new PropertyValueFactory<>("sr_used_point"));
-
-		TableColumn colInsertSr_Return_Reason = new TableColumn("반품 사유");
-		colInsertSr_Return_Reason.setPrefWidth(100);
-		colInsertSr_Return_Reason.setStyle("-fx-alignment:CENTER");
-		colInsertSr_Return_Reason.setCellValueFactory(new PropertyValueFactory<>("sr_return_reason"));
-
-		tableSaleInsert.setItems(saleInsertDataList);
-		tableSaleInsert.getColumns().addAll(colInsertP_Code, colInsertP_Name, colInsertSr_State, colInsertSr_ea,
-				colInsertP_Price, colInsertSr_Total, colInsertP_Point, colInsertSr_Used_Point,
-				colInsertSr_Return_Reason);
-
+	      tableSaleInsert.setItems(saleInsertDataList);
+	      tableSaleInsert.getColumns().addAll(colInsertP_Code, colInsertP_Name, colInsertP_ea,
+	            colInsertP_Price, colInsertP_total, colInsertP_Point);
+	      
+	      
 		// 판매 내역 테이블 컬럼 지정
 		TableColumn colListNo = new TableColumn("NO");
 		colListNo.setPrefWidth(30);
@@ -260,27 +243,53 @@ public class SaleTabController implements Initializable {
 
 	// 등록 버튼 이벤트 메소드
 	public void handlerBtnPRegiAction(ActionEvent event) {
-
+		// 테이블에서 선택한 정보를 selectSubject에 저장
+        selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
+        selectedSaleIndex = selectInsert.get(0).getP_no();
+        
+        
+        selectInsert.get(0).getP_code();
+        selectInsert.get(0).getP_ea();
+        selectInsert.get(0).getP_price();
+        selectInsert.get(0).getP_point();
+        selectInsert.get(0).getP_total();
+        selectInsert.get(0).getP_name();
+        
+        String e_name = cbxE_name.getSelectionModel().getSelectedItem().toString();
+        String e_code;
+        String sr_state;
+        int c_code = 0;
+        int p_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
+        int p_point = p_total / 100;
+        
+        EmployeeDAO edao = new EmployeeDAO();
+       e_code = edao.getEmployeeCode(e_name.trim());
+       sr_state = cbxState.getSelectionModel().getSelectedItem().toString();
+       
+       SaleVO svo = new SaleVO(c_code, e_code, selectInsert.get(0).getP_code(), selectInsert.get(0).getP_name(), sr_state.trim(), 
+    		   Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), p_total, p_point);
+         
+       saleListDataList.add(svo);
 	}
 
-	// 판매 입력 클릭 이벤트 메소드
-	public void handlerTableSaleInsertAction(MouseEvent event) {
+	 // 판매 입력 클릭 이벤트 메소드
+	   public void handlerTableSaleInsertAction(MouseEvent event) {
 
-		if (event.getClickCount() == 1) { // 판매 입력 클릭시
-			try {
+	      if (event.getClickCount() == 1) { // 판매 입력 클릭시
+	         try {
 
-				cbxState.setDisable(false); // 상태 콤보박스 활성화
+	            cbxState.setDisable(false); // 상태 콤보박스 활성화
+	            
+	           
+	             
+	           
+	            
+	         } catch (Exception e) {
+	            e.printStackTrace();
+	         }
+	      }
 
-				// 테이블에서 선택한 정보를 selectSubject에 저장
-				selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
-				selectedSaleIndex = selectInsert.get(0).getNo();
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-	}
+	   }
 
 	// 상태 콤보박스 이벤트 메소드
 	public void handlerCbxStateAction(ActionEvent event) {
