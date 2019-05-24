@@ -187,8 +187,8 @@ public class CustomerTabController implements Initializable {
 
 	}
 
-	// 수정 버튼
-	public void customerEdit() {
+	// 수정 버튼 이벤트 메소드
+	public void handlerBtnEditAction(ActionEvent event) {
 
 		CustomerVO cvo = new CustomerVO();
 		CustomerDAO cdao = new CustomerDAO();
@@ -210,23 +210,29 @@ public class CustomerTabController implements Initializable {
 				// 닫기 버튼을 호출하여 창을 닫아준다
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("고객 정보 수정");
-				alert.setHeaderText(txtC_name.getText() + " 고객 정보 수정 성공");
-				alert.setContentText("고객의 정보가 수정되었습니다");
+				alert.setHeaderText("고객 정보 수정 성공");
+				alert.setContentText(txtCustomerName.getText() + "고객의 정보가 수정되었습니다");
 				alert.showAndWait();
 			}
 			
-			// 고객 조회 테이블에 값 변경한 거 넣어야함
-
+			// 고객조회, 구매내역 테이블 초기화
+			customerDataList.removeAll(customerDataList);
+			buyDataList.removeAll(buyDataList);
+			
+			// 모든 텍스트 상자 초기화
+			txtCustomerCode.clear();
+			handlerBtnCancleAction(event);
+			
+			txtCustomerName.setDisable(false);
+			dpCustomerBirth.setDisable(false);
+			
+			txtCustomerCode.setText(cdao.getCustomerCode() + "");
+			
+			btnEdit.setDisable(true);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-	}
-
-	// 수정 버튼 이벤트 메소드
-	public void handlerBtnEditAction(ActionEvent event) {
-
-		customerEdit();
 
 	}
 
@@ -370,6 +376,10 @@ public class CustomerTabController implements Initializable {
 		}
 	}
 
+	public void registe() {
+		
+	}
+	
 	// 등록버튼 이벤트 핸들러
 	public void handlerBtnRegisteAction(ActionEvent event) {
 		CustomerDAO cdao = new CustomerDAO();
@@ -425,6 +435,7 @@ public class CustomerTabController implements Initializable {
 		txtCustomerAddress.clear();
 		txtCustomerEmail.clear();
 		txtAreaEtc.clear();
+		dpCustomerBirth.setValue(null);
 	}
 
 }
