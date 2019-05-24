@@ -418,7 +418,7 @@ public class CustomerTabController implements Initializable {
                   txtCustomerEmail.getText().trim(), txtAreaEtc.getText());
             ok = cdao.customerRegiste(cvo);
          }
-         if (오케이) {
+         if (ok) {
             handlerBtnCancleAction(event);
             txtCustomerCode.setText(cdao.getCustomerCode() + "");
          }

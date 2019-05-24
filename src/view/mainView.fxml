@@ -9,55 +9,55 @@
 
 <BorderPane prefWidth="1500" prefHeight="700" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
 
-	<top>
-		<MenuBar>
-			<menus>
-				<Menu text="홈">
-					<items>
-						<MenuItem text="로그아웃" fx:id="menuLogout" />
-						<MenuItem text="종료" fx:id="menuExit" />
-					</items>
-				</Menu>
-				
-				<Menu text="정보">
-					<items>
-						<MenuItem text="매장 정보 변경" fx:id="menuStoreInfoEdit" />
-						<MenuItem text="직원 등록" fx:id="menuEmployeeRegiste" />
-						<MenuItem text="직원 정보 변경" fx:id="menuEmployeeInfoEdit" />
-					</items>
-				</Menu>
-			</menus>
-		</MenuBar>
-	</top>
-	
-	<center>
-		<TabPane tabClosingPolicy="UNAVAILABLE" fx:id="mainPane">
-			<tabs>
-				<Tab text="판 매" fx:id="sale">
-					<content>
-						<fx:include fx:id="saleTab" source="saleTab.fxml"/>
-					</content>
-				</Tab>
-				
-				<Tab text="주 문" fx:id="order">
-					<content>
-						<fx:include fx:id="orderTab" source="orderTab.fxml"/>
-					</content>
-				</Tab>
-				
-				<Tab text="반 품" fx:id="rtrn">
-					<content>
-						<fx:include fx:id="returnTab" source="returnTab.fxml"/>
-					</content>
-				</Tab>
-				
-				<Tab text="고 객" fx:id="customer">
-					<content>
-						<fx:include fx:id="customerTab" source="customerTab.fxml"/>
-					</content>
-				</Tab>
-			</tabs>
-		</TabPane>
-	</center>
+   <top>
+      <MenuBar>
+         <menus>
+            <Menu text="홈">
+               <items>
+                  <MenuItem text="로그아웃" fx:id="menuLogout" />
+                  <MenuItem text="종료" fx:id="menuExit" />
+               </items>
+            </Menu>
+            
+            <Menu text="정보">
+               <items>
+                  <MenuItem text="매장 정보 변경" fx:id="menuStoreInfoEdit" />
+                  <MenuItem text="직원 등록" fx:id="menuEmployeeRegiste" />
+                  <MenuItem text="직원 정보 변경" fx:id="menuEmployeeInfoEdit" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+   </top>
+   
+   <center>
+      <TabPane tabClosingPolicy="UNAVAILABLE" fx:id="mainPane">
+         <tabs>
+            <Tab text="판 매" fx:id="sale">
+               <content>
+                  <fx:include fx:id="saleTab" source="saleTab.fxml"/>
+               </content>
+            </Tab>
+            
+            <Tab text="주 문" fx:id="order">
+               <content>
+                  <fx:include fx:id="orderTab" source="orderTab.fxml"/>
+               </content>
+            </Tab>
+            
+            <Tab text="반 품" fx:id="rtrn">
+               <content>
+                  <fx:include fx:id="returnTab" source="returnTab.fxml"/>
+               </content>
+            </Tab>
+            
+            <Tab text="고 객" fx:id="customer">
+               <content>
+                  <fx:include fx:id="customerTab" source="customerTab.fxml"/>
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </center>
 
 </BorderPane>
