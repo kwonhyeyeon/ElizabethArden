@@ -42,6 +42,7 @@
 			<spacing>10</spacing>
 
 			<TextField fx:id="or_ea" promptText="수 량" />
+			<Button text="수 정" fx:id="btnEdit" />
 			<Button text="등  록" fx:id="btnRegiste" />
 			<Button text="삭  제" fx:id="btnDelete" />
 
@@ -50,7 +51,7 @@
 		<Label text="주문 현황" />
 		<DatePicker fx:id="dpDate" />
 		<TableView prefWidth="840" prefHeight="300"
-			fx:id="tableOrderState"></TableView>
+			fx:id="tableOrderList"></TableView>
 		
 		<HBox alignment="CENTER_RIGHT">
 			<padding>
