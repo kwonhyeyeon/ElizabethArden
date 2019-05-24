@@ -181,12 +181,12 @@ public class SaleTabController implements Initializable {
 
 		// 판매 입력 테이블 컬럼 지정
 		TableColumn colInsertP_Code = new TableColumn("상품코드");
-		colInsertP_Code.setPrefWidth(100);
+		colInsertP_Code.setPrefWidth(120);
 		colInsertP_Code.setStyle("-fx-alignment:CENTER");
 		colInsertP_Code.setCellValueFactory(new PropertyValueFactory<>("p_code"));
 
 		TableColumn colInsertP_Name = new TableColumn("상품명");
-		colInsertP_Name.setPrefWidth(230);
+		colInsertP_Name.setPrefWidth(420);
 		colInsertP_Name.setStyle("-fx-alignment:CENTER");
 		colInsertP_Name.setCellValueFactory(new PropertyValueFactory<>("p_name"));
 
@@ -196,17 +196,17 @@ public class SaleTabController implements Initializable {
 		colInsertP_ea.setCellValueFactory(new PropertyValueFactory<>("p_ea"));
 
 		TableColumn colInsertP_Price = new TableColumn("단가");
-		colInsertP_Price.setPrefWidth(90);
+		colInsertP_Price.setPrefWidth(110);
 		colInsertP_Price.setStyle("-fx-alignment:CENTER");
 		colInsertP_Price.setCellValueFactory(new PropertyValueFactory<>("p_price"));
 
 		TableColumn colInsertP_total = new TableColumn("총액");
-		colInsertP_total.setPrefWidth(90);
+		colInsertP_total.setPrefWidth(150);
 		colInsertP_total.setStyle("-fx-alignment:CENTER");
 		colInsertP_total.setCellValueFactory(new PropertyValueFactory<>("p_total"));
 
 		TableColumn colInsertP_Point = new TableColumn("포인트");
-		colInsertP_Point.setPrefWidth(90);
+		colInsertP_Point.setPrefWidth(100);
 		colInsertP_Point.setStyle("-fx-alignment:CENTER");
 		colInsertP_Point.setCellValueFactory(new PropertyValueFactory<>("p_point"));
 

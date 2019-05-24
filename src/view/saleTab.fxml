@@ -13,75 +13,76 @@
 <?import javafx.scene.control.cell.TextFieldTableCell?>
 
 <HBox prefHeight="800" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SaleTabController">
-   <padding>
-      <Insets top="10" right="10" bottom="10" left="10"/>
-   </padding>
-   <spacing>10</spacing>
-   
-   <VBox>
-      <spacing>10</spacing>
-      <Label text="재고 현황"/>
-      
-      <TableView prefWidth="550" prefHeight="680" fx:id="tableProduct"></TableView>
-   </VBox>
-   
-   <VBox>
-      <spacing>10</spacing>
-      <Label text="판매 입력"/>
-      
-      <HBox>
-         <spacing>10</spacing>
-         <DatePicker fx:id="dpDate"/>
-         
-         <ComboBox fx:id="cbxE_name" promptText="직원명"/>
-         
-         <TextField fx:id="txtC_name" promptText="고객명"/>
-         <Button fx:id="btnC_search" text="검색"/>
-      </HBox>
-      
-      <!-- 컨트롤러에서 한 줄로 수정 -->
-      <HBox>
-      <spacing>5</spacing>
-      <Label text="고객정보" fx:id="lblCInfo" />
-      
-      </HBox>
+	<padding>
+		<Insets top="10" right="10" bottom="10" left="10"/>
+	</padding>
+	<spacing>10</spacing>
+	
+	<VBox>
+		<spacing>10</spacing>
+		<Label text="재고 현황"/>
+		
+		<TableView prefWidth="550" prefHeight="680" fx:id="tableProduct"></TableView>
+	</VBox>
+	
+	<VBox>
+		<spacing>10</spacing>
+		<Label text="판매 입력"/>
+		
+		<HBox>
+			<spacing>10</spacing>
+			<DatePicker fx:id="dpDate"/>
+			
+			<ComboBox fx:id="cbxE_name" promptText="직원명"/>
+			
+			<TextField fx:id="txtC_name" promptText="고객명"/>
+			<Button fx:id="btnC_search" text="검색"/>
+		</HBox>
+		
+		<!-- 컨트롤러에서 한 줄로 수정 -->
+		<HBox>
+		<spacing>5</spacing>
+		<Label text="고객정보" fx:id="lblCInfo" />
 
-      <TableView prefWidth="972" prefHeight="250" fx:id="tableSaleInsert">
-         
-      </TableView>
-      
-      <HBox alignment="CENTER_RIGHT">
-         <padding>
-            <Insets top="10"/>
-         </padding>
-         <spacing>10</spacing>
-         
-         <TextField fx:id="p_ea" promptText="수 량"/>
-         <ComboBox fx:id="cbxState" promptText="상 태"/>
-         <TextField fx:id="txtUsedPoint" promptText="포인트 사용금액"/>
-         <ComboBox fx:id="cbxReturnReason" promptText="반품 사유"/>
-         <Button fx:id="btnP_regi" text="등 록" prefWidth="80" prefHeight="30"/>
-      </HBox>
+		</HBox>
 
-      <VBox>
-         <padding>
-            <Insets top="20"/>
-         </padding>
-         <spacing>10</spacing>
-   
-         <Label text="구매 내역"/>
-         <TableView prefWidth="840" prefHeight="180" fx:id="tableSaleList"></TableView>
-      </VBox>
-      
-      <VBox>
-         <padding>
-            <Insets top="20"/>
-         </padding>
-         <spacing>10</spacing>
-         
-         <Label text="비 고"/>
-         <TextArea prefWidth="840" fx:id="taBigo"/>
-      </VBox>
-   </VBox>
-   
+		<TableView prefWidth="972" prefHeight="250" fx:id="tableSaleInsert">
+			
+		</TableView>
+		
+		<HBox alignment="CENTER_RIGHT">
+			<padding>
+				<Insets top="10"/>
+			</padding>
+			<spacing>10</spacing>
+			
+			<TextField fx:id="p_ea" promptText="수 량"/>
+			<ComboBox fx:id="cbxState" promptText="상 태"/>
+			<TextField fx:id="txtUsedPoint" promptText="포인트 사용금액"/>
+			<ComboBox fx:id="cbxReturnReason" promptText="반품 사유"/>
+			<Button fx:id="btnP_regi" text="등 록" prefWidth="80" prefHeight="30"/>
+		</HBox>
+
+		<VBox>
+			<padding>
+				<Insets top="20"/>
+			</padding>
+			<spacing>10</spacing>
+	
+			<Label text="판매 내역" fx:id="lblDateSale"/>
+			<TableView prefWidth="840" prefHeight="180" fx:id="tableSaleList"></TableView>
+		</VBox>
+		
+		<VBox>
+			<padding>
+				<Insets top="20"/>
+			</padding>
+			<spacing>10</spacing>
+			
+			<Label text="비 고"/>
+			<TextArea prefWidth="840" fx:id="taBigo"/>
+		</VBox>
+	</VBox>
+	
 </HBox>
+
