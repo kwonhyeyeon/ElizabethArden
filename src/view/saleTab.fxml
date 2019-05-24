@@ -43,7 +43,11 @@
 		<HBox>
 		<spacing>5</spacing>
 		<Label text="고객정보" fx:id="lblCInfo" />
+<<<<<<< HEAD
 
+=======
+		
+>>>>>>> 9c85f60e47fccd3158a33369af865d8d3ec4cf4c
 		</HBox>
 
 		<TableView prefWidth="972" prefHeight="250" fx:id="tableSaleInsert">

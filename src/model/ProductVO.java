@@ -55,6 +55,17 @@ public class ProductVO {
 		this.p_total = p_total;
 		this.p_point = p_point;
 	}
+	
+	// 주문 등록 생성자	
+	public ProductVO(String p_code, String p_name, int p_ea, int p_price, int p_total) {
+		super();
+		this.p_code = p_code;
+		this.p_name = p_name;
+		this.p_ea = p_ea;
+		this.p_price = p_price;
+		this.p_total = p_total;
+	}
+
 	//get,set
 	public String getP_code() {
 		return p_code;
