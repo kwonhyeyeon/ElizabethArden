@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import model.ProductVO;
-import model.SaleVO;
 
 public class SaleDAO {
 
@@ -110,63 +109,4 @@ public class SaleDAO {
 		}
 		return columnName;
 	}
-	
-	// 고객 조회시 구매 내역
-		public ArrayList<SaleVO> getBuyList(int c_code) throws Exception {
-			
-			ArrayList<SaleVO> buyList = new ArrayList<SaleVO>();
-			
-			String sql = "select sr.p_code, p.p_name, sr.sr_state, sr.sr_ea, p.p_price, sr.sr_total, p.p_price/100 as p_point, sr.sr_used_point, to_char(sr.build_date, 'YYYY/MM/DD') as build_date " + 
-					"from sale_return sr, product p " + 
-					"where sr.p_code = p.p_code and sr.c_code = ?";
-			Connection con = null;
-			PreparedStatement pstmt = null;
-			ResultSet rs = null;
-			SaleVO svo = null;
-			
-			try {
-				
-				con = DBUtil.getConnection();
-				pstmt = con.prepareStatement(sql);
-				pstmt.setInt(1, c_code);
-				rs = pstmt.executeQuery();
-				
-				while(rs.next()) {
-					svo = new SaleVO();
-					svo.setP_code(rs.getString("p_code"));
-					svo.setP_name(rs.getString("p_name"));
-					svo.setSr_state(rs.getString("sr_state"));
-					svo.setSr_ea(rs.getInt("sr_ea"));
-					svo.setP_price(rs.getInt("p_price"));
-					svo.setSr_total(rs.getInt("sr_total"));
-					svo.setP_point(rs.getInt("p_point"));
-					svo.setSr_used_point(rs.getInt("sr_used_point"));
-					svo.setBuild_date(rs.getString("build_date"));
-					
-					buyList.add(svo);
-				}
-				
-			} catch (SQLException se) {
-				System.out.println(se);
-			} catch (Exception e) {
-				System.out.println(e);
-			} finally {
-				try {
-					// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
-					if (rs != null) {
-						rs.close();
-					}
-					if (pstmt != null) {
-						pstmt.close();
-					}
-					if (con != null) {
-						con.close();
-					}
-				} catch (SQLException se) {
-				}
-			}
-			
-			return buyList;
-			
-		}
 }

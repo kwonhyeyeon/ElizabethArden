@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -75,6 +77,10 @@ public class SaleTabController implements Initializable {
 	private ComboBox<String> cbxReturnReason; // 반품사유 콤보박스
 	@FXML
 	private Label lblCInfo;
+	@FXML
+	private Label lblDateSale;
+	
+	private static int customer_point;
 
 	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
 	ObservableList<ProductVO> saleInsertDataList = FXCollections.observableArrayList(); // 판매입력 테이블
@@ -88,6 +94,29 @@ public class SaleTabController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+
+		// 수량입력에 숫자만 입력할수 있게해줌
+		p_ea.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (!newValue.matches("\\d*")) {
+					p_ea.setText(newValue.replaceAll("[^\\d]", ""));
+				}
+			}
+
+		});
+		// 포인트 사용금액에 숫자만 입력할수 있게 해줌
+		txtUsedPoint.textProperty().addListener(new ChangeListener<String>() {
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (!newValue.matches("\\d*")) {
+					txtUsedPoint.setText(newValue.replaceAll("[^\\d]", ""));
+				}
+			}
+
+		});
 
 		try {
 			// tableSaleInsert.editingCellProperty(); // 테이블 수정
@@ -122,7 +151,7 @@ public class SaleTabController implements Initializable {
 		colProductCode.setCellValueFactory(new PropertyValueFactory<>("p_code"));
 
 		TableColumn colProductName = new TableColumn("상품명");
-		colProductName.setPrefWidth(200);
+		colProductName.setPrefWidth(188);
 		colProductName.setStyle("-fx-alignment:CENTER_LEFT");
 		colProductName.setCellValueFactory(new PropertyValueFactory<>("p_name"));
 
@@ -268,6 +297,8 @@ public class SaleTabController implements Initializable {
 			list = sdao.getSaleReturndpdate(buildDate);
 
 			saleListDataList.removeAll(saleListDataList);
+
+			lblDateSale.setText("[" + buildDate + "]" + " 판매내역");
 			for (int index = 0; index < list.size(); index++) {
 				SaleVO svo = new SaleVO(list.get(index).getNo(), list.get(index).getP_code(),
 						list.get(index).getP_name(), list.get(index).getSr_state(), list.get(index).getSr_ea(),
@@ -286,61 +317,210 @@ public class SaleTabController implements Initializable {
 	public void handlerBtnPRegiAction(ActionEvent event) {
 
 		try {
-			// 선택한 행의 인덱스
-			int index = tableSaleInsert.getSelectionModel().getSelectedIndex();
+			if (cbxE_name.getSelectionModel().getSelectedItem() == null) {
+				// 직원선택을 안하고 했을경우
+				Alert alert;
+				alert = new Alert(AlertType.WARNING);
+				alert.setTitle("판매 등록안내");
+				alert.setHeaderText("직원을 선택하십시오");
+				alert.setContentText("");
+				// 경고창 크기설정 불가
+				alert.setResizable(false);
+				// 경고창을 보여주고 기다린다
+				alert.showAndWait();
 
-			// 테이블에서 선택한 정보를 selectSubject에 저장
-			selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
-			selectedSaleIndex = selectInsert.get(0).getP_no();
-			selectInsert.get(0).getP_code();
-			selectInsert.get(0).getP_ea();
-			selectInsert.get(0).getP_price();
-			selectInsert.get(0).getP_point();
-			selectInsert.get(0).getP_total();
-			selectInsert.get(0).getP_name();
-			CustomerDAO cdao = new CustomerDAO();
-			ArrayList<CustomerVO> list = new ArrayList<>();
+			} else if (cbxState.getSelectionModel().getSelectedItem() == null) {
+				Alert alert;
+				alert = new Alert(AlertType.WARNING);
+				alert.setTitle("판매 등록오류");
+				alert.setHeaderText("판매 유형을 선택하십시오..");
+				alert.setContentText("");
+				// 경고창 크기설정 불가
+				alert.setResizable(false);
+				// 경고창을 보여주고 기다린다
+				alert.showAndWait();
+			} else { // 선택한 행의 인덱스
+				int index = tableSaleInsert.getSelectionModel().getSelectedIndex();
 
-			String e_name = cbxE_name.getSelectionModel().getSelectedItem().toString();
-			String e_code;
-			String sr_state;
-			list = cdao.getCustomerSearch(txtC_name.getText().trim());
-			int c_code = list.get(0).getC_code();
+				// 테이블에서 선택한 정보를 selectSubject에 저장
+				selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
+				selectedSaleIndex = selectInsert.get(0).getP_no();
+				selectInsert.get(0).getP_code();
+				selectInsert.get(0).getP_ea();
+				selectInsert.get(0).getP_price();
+				selectInsert.get(0).getP_point();
+				selectInsert.get(0).getP_total();
+				selectInsert.get(0).getP_name();
+				CustomerDAO cdao = new CustomerDAO();
+				ArrayList<CustomerVO> list = new ArrayList<>();
 
-			int sr_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
-			int sr_point = sr_total / 100;
-			int used_point = 0;
-			EmployeeDAO edao = new EmployeeDAO();
-			SaleReturnDAO srdao = new SaleReturnDAO();
+				String e_name = cbxE_name.getSelectionModel().getSelectedItem().toString();
+				String e_code;
+				String sr_state;
+				list = cdao.getCustomerSearch(txtC_name.getText().trim());
+				int c_code = list.get(0).getC_code();
 
-			int saleRetrunNo = srdao.getSale_returnNO();
-			e_code = edao.getEmployeeCode(e_name.trim());
-			sr_state = cbxState.getSelectionModel().getSelectedItem().toString();
-			String buildDate = dpDate.getValue().toString();
+				int sr_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
+				int sr_point = sr_total / 100;
+				int used_point = 0;
+				EmployeeDAO edao = new EmployeeDAO();
+				SaleReturnDAO srdao = new SaleReturnDAO();
 
-			dpDate.getValue().toString();
-			if (sr_state.equals("판매")) {
-				SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(), selectInsert.get(0).getP_name(),
-						sr_state.trim(), Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), sr_total,
-						sr_point, 0, buildDate);
-				saleListDataList.add(svo);
+				int saleRetrunNo = srdao.getSale_returnNO();
+				e_code = edao.getEmployeeCode(e_name.trim());
+				sr_state = cbxState.getSelectionModel().getSelectedItem().toString();
+				String buildDate = dpDate.getValue().toString();
+				String returnReason = cbxReturnReason.getSelectionModel().getSelectedItem();
 
-				// 판매등록후 테이블에 값 입력
-				srdao.insertSale_return(c_code, selectInsert.get(0).getP_code(), e_code, sr_total, sr_state,
-						Integer.parseInt(p_ea.getText()), buildDate);
-				// 판매등록후 재고테이블 수량변경
-				srdao.setProductTable(Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_code());
-				// 재고테이블 새로고침
-				productTotalList();
-				// 판매등록후 고객 포인트 변경
-				srdao.setCustomerPoint(sr_point, c_code);
+				if (sr_state.equals("판매")) {
+					SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
+							selectInsert.get(0).getP_name(), sr_state.trim(), Integer.parseInt(p_ea.getText()),
+							selectInsert.get(0).getP_price(), sr_total, sr_point, 0, buildDate);
+					saleListDataList.add(svo);
+					returnReason = "없음";
+					// 판매등록후 테이블에 값 입력
+					srdao.insertSale_return(c_code, selectInsert.get(0).getP_code(), e_code, sr_total, sr_state,
+							Integer.parseInt(p_ea.getText()), returnReason, buildDate);
+					// 판매등록후 재고테이블 수량변경
+					srdao.setProductTable(Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_code());
+					// 재고테이블 새로고침
+					productTotalList();
+					// 판매등록후 고객 포인트 변경
+					srdao.setCustomerPoint(sr_point, c_code);
 
-				// 선택한 행의 정보 삭제
-				saleInsertDataList.remove(index);
+					// 선택한 행의 정보 삭제
+					saleInsertDataList.remove(index);
+
+				} else if (sr_state.equals("반품")) {
+					if (returnReason == null) {
+						Alert alert;
+						alert = new Alert(AlertType.WARNING);
+						alert.setTitle("반품 등록 오류");
+						alert.setHeaderText("반품사유를 입력하십시오");
+						alert.setContentText("");
+						// 경고창 크기설정 불가
+						alert.setResizable(false);
+						// 경고창을 보여주고 기다린다
+						alert.showAndWait();
+
+					} else {
+						SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
+								selectInsert.get(0).getP_name(), sr_state.trim(), Integer.parseInt(p_ea.getText()),
+								selectInsert.get(0).getP_price(), sr_total, sr_point, 0, buildDate);
+						saleListDataList.add(svo);
+
+						// 판매등록후 테이블에 값 입력
+						srdao.insertSale_return(c_code, selectInsert.get(0).getP_code(), e_code, sr_total, sr_state,
+								Integer.parseInt(p_ea.getText()), returnReason, buildDate);
+						// 판매등록후 재고테이블 수량변경
+						srdao.setProductTable(-Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_code());
+						// 재고테이블 새로고침
+						productTotalList();
+						// 판매등록후 고객 포인트 변경
+						srdao.setCustomerPoint(-sr_point, c_code);
+
+						// 선택한 행의 정보 삭제
+						saleInsertDataList.remove(index);
+					}
+
+				} else if (sr_state.equals("포인트 사용")) {
+					if(txtC_name.getText().equals("FREE")) {
+						Alert alert;
+						alert = new Alert(AlertType.WARNING);
+						alert.setTitle("포인트 사용 오류");
+						alert.setHeaderText("FREE고객은 포인트를 사용할수 없습니다.");
+						alert.setContentText("");
+						// 경고창 크기설정 불가
+						alert.setResizable(false);
+						// 경고창을 보여주고 기다린다
+						alert.showAndWait();
+					}else if (txtUsedPoint.getText().length() == 0) {
+						Alert alert;
+						alert = new Alert(AlertType.WARNING);
+						alert.setTitle("포인트 오류");
+						alert.setHeaderText("포인트 사용 금액을 입력하십시오..");
+						alert.setContentText("");
+						// 경고창 크기설정 불가
+						alert.setResizable(false);
+						// 경고창을 보여주고 기다린다
+						alert.showAndWait();
+					} else {
+						int uspoint = Integer.parseInt(txtUsedPoint.getText().trim());
+						if(customer_point < uspoint) {
+							Alert alert;
+							alert = new Alert(AlertType.WARNING);
+							alert.setTitle("포인트 부족");
+							alert.setHeaderText("포인트가 부족합니다..");
+							alert.setContentText("");
+							// 경고창 크기설정 불가
+							alert.setResizable(false);
+							// 경고창을 보여주고 기다린다
+							alert.showAndWait();
+						}else {
+						// 포인트 사용금액이 총액보다 같거나 작을경우
+						if(uspoint <= sr_total) {
+						returnReason = "없음";
+						sr_total = sr_total - uspoint; // 총액에 사용한 포인트만큼 차감
+						sr_point = sr_total /100;
+						SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
+								selectInsert.get(0).getP_name(), sr_state.trim(), Integer.parseInt(p_ea.getText()),
+								selectInsert.get(0).getP_price(), sr_total, sr_point, uspoint, buildDate);
+						saleListDataList.add(svo);
+
+						// 판매등록후 테이블에 값 입력
+						srdao.insertSale_return_used_point(c_code, selectInsert.get(0).getP_code(), e_code, sr_total,
+								sr_state, Integer.parseInt(p_ea.getText()), returnReason, uspoint, buildDate);
+						// 판매등록후 재고테이블 수량변경
+						srdao.setProductTable(-Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_code());
+						// 재고테이블 새로고침
+						productTotalList();
+						// 판매등록후 고객 포인트 변경
+						srdao.setCustomerPoint(sr_point, c_code);
+						// 사용한 포인트만큼 차감
+						srdao.setCustomerPoint(-uspoint, c_code);
+
+						// 선택한 행의 정보 삭제
+						saleInsertDataList.remove(index);
+						}else {
+							// 포인트 사용 금액이 총액보다 클경우
+							returnReason = "없음";
+							uspoint = sr_total;
+							sr_total = 0; // 총액에 사용한 포인트만큼 차감
+							sr_point = 0;
+							
+							
+							SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
+									selectInsert.get(0).getP_name(), sr_state.trim(), Integer.parseInt(p_ea.getText()),
+									selectInsert.get(0).getP_price(), sr_total, sr_point, uspoint, buildDate);
+							saleListDataList.add(svo);
+
+							// 판매등록후 테이블에 값 입력
+							srdao.insertSale_return_used_point(c_code, selectInsert.get(0).getP_code(), e_code, sr_total,
+									sr_state, Integer.parseInt(p_ea.getText()), returnReason, uspoint, buildDate);
+							// 판매등록후 재고테이블 수량변경
+							srdao.setProductTable(-Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_code());
+							// 재고테이블 새로고침
+							productTotalList();
+							// 사용한 포인트만큼 차감
+							srdao.setCustomerPoint(-uspoint, c_code);
+
+							// 선택한 행의 정보 삭제
+							saleInsertDataList.remove(index);
+						}
+						}
+					}
+				}
 			}
-
 		} catch (Exception e) {
-			System.out.println(e);
+			Alert alert;
+			alert = new Alert(AlertType.WARNING);
+			alert.setTitle("정보가 없습니다");
+			alert.setHeaderText("판매등록할 정보를 선택하십시오");
+			alert.setContentText("");
+			// 경고창 크기설정 불가
+			alert.setResizable(false);
+			// 경고창을 보여주고 기다린다
+			alert.showAndWait();
 		}
 	}
 
@@ -491,14 +671,16 @@ public class SaleTabController implements Initializable {
 						String selectedCustomerPhonenumber = tableCustomerList.getSelectionModel().getSelectedItem()
 								.getC_phoneNumber();
 						String seletedCustomerEtc = tableCustomerList.getSelectionModel().getSelectedItem().getC_etc();
-
+						
+						int selectedCustomerPoint = tableCustomerList.getSelectionModel().getSelectedItem().getC_point();
+						
 						if (!(selectedCustomerName.contentEquals(""))) {
 							dialog.close();
 
 							txtC_name.setText(selectedCustomerName);
 							// 선택된 고객정보로 라벨과 텍스트상자 설정
 							lblCInfo.setText("주소 : " + selectedCustomerAddress + "\t생년월일 : " + selectedCustomerBirth
-									+ "\t핸드폰번호 : " + selectedCustomerPhonenumber);
+									+ "\t핸드폰번호 : " + selectedCustomerPhonenumber + "\t포인트 : " + selectedCustomerPoint);
 							/*
 							 * txtC_name.setText(selectedCustomerName);
 							 * txtBirth.setText(selectedCustomerBirth);
@@ -681,13 +863,15 @@ public class SaleTabController implements Initializable {
 						String selectedCustomerPhonenumber = tableCustomerList.getSelectionModel().getSelectedItem()
 								.getC_phoneNumber();
 						String seletedCustomerEtc = tableCustomerList.getSelectionModel().getSelectedItem().getC_etc();
+						int selectedCustomerPoint = tableCustomerList.getSelectionModel().getSelectedItem().getC_point();
+						customer_point = selectedCustomerPoint;
 						if (!(selectedCustomerName.contentEquals(""))) {
 							dialog.close();
 
 							txtC_name.setText(selectedCustomerName);
 							// 선택된 고객정보로 라벨과 텍스트상자 설정
 							lblCInfo.setText("주소 : " + selectedCustomerAddress + "\t생년월일 : " + selectedCustomerBirth
-									+ "\t핸드폰번호 : " + selectedCustomerPhonenumber);
+									+ "\t핸드폰번호 : " + selectedCustomerPhonenumber + "\t포인트 : " + selectedCustomerPoint);
 							/*
 							 * txtC_name.setText(selectedCustomerName);
 							 * txtBirth.setText(selectedCustomerBirth);

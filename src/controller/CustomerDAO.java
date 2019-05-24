@@ -81,7 +81,7 @@ public class CustomerDAO {
 
 		ArrayList<CustomerVO> list = new ArrayList<>();
 
-		String sql = "select c_code, c_name, to_char(c_birth, 'YYYY/MM/DD') as c_birth, c_phonenumber, c_email, c_address from customer where c_name like ?";
+		String sql = "select c_code,  c_name, to_char(c_birth, 'YYYY/MM/DD') as c_birth, c_phonenumber, c_email, c_address from customer where c_name like ?";
 
 		Connection con = null;
 		PreparedStatement pstmt = null;

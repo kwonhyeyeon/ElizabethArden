@@ -12,9 +12,9 @@ import model.SaleVO;
 
 public class SaleReturnDAO {
 	// 상태가 판매일시 테이블에 등록하는 메소드
-	public boolean insertSale_return(int c_code, String p_code, String e_code, int sr_total, String sr_state, int sr_ea, String bulid_date) throws Exception{
+	public boolean insertSale_return(int c_code, String p_code, String e_code, int sr_total, String sr_state, int sr_ea, String returnReason, String bulid_date) throws Exception{
 		
-		String sql = "insert into sale_return values(sale_return_seq.nextval, ?, ?, ?, ?, ?, ?, 0, '없음', ?)";
+		String sql = "insert into sale_return values(sale_return_seq.nextval, ?, ?, ?, ?, ?, ?, 0, ?, ?)";
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		
@@ -32,7 +32,8 @@ public class SaleReturnDAO {
 			pstmt.setInt(4, sr_total);
 			pstmt.setString(5, sr_state);
 			pstmt.setInt(6, sr_ea);
-			pstmt.setString(7, bulid_date);
+			pstmt.setString(7, returnReason);
+			pstmt.setString(8, bulid_date);
 			// insert문이 성공적으로 입력되면 1을 반환
 			int i = pstmt.executeUpdate();
 
@@ -73,6 +74,72 @@ public class SaleReturnDAO {
 		return insertResult;
 
 	}
+	
+	// 상태가 판매일시 테이블에 등록하는 메소드
+		public boolean insertSale_return_used_point(int c_code, String p_code, String e_code, int sr_total, String sr_state, int sr_ea, String returnReason, int uspoint, String bulid_date) throws Exception{
+			
+			String sql = "insert into sale_return values(sale_return_seq.nextval, ?, ?, ?, ?, ?, ?, 0, ?, ?)";
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			
+			// 등록 성공 판단 변수
+			boolean insertResult = false;
+			try {
+
+				// DB연동
+				con = DBUtil.getConnection();
+				// sql문을 담아줄 그릇
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, c_code);
+				pstmt.setString(2, p_code);
+				pstmt.setString(3, e_code);
+				pstmt.setInt(4, sr_total);
+				pstmt.setString(5, sr_state);
+				pstmt.setInt(6, sr_ea);
+				pstmt.setString(7, returnReason);
+				pstmt.setInt(8, uspoint);
+				pstmt.setString(8, bulid_date);
+				// insert문이 성공적으로 입력되면 1을 반환
+				int i = pstmt.executeUpdate();
+
+				if (i == 1) {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("판매 등록 성공");
+					alert.setHeaderText("판매 입력 등록 성공");
+					alert.setContentText("수고링");
+					alert.showAndWait();
+					// 등록성공 판단변수 true
+					insertResult = true;
+				} else {
+					Alert alert = new Alert(AlertType.WARNING);
+					alert.setTitle("판매 입력 등록");
+					alert.setHeaderText("판매정보를 똑바로 입력하십시오");
+					alert.setContentText("");
+					alert.showAndWait();
+				}
+
+			} catch (SQLException e) {
+				System.out.println("e=[" + e + "]");
+			} catch (Exception e) {
+				System.out.println("e=[" + e + "]");
+			} finally {
+				try {
+					// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+					if (pstmt != null) {
+						pstmt.close();
+					}
+					if (con != null) {
+						con.close();
+					}
+				} catch (SQLException e) {
+					System.out.println(e);
+				}
+			}
+
+			return insertResult;
+
+		}
+	
 	// 판매등록후 재고의 수량을 변경해주는 메소드
 	public boolean setProductTable(int sr_ea, String p_code) throws Exception{
 		String sql = "update product set p_ea = p_ea - ? where p_code = ?";

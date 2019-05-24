@@ -43,17 +43,7 @@
 		<HBox>
 		<spacing>5</spacing>
 		<Label text="고객정보" fx:id="lblCInfo" />
-		
-		<!-- <Label text="고객 주소 :" />
-		<TextField prefWidth="100" fx:id="txtAddress" />
-		<Label text="고객 핸드폰 번호 :" />
-		<TextField prefWidth="100" fx:id="txtPhone" />
-		<Label text="고객 생년월 :" />
-		<TextField prefWidth="100" fx:id="txtBirth" />
- -->		
-			<!-- <Label text="생년월일 : " fx:id="lblBirth"/>
-			<Label text="핸드폰번호 : " fx:id="lblPhone"/>
-			<Label text="주 소 : " fx:id="lblAddress"/> -->
+
 		</HBox>
 
 		<TableView prefWidth="972" prefHeight="250" fx:id="tableSaleInsert">
@@ -79,7 +69,7 @@
 			</padding>
 			<spacing>10</spacing>
 	
-			<Label text="구매 내역"/>
+			<Label text="판매 내역" fx:id="lblDateSale"/>
 			<TableView prefWidth="840" prefHeight="180" fx:id="tableSaleList"></TableView>
 		</VBox>
 		
