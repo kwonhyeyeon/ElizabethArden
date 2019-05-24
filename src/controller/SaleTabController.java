@@ -122,7 +122,7 @@ public class SaleTabController implements Initializable {
 		colProductCode.setCellValueFactory(new PropertyValueFactory<>("p_code"));
 
 		TableColumn colProductName = new TableColumn("상품명");
-		colProductName.setPrefWidth(200);
+		colProductName.setPrefWidth(188);
 		colProductName.setStyle("-fx-alignment:CENTER_LEFT");
 		colProductName.setCellValueFactory(new PropertyValueFactory<>("p_name"));
 

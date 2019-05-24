@@ -12,11 +12,9 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.Separator?>
 
-<HBox prefWidth="1200" prefHeight="700"
-	xmlns:fx="http://javafx.com/fxml/1">
-
-
-
+<HBox prefWidth="1500" prefHeight="700"
+	xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="controller.OrderTabController">
 
 	<padding>
 		<Insets top="10" right="10" bottom="10" left="10" />
@@ -27,7 +25,7 @@
 		<spacing>10</spacing>
 		<Label text="재고 현황" />
 
-		<TableView prefWidth="350" prefHeight="680"
+		<TableView prefWidth="550" prefHeight="680"
 			fx:id="tableProduct"></TableView>
 	</VBox>
 
@@ -35,24 +33,33 @@
 		<spacing>10</spacing>
 		<Label text="주문 등록" />
 
-
-		<TableView prefWidth="840" prefHeight="300"
+		<TableView prefWidth="972" prefHeight="300"
 			fx:id="tableOrder"></TableView>
 		<HBox alignment="CENTER_RIGHT">
 			<padding>
-				<Insets top="10" />
+				<Insets top="5" />
 			</padding>
 			<spacing>10</spacing>
-			<Separator prefHeight="15" prefWidth="630" />
-			<Button text="삭  제" fx:id="btnDelete" />
+
+			<TextField fx:id="or_ea" promptText="수 량" />
 			<Button text="등  록" fx:id="btnRegiste" />
-			<Button text="입고 확인" fx:id="btnWearing" />
+			<Button text="삭  제" fx:id="btnDelete" />
 
 		</HBox>
+
 		<Label text="주문 현황" />
-		<DatePicker fx:id="dpDate"/>
+		<DatePicker fx:id="dpDate" />
 		<TableView prefWidth="840" prefHeight="300"
 			fx:id="tableOrderState"></TableView>
+		
+		<HBox alignment="CENTER_RIGHT">
+			<padding>
+				<Insets top="5" />
+			</padding>
+
+			<Button text="입고 확인" fx:id="btnWearing" />
+		</HBox>
+		
 
 	</VBox>
 
