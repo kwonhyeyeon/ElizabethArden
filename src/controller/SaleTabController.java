@@ -1062,7 +1062,7 @@ public class SaleTabController implements Initializable {
 
 		EmployeeDAO edao = new EmployeeDAO();
 		ArrayList employeeName = new ArrayList<>();
-
+		
 		try {
 			employeeName = edao.getEmployeeTotalList();
 			cbxE_name.setItems(FXCollections.observableArrayList(employeeName));

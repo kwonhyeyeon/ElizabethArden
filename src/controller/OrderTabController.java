@@ -196,7 +196,6 @@ public class OrderTabController implements Initializable {
 			int index = tableOrderList.getSelectionModel().getSelectedIndex();
 			OrderList.remove(index);
 			
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -208,6 +207,9 @@ public class OrderTabController implements Initializable {
 		
 		// 주문 등록 테이블에서 선택한 행의 수량을 or_ea에서 받은 값으로 설정해준다
 		tableOrder.getSelectionModel().getSelectedItem().setOr_ea(Integer.parseInt(or_ea.getText()));
+		// 수량만큼 총액 변경
+		tableOrder.getSelectionModel().getSelectedItem().setOr_total(
+				Integer.parseInt(or_ea.getText()) * tableOrder.getSelectionModel().getSelectedItem().getPrice());
 		// 테이블 데이터리스트 삭제
 		orderDataList.removeAll(orderDataList);
 		OrderVO ovo = null;
@@ -279,7 +281,7 @@ public class OrderTabController implements Initializable {
 			
 			
 			orderDataList.removeAll(orderDataList);
-			
+			selectedItem.removeAll(selectedItem);
 			insertResult = true;	
 			
 		}

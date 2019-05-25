@@ -286,6 +286,7 @@ public class CustomerTabController implements Initializable {
             txtAreaEtc.setText(selectCustomer.get(0).getC_etc());
             
             btnEdit.setDisable(false);
+            btnRegiste.setDisable(true);
 
          } catch (Exception e1) {
             e1.printStackTrace();
@@ -375,10 +376,6 @@ public class CustomerTabController implements Initializable {
 
       }
    }
-
-   public void registe() {
-      
-   }
    
    // 등록버튼 이벤트 핸들러
    public void handlerBtnRegisteAction(ActionEvent event) {
@@ -436,6 +433,19 @@ public class CustomerTabController implements Initializable {
       txtCustomerEmail.clear();
       txtAreaEtc.clear();
       dpCustomerBirth.setValue(null);
+      
+      btnEdit.setDisable(true); // 수정 버튼 비활성화
+      dpCustomerBirth.setDisable(false);
+      txtCustomerName.setDisable(false);
+      btnRegiste.setDisable(false);
+      
+      try {
+    	  CustomerDAO cdao = new CustomerDAO();
+          txtCustomerCode.setText(cdao.getCustomerCode() + "");
+	} catch (Exception e) {
+		System.out.println(e);
+	}
+      
    }
 
 }

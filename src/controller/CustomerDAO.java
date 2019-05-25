@@ -279,6 +279,7 @@ public class CustomerDAO {
 		return list;
 	}
 
+	// 고객정보 수정
 	public boolean getCustomerUpdate(String c_phoneNumber, String c_address, String c_email, String c_etc, int c_code) throws Exception {
 		
 		String sql = "update customer set c_phoneNumber = ?, c_address = ?, c_email = ?, c_etc = ? where c_code = ?";
