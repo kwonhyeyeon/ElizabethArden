@@ -2,6 +2,7 @@ package controller;
 
 import java.net.URL;
 import java.nio.channels.Selector;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -177,18 +178,39 @@ public class OrderTabController implements Initializable {
 	// 등록날짜 이벤트 메소드
 	public void handlerDpDateAction(ActionEvent event) {
 		
+		ArrayList<OrderVO> list = new ArrayList();
+		OrderDAO odao = new OrderDAO();
+		
+		try {
+			
+			String orderDate = dpDate.getValue().toString(); // 선택한 날짜
+			System.out.println(orderDate);
+			list = odao.getOrderDate(orderDate);
+			
+			OrderList.removeAll(OrderList);
+			
+			OrderVO ovo = null;
+			for(int index = 0; index < list.size(); index++) {
+				ovo = new OrderVO(list.get(index).getP_code(), list.get(index).getP_name(),
+						list.get(index).getOr_ea(), list.get(index).getPrice(), list.get(index).getOr_total());
+				OrderList.addAll(ovo);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		
 	}
 
-	// 입고 확인 버튼 이벤트 메소드
+	// 입고 확인 버튼 이벤트 메소드, 수정
 	public void handlerBtnWearingAction(ActionEvent event) {
 
 		try {
 			
 			SaleReturnDAO srdao = new SaleReturnDAO();
 			// 판매등록후 재고테이블 수량변경
-			srdao.setProductTable(-Integer.parseInt(or_ea.getText()), selectOrder.get(0).getP_code());
+			srdao.setProductTable(-Integer.parseInt(or_ea.getText()), OrderList.get(0).getP_code());
 			// 재고테이블 새로고침
 			productTotalList();
 			
@@ -275,10 +297,8 @@ public class OrderTabController implements Initializable {
 				odao.getOrderInsert(selectedItem);
 				OrderList.addAll(selectedItem);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
 			
 			orderDataList.removeAll(orderDataList);
 			selectedItem.removeAll(selectedItem);
@@ -293,6 +313,8 @@ public class OrderTabController implements Initializable {
 
 		selectedOrderIndex = tableOrder.getSelectionModel().getSelectedIndex();
 		orderDataList.remove(selectedOrderIndex);
+		// 삭제시 선택했던 행을 selectedItem에서도 삭제해준다
+		selectedItem.remove(selectedOrderIndex);
 
 	}
 

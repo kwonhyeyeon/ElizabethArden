@@ -83,9 +83,9 @@ public class OrderDAO {
 				pstmt.setInt(3, selectedItem.get(index).getOr_ea());
 				pstmt.setInt(4, selectedItem.get(index).getOr_total());
 				pstmt.setString(5, selectedItem.get(index).getOr_bad());
-				// insert문이 성공적으로 입력되면 1을 반환
 			}
 			
+			// insert문이 성공적으로 입력되면 1을 반환
 			int i = pstmt.executeUpdate();
 
 			if (i == 1) {
@@ -127,15 +127,20 @@ public class OrderDAO {
 	}
 	
 	// 등록된 날짜로 주문현황 가져오는 메소드
-	public ArrayList<OrderVO> getSaleReturndpdate(String or_date) throws Exception {
+	public ArrayList<OrderVO> getOrderDate(String or_date) throws Exception {
 
 		ArrayList<OrderVO> list = new ArrayList<>();
 
-		String sql = "select or.p_code from order_return where or_date = ?";
+		String sql = "select e.p_code, e.or_ea, e.or_total, p.p_name, p.p_price" + 
+				" from(select distinct(p_code) p_code, sum(or_ea) or_ea, sum(or_total) or_total" + 
+				" from order_return" + 
+				" where to_char(or_date, 'yyyy-mm-dd') = ?" + 
+				" group by p_code) e, product p" + 
+				" where e.p_code = p.p_code";
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		SaleVO svo = null;
+		OrderVO ovo = null;
 
 		try {
 
@@ -146,23 +151,18 @@ public class OrderDAO {
 			rs = pstmt.executeQuery(); // 쿼리 실행
 
 			while (rs.next()) {
-				svo = new SaleVO();
-				svo.setNo(rs.getInt("no"));
-				svo.setP_name(rs.getString("p_name"));
-				svo.setP_code(rs.getString("p_code"));
-				svo.setP_price(rs.getInt("p_price"));
-				svo.setSr_total(rs.getInt("sr_total"));
-				svo.setSr_state(rs.getString("sr_state"));
-				svo.setSr_ea(rs.getInt("sr_ea"));
-				svo.setSr_used_point(rs.getInt("sr_used_point"));
-				// svo.setP_point(rs.getInt("p_point"));
-				svo.setBuild_date(rs.getString("build_date"));
-
-				svo.setP_point(svo.getP_price() / 100);
-				//list.add(svo);
+				ovo = new OrderVO();
+				ovo.setP_code(rs.getString("p_code"));
+				ovo.setP_name(rs.getString("p_name"));
+				ovo.setOr_ea(rs.getInt("or_ea"));
+				ovo.setPrice(rs.getInt("p_price"));
+				ovo.setOr_total(rs.getInt("or_total"));
+				
+				list.add(ovo);
+				
 			}
 
-			if (svo == null) {
+			if (ovo == null) {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("날짜 검색");
 				alert.setHeaderText(or_date + " 에 등록된 데이터가 없습니다.");
@@ -190,7 +190,6 @@ public class OrderDAO {
 			} catch (SQLException se) {
 			}
 		}
-
 		return list;
 
 	}
