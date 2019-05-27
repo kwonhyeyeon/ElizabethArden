@@ -13,13 +13,14 @@ public class OrderVO {
 	String or_bad; // 불량 여부
 	String or_state; // 주문, 반품 상태
 	String or_date; // 주문 등록일자
+	String in_out; // 입출고
 	
 	public OrderVO() {
 		super();
 	}
 
 	public OrderVO(int no, String p_code, String p_name, int or_ea, int price, int or_total, String or_bad,
-			String or_state, String or_date) {
+			String or_state, String or_date, String in_out) {
 		super();
 		this.no = no;
 		this.p_code = p_code;
@@ -30,6 +31,12 @@ public class OrderVO {
 		this.or_bad = or_bad;
 		this.or_state = or_state;
 		this.or_date = or_date;
+		this.in_out = in_out;
+	}	
+
+	public OrderVO(String p_code) {
+		super();
+		this.p_code = p_code;
 	}
 
 	// 상품코드, 상품명, 수량, 단가, 총액
@@ -42,7 +49,7 @@ public class OrderVO {
 		this.or_total = or_total;
 	}	
 
-	public OrderVO(String p_code, String p_name, int or_ea, int price, String or_bad, String or_date) {
+	public OrderVO(String p_code, String p_name, int or_ea, int price, String or_bad, String or_date, String in_out) {
 		super();
 		this.p_code = p_code;
 		this.p_name = p_name;
@@ -50,6 +57,7 @@ public class OrderVO {
 		this.price = price;
 		this.or_bad = or_bad;
 		this.or_date = or_date;
+		this.in_out = in_out;
 	}
 
 	public OrderVO(ArrayList<ProductVO> selectedItem) {
@@ -133,11 +141,19 @@ public class OrderVO {
 		this.or_date = or_date;
 	}
 
+	public String getIn_out() {
+		return in_out;
+	}
+
+	public void setIn_out(String in_out) {
+		this.in_out = in_out;
+	}
+
 	@Override
 	public String toString() {
 		return "OrderVO [no=" + no + ", p_code=" + p_code + ", p_name=" + p_name + ", or_ea=" + or_ea + ", price="
 				+ price + ", or_total=" + or_total + ", or_bad=" + or_bad + ", or_state=" + or_state + ", or_date="
-				+ or_date + "]";
+				+ or_date + ", in_out=" + in_out + "]";
 	}
 	
 }

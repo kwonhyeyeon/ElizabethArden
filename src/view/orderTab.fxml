@@ -48,8 +48,7 @@
 
 		</HBox>
 
-		<Label text="주문 현황" />
-		<DatePicker fx:id="dpDate" />
+		<Label fx:id="lblorderlist" text="주문 현황" />
 		<TableView prefWidth="840" prefHeight="300"
 			fx:id="tableOrderList"></TableView>
 		

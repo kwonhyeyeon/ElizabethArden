@@ -79,7 +79,7 @@ public class EmployeeEditController implements Initializable {
 
 			list = edao.getEmployeeInfo(selectedName);
 
-			txtEmployeePhone.setText(list.get(0).getE_phonenumber() + "");
+			txtEmployeePhone.setText(list.get(0).getE_phonenumber());
 			txtEmployeeAddress.setText(list.get(0).getE_address());
 			cbxEmployeeRank.setValue(list.get(0).getE_rank());
 

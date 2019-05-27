@@ -64,16 +64,16 @@ public class OrderDAO {
 		ArrayList<OrderVO> orderProduct = new ArrayList<OrderVO>();
 		LoginController lc = new LoginController();
 		String storeCode = lc.loginStoreCode;
-		String sql = "insert into order_return values (sale_return_seq.nextval, ?, ?, ?, ?, '주문', ?, sysdate)";
-		Connection con = null;
-		PreparedStatement pstmt = null;
+		for (int index = 0; index < selectedItem.size(); index++) {
+			String sql = "insert into order_return values (sale_return_seq.nextval, ?, ?, ?, ?, '주문', ?, sysdate, 'N')";
+			Connection con = null;
+			PreparedStatement pstmt = null;
 
-		// 등록 성공 판단 변수
-		boolean insertResult = false;
+			// 등록 성공 판단 변수
+			boolean insertResult = false;
 
-		try {
+			try {
 
-			for (int index = 0; index < selectedItem.size(); index++) {
 				// DB연동
 				con = DBUtil.getConnection();
 				// sql문을 담아줄 그릇
@@ -83,60 +83,56 @@ public class OrderDAO {
 				pstmt.setInt(3, selectedItem.get(index).getOr_ea());
 				pstmt.setInt(4, selectedItem.get(index).getOr_total());
 				pstmt.setString(5, selectedItem.get(index).getOr_bad());
-			}
-			
-			// insert문이 성공적으로 입력되면 1을 반환
-			int i = pstmt.executeUpdate();
 
-			if (i == 1) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("주문 등록");
-				alert.setHeaderText("주문 등록 성공");
-				alert.setContentText("주문 등록이 완료되었습니다");
-				alert.showAndWait();
-				// 등록성공 판단변수 true
-				insertResult = true;
-			} else {
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("주문 등록");
-				alert.setHeaderText("주문 등록 실패");
-				alert.setContentText("주문 등록을 다시 하세요");
-				alert.showAndWait();
-			}
+				// insert문이 성공적으로 입력되면 1을 반환
+				int i = pstmt.executeUpdate();
 
-		} catch (SQLException e) {
-			System.out.println("e=[" + e + "]");
-		} catch (Exception e) {
-			System.out.println("e=[" + e + "]");
-		} finally {
-			try {
-				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
-				if (pstmt != null) {
-					pstmt.close();
+				if (i == 1) {
+					/*
+					 * Alert alert = new Alert(AlertType.INFORMATION); alert.setTitle("주문 등록");
+					 * alert.setHeaderText("주문 등록 성공"); alert.setContentText("주문 등록이 완료되었습니다");
+					 * alert.showAndWait();
+					 */
+					// 등록성공 판단변수 true
+					insertResult = true;
+				} else {
+					/*
+					 * Alert alert = new Alert(AlertType.WARNING); alert.setTitle("주문 등록");
+					 * alert.setHeaderText("주문 등록 실패"); alert.setContentText("주문 등록을 다시 하세요");
+					 * alert.showAndWait();
+					 */
 				}
-				if (con != null) {
-					con.close();
-				}
+
 			} catch (SQLException e) {
-				System.out.println(e);
+				System.out.println("e=[" + e + "]");
+			} catch (Exception e) {
+				System.out.println("e=[" + e + "]");
+			} finally {
+				try {
+					// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+					if (pstmt != null) {
+						pstmt.close();
+					}
+					if (con != null) {
+						con.close();
+					}
+				} catch (SQLException e) {
+					System.out.println(e);
+				}
 			}
 		}
-
 		return orderProduct;
 
 	}
-	
+
 	// 등록된 날짜로 주문현황 가져오는 메소드
 	public ArrayList<OrderVO> getOrderDate(String or_date) throws Exception {
 
 		ArrayList<OrderVO> list = new ArrayList<>();
 
-		String sql = "select e.p_code, e.or_ea, e.or_total, p.p_name, p.p_price" + 
-				" from(select distinct(p_code) p_code, sum(or_ea) or_ea, sum(or_total) or_total" + 
-				" from order_return" + 
-				" where to_char(or_date, 'yyyy-mm-dd') = ?" + 
-				" group by p_code) e, product p" + 
-				" where e.p_code = p.p_code";
+		String sql = "select e.p_code, e.or_ea, e.or_total, p.p_name, p.p_price, e.in_out"
+				+ " from (select p_code, or_ea, or_total, in_out from order_return where to_char(or_date, 'yyyy-mm-dd') = ? and or_state = '주문') e, product p"
+				+ " where e.p_code = p.p_code";
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -157,18 +153,10 @@ public class OrderDAO {
 				ovo.setOr_ea(rs.getInt("or_ea"));
 				ovo.setPrice(rs.getInt("p_price"));
 				ovo.setOr_total(rs.getInt("or_total"));
-				
-				list.add(ovo);
-				
-			}
+				ovo.setIn_out(rs.getString("in_out"));
 
-			if (ovo == null) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("날짜 검색");
-				alert.setHeaderText(or_date + " 에 등록된 데이터가 없습니다.");
-				alert.setContentText("");
-				alert.showAndWait();
-				// 등록성공 판단변수 true
+				list.add(ovo);
+
 			}
 
 		} catch (SQLException se) {
@@ -191,6 +179,102 @@ public class OrderDAO {
 			}
 		}
 		return list;
+
+	}
+
+	// 추가 주문 등록할 경우 상품명 중복 검사
+	public boolean getOverLapProductName(String or_date, String p_code) throws Exception {
+
+		ArrayList<OrderVO> list = new ArrayList();
+
+		boolean overlap = false; // 중복검사 결과(중복된 값 없음)
+		String sql = "select p_code from order_return where to_char(or_date, 'yyyy-mm-dd') = ? and p_code = ? and or_state = '주문'";
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		OrderVO ovo = null;
+
+		try {
+
+			con = DBUtil.getConnection(); // DBUtil 연결
+
+			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
+			pstmt.setString(1, or_date);
+			pstmt.setString(2, p_code);
+			rs = pstmt.executeQuery(); // 쿼리 실행
+
+			while (rs.next()) {
+				ovo = new OrderVO();
+				ovo.setP_code(rs.getString("p_code"));
+
+				list.add(ovo);
+			}
+
+			if (ovo != null) {
+				overlap = true; // 중복된 값 있으면 true
+			}
+		} catch (SQLException se) {
+			System.out.println(se);
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException se) {
+			}
+		}
+
+		return overlap;
+
+	}
+
+	// 중복된 값이 있을 경우 수량 변경
+	public void updateEa(String or_date, String p_code, int or_ea) {
+		String sql = "update order_return set or_ea = or_ea + ? where p_code = ? and to_char(or_date, 'yyyy-mm-dd') = ? and or_state = '주문'";
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		// boolean eaUpdateResult = false;
+
+		try {
+			con = DBUtil.getConnection(); // DBUtil 연결
+			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
+			pstmt.setInt(1, or_ea);
+			pstmt.setString(2, p_code);
+			pstmt.setString(3, or_date);
+
+			int i = pstmt.executeUpdate();
+
+			if (i == 1) {
+				System.out.println(p_code + "의 수량변경 성공");
+			} else {
+				System.out.println(p_code + "의 수량변경 실패");
+			}
+
+		} catch (SQLException e) {
+			System.out.println("e=[" + e + "]");
+		} catch (Exception e) {
+			System.out.println("e=[" + e + "]");
+		} finally {
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+			}
+		}
 
 	}
 
