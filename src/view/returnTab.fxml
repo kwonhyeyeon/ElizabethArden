@@ -12,7 +12,8 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.Separator?>
 
-<HBox prefWidth="1500" prefHeight="700" xmlns:fx="http://javafx.com/fxml/1">
+<HBox prefWidth="1500" prefHeight="700" xmlns:fx="http://javafx.com/fxml/1"
+fx:controller="controller.ReturnTabController">
 	<padding>
 		<Insets top="10" right="10" bottom="10" left="10"/>
 	</padding>
@@ -39,6 +40,8 @@
 			<spacing>10</spacing>
 			
 			<TextField fx:id="or_ea" promptText="수 량" />
+			<ComboBox fx:id="cbxbad" promptText="불량 "/>
+			<Button text="수  정" fx:id="btnEdit"/>
 			<Button text="등  록" fx:id="btnRegiste" />
 			<Button text="삭  제" fx:id="btnDelete" />
 			
