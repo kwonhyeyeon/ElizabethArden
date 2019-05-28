@@ -49,7 +49,7 @@ public class ReturnTabController implements Initializable {
 	private ComboBox<String> cbxbad; // 불량여부 콤보박스
 	@FXML
 	private Button btnEdit; // 수정버튼
-
+	private static String today;
 	private ArrayList<ReturnVO> selectedItem = new ArrayList(); // 2 * 재고테이블에서 선택한 행의 정보만 담는 배열 생성
 
 	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
@@ -61,6 +61,9 @@ public class ReturnTabController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+		Date time = new Date();
+		today = format1.format(time);
 		// 수량입력에 숫자만 입력할수 있게해줌
 		or_ea.textProperty().addListener(new ChangeListener<String>() {
 
@@ -74,8 +77,9 @@ public class ReturnTabController implements Initializable {
 		});
 
 		dpDate.setValue(LocalDate.now());
-		
+
 		productTotalList();
+		ReturnStateTotalList();
 		// 콤보박스 설정
 		cbxbad.setItems(FXCollections.observableArrayList("Y", "N"));
 
@@ -202,23 +206,38 @@ public class ReturnTabController implements Initializable {
 		btnRelease.setOnAction(event -> handlerBtnRelease(event));
 		// 달력에서 클릭 선택 이벤트 핸들러
 		dpDate.setOnAction(event -> handlerdpDateAction(event));
-		
+
+		ReturnDAO rdao = new ReturnDAO();
+		ArrayList<ReturnVO> list = new ArrayList();
+
+		// 프로그램 실행시 그날의 반품등록한 리스트를 보여준다.
+		try {
+			list = rdao.getOrderDate(today);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		ReturnState.removeAll(ReturnState);
+
+		ReturnStateTotalList(); // 추가
+
 	}
+
 	// 달력에서 클릭 선택 이벤트 핸들러
 	public void handlerdpDateAction(ActionEvent event) {
 		// TODO Auto-generated method stub
-		
-		
-		
-		
-		
+
 	}
 
 	// 출고확인버튼 이벤트 핸들러
 	public void handlerBtnRelease(ActionEvent event) {
 
 		ReturnVO rvo2 = new ReturnVO();
+		ReturnDAO rdao = new ReturnDAO();
 		rvo2 = tableReturnState.getSelectionModel().getSelectedItem();
+		String xy = tableReturnState.getSelectionModel().getSelectedItem().getBeReleased();
+		String selectedP_name = tableReturnState.getSelectionModel().getSelectedItem().getRp_name(); // 상품명
 
 		if (rvo2 == null) {
 			Alert alert;
@@ -230,53 +249,32 @@ public class ReturnTabController implements Initializable {
 			alert.setResizable(false);
 			// 경고창을 보여주고 기다린다
 			alert.showAndWait();
+		} else if (xy.equals("Y")) {
+
+			Alert alert;
+			alert = new Alert(AlertType.WARNING);
+			alert.setTitle("출고안내");
+			alert.setHeaderText(selectedP_name + "");
+			alert.setContentText("해당 상품은 이미 출고확인이 되었습니다.");
+			// 경고창 크기설정 불가
+			alert.setResizable(false);
+			// 경고창을 보여주고 기다린다
+			alert.showAndWait();
+
 		} else {
 
-			boolean selectedReleased = tableReturnState.getSelectionModel().getSelectedItem().getBeReleased(); // 출고여부
-			String selectedP_name = tableReturnState.getSelectionModel().getSelectedItem().getRp_name(); // 상품명
 			String selectedP_code = tableReturnState.getSelectionModel().getSelectedItem().getRp_code();
 			int selectedP_ea = tableReturnState.getSelectionModel().getSelectedItem().getRp_ea();
 
-			// 출고여부가 true일경우 경고창
-			if (selectedReleased) {
-				Alert alert;
-				alert = new Alert(AlertType.WARNING);
-				alert.setTitle("출고안내");
-				alert.setHeaderText(selectedP_name);
-				alert.setContentText("해당 상품은 이미 출고등록이 되었습니다.");
-				// 경고창 크기설정 불가
-				alert.setResizable(false);
-				// 경고창을 보여주고 기다린다
-				alert.showAndWait();
-			} else {
-				// false일경우 재고 업데이트
-				try {
-					ReturnDAO rdao = new ReturnDAO();
-					rdao.updateProductTable(selectedP_ea, selectedP_code);
-					// 재고 등록후 true로 설정
-					tableReturnState.getSelectionModel().getSelectedItem().setBeReleased(true);
+			rdao.SetY(today, selectedP_code);
+			rdao.setIn_Out(selectedP_ea, selectedP_code);
 
-					ReturnVO rvo = null;
-					ArrayList<ReturnVO> list = new ArrayList();
+			ReturnStateTotalList();
+			productTotalList();
+			try {
 
-					for (int i = 0; i < ReturnState.size(); i++) {
-						rvo = ReturnState.get(i);
-						list.add(rvo);
-					}
-
-					ReturnState.removeAll(ReturnState);
-
-					for (int i = 0; i < list.size(); i++) {
-						rvo = list.get(i);
-						ReturnState.add(rvo);
-					}
-					list.removeAll(list);
-
-					productTotalList();
-
-				} catch (Exception e) {
-					System.out.println(e);
-				}
+			} catch (Exception e) {
+				System.out.println(e);
 			}
 		}
 	}
@@ -384,38 +382,50 @@ public class ReturnTabController implements Initializable {
 	// 등록버튼 이벤트 메소드
 	public void handlerBtnPRegiAction(ActionEvent event) {
 		boolean editEa = false;
+		boolean overlap = false;
+		ReturnDAO rdao = new ReturnDAO();
+		boolean ok = false;
+		try {
+			for (int index = 0; index < insertReturn.size(); index++) {
+				int ea = insertReturn.get(index).getRp_ea();
 
-		for (int index = 0; index < insertReturn.size(); index++) {
-			int ea = insertReturn.get(index).getRp_ea();
+				// 반품 입력 테이블에 등록된 수량중 0이 있거나 0보다 작은값이 있을경우 true로 설정
+				if (ea == 0 || ea < 0) {
+					editEa = true;
+				}
 
-			// 반품 입력 테이블에 등록된 수량중 0이 있거나 0보다 작은값이 있을경우 true로 설정
-			if (ea == 0 || ea < 0) {
-				editEa = true;
 			}
+			if (editEa) {
+				Alert alert;
+				alert = new Alert(AlertType.WARNING);
+				alert.setTitle("등록 오류");
+				alert.setHeaderText("반품등록한 상품중 \n수량입력이 안된 상품이 있습니다");
+				alert.setContentText("");
+				// 경고창 크기설정 불가
+				alert.setResizable(false);
+				// 경고창을 보여주고 기다린다
+				alert.showAndWait();
+			} else {
 
-		}
-		if (editEa) {
-			Alert alert;
-			alert = new Alert(AlertType.WARNING);
-			alert.setTitle("등록 오류");
-			alert.setHeaderText("반품등록한 상품중 \n수량입력이 안된 상품이 있습니다");
-			alert.setContentText("");
-			// 경고창 크기설정 불가
-			alert.setResizable(false);
-			// 경고창을 보여주고 기다린다
-			alert.showAndWait();
-		} else {
-			try {
-				ReturnDAO rdao = new ReturnDAO();
-				boolean ok = false;
-
-				// 반품입력 테이블의 레코드 갯수만큼 반복하여 iesert문에 넣어주고 DB에 저장한다.
 				for (int index = 0; index < insertReturn.size(); index++) {
 
-					ok = rdao.insertOrder_Return(insertReturn.get(index).getRp_code(),
-							insertReturn.get(index).getRp_ea(), insertReturn.get(index).getRp_total(),
-							insertReturn.get(index).getRp_bad());
+					overlap = rdao.overlapP_code(today, insertReturn.get(index).getRp_code());
 
+					if (overlap) {
+						String p_code = insertReturn.get(index).getRp_code();
+						int or_ea = insertReturn.get(index).getRp_ea();
+						rdao.updateOverp_code(today, p_code, or_ea);
+						overlap = false;
+					} else {
+						ReturnDAO rdao2 = new ReturnDAO();
+
+						// 반품입력 테이블의 레코드 갯수만큼 반복하여 iesert문에 넣어주고 DB에 저장한다.
+
+						ok = rdao2.insertOrder_Return(insertReturn.get(index).getRp_code(),
+								insertReturn.get(index).getRp_ea(), insertReturn.get(index).getRp_total(),
+								insertReturn.get(index).getRp_bad());
+
+					}
 				}
 
 				if (ok) {
@@ -428,48 +438,37 @@ public class ReturnTabController implements Initializable {
 					alert.setResizable(false);
 					// 경고창을 보여주고 기다린다
 					alert.showAndWait();
-				} else {
-					SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-					Date time = new Date();
-					String time1 = format1.format(time);
-
-					Alert alert;
-					alert = new Alert(AlertType.WARNING);
-					alert.setTitle("등록 실패");
-					alert.setHeaderText("반품등록이 실패하였습니다.");
-					alert.setContentText(time1 + "에 해당하는 반품현황");
-					// 경고창 크기설정 불가
-					alert.setResizable(false);
-					// 경고창을 보여주고 기다린다
-					alert.showAndWait();
-				}
-				// 현재 날짜를 불러와서 매개변수에 넣어줌
-				SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
-				Date time = new Date();
-				String time1 = format1.format(time);
-
-				ArrayList<ReturnVO> list = new ArrayList();
-
-				list = rdao.getOrderDate(time1);
-
-				ReturnState.removeAll(ReturnState);
-
-				for (int index = 0; index < list.size(); index++) {
-					ReturnVO rvo = null;
-					rvo = new ReturnVO(list.get(index).getRp_code(), list.get(index).getRp_name(),
-							list.get(index).getRp_ea(), list.get(index).getRp_price(), list.get(index).getRp_total(),
-							time1, false);
-
-					ReturnState.add(rvo);
 
 				}
+
+				ReturnStateTotalList(); // 테이블 새로고침
 
 				insertReturn.removeAll(insertReturn);
 				selectedItem.removeAll(selectedItem);
-
-			} catch (Exception e) {
-				System.out.println(e);
 			}
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	// 반품현황 리스트
+	public void ReturnStateTotalList() {
+		ReturnState.removeAll(ReturnState);
+
+		ReturnDAO rdao = new ReturnDAO();
+		ReturnVO rvo = null;
+
+		ArrayList<ReturnVO> list;
+		try {
+			list = rdao.getOrderDate(today);
+			int rowCount = list.size();
+
+			for (int index = 0; index < rowCount; index++) {
+				rvo = list.get(index);
+				ReturnState.add(rvo);
+			}
+
+		} catch (Exception e) {
 		}
 
 	}

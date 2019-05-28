@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class ReturnVO {
 
 	private String rp_code; // 반품 상품코드
@@ -10,33 +12,37 @@ public class ReturnVO {
 	private String rp_date; // 반품등록일
 	private String rp_bad; // 불량여부
 	private String rp_state; // 등록유형
-	private boolean beReleased; // 출고확인
+	private String beReleased; // 출고확인
 
 	// 디폴트 생성자
 	public ReturnVO() {
 		super();
 	}
 
-	
-	
-	
-	public ReturnVO(String rp_code, String rp_name, int rp_ea, int rp_price, int rp_total,
-			String rp_date, boolean beReleased) {
+	public ReturnVO(String rp_code) {
 		super();
 		this.rp_code = rp_code;
-		this.rp_name = rp_name;
-		this.rp_ea = rp_ea;
-		this.rp_price = rp_price;
-		this.rp_total = rp_total;
-		this.rp_date = rp_date;
-		this.beReleased = beReleased;
 	}
 
-
+	
+	
+	// 리스트 배열로 받는 생성자
+	public ReturnVO(ArrayList<ReturnVO> list) {
+		super();
+		this.rp_code = list.get(0).getRp_code();
+		this.rp_name = list.get(0).getRp_name();
+		this.rp_ea = list.get(0).getRp_ea();
+		this.rp_price = list.get(0).getRp_price();
+		this.rp_total = list.get(0).getRp_total();
+		this.rp_date = list.get(0).getRp_date();
+		this.rp_bad = list.get(0).getRp_bad();
+		this.rp_state = list.get(0).getRp_state();
+		this.beReleased = list.get(0).getBeReleased();
+	}
 
 	// 전체필드 생성자
 	public ReturnVO(String rp_code, String rp_name, int rp_ea, int rp_price, int rp_total, String rp_date,
-			String rp_bad, String rp_state, boolean beReleased) {
+			String rp_bad, String rp_state, String beReleased) {
 		super();
 		this.rp_code = rp_code;
 		this.rp_name = rp_name;
@@ -76,131 +82,76 @@ public class ReturnVO {
 		this.rp_state = rp_state;
 	}
 
-
-
-
 	public String getRp_code() {
 		return rp_code;
 	}
-
-
-
 
 	public void setRp_code(String rp_code) {
 		this.rp_code = rp_code;
 	}
 
-
-
-
 	public String getRp_name() {
 		return rp_name;
 	}
-
-
-
 
 	public void setRp_name(String rp_name) {
 		this.rp_name = rp_name;
 	}
 
-
-
-
 	public int getRp_ea() {
 		return rp_ea;
 	}
-
-
-
 
 	public void setRp_ea(int rp_ea) {
 		this.rp_ea = rp_ea;
 	}
 
-
-
-
 	public int getRp_price() {
 		return rp_price;
 	}
-
-
-
 
 	public void setRp_price(int rp_price) {
 		this.rp_price = rp_price;
 	}
 
-
-
-
 	public int getRp_total() {
 		return rp_total;
 	}
-
-
-
 
 	public void setRp_total(int rp_total) {
 		this.rp_total = rp_total;
 	}
 
-
-
-
 	public String getRp_date() {
 		return rp_date;
 	}
-
-
-
 
 	public void setRp_date(String rp_date) {
 		this.rp_date = rp_date;
 	}
 
-
-
-
 	public String getRp_bad() {
 		return rp_bad;
 	}
-
-
-
 
 	public void setRp_bad(String rp_bad) {
 		this.rp_bad = rp_bad;
 	}
 
-
-
-
 	public String getRp_state() {
 		return rp_state;
 	}
-
-
-
 
 	public void setRp_state(String rp_state) {
 		this.rp_state = rp_state;
 	}
 
-
-
-
-	public boolean getBeReleased() {
+	public String getBeReleased() {
 		return beReleased;
 	}
 
-
-
-
-	public void setBeReleased(boolean beReleased) {
+	public void setBeReleased(String beReleased) {
 		this.beReleased = beReleased;
 	}
-
 
 }
