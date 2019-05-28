@@ -1,6 +1,7 @@
 package controller;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -217,17 +218,46 @@ public class ReturnTabController implements Initializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		// 반품현황 테이블에 있던 정보들을 지워준다
 		ReturnState.removeAll(ReturnState);
-
-		ReturnStateTotalList(); // 추가
+		// 지워준후 테이블 새로고침
+		ReturnStateTotalList();
 
 	}
 
 	// 달력에서 클릭 선택 이벤트 핸들러
 	public void handlerdpDateAction(ActionEvent event) {
 		// TODO Auto-generated method stub
+		ReturnDAO rdao = new ReturnDAO();
+		ReturnVO rvo = new ReturnVO();
 
+		String selectedDay = dpDate.getValue().toString();
+
+		ArrayList<ReturnVO> list = null;
+		ReturnState.removeAll(ReturnState);
+
+		try {
+			list = rdao.getOrderDate(selectedDay);
+			int rowCount = list.size();
+
+			if (list.size() == 0) {
+				Alert alert;
+				alert = new Alert(AlertType.WARNING);
+				alert.setTitle("반품현황");
+				alert.setHeaderText("[ " + selectedDay + " ] 에 등록된 상품이 없습니다.");
+				alert.setContentText("");
+				// 경고창 크기설정 불가
+				alert.setResizable(false);
+				// 경고창을 보여주고 기다린다
+				alert.showAndWait();
+			} else {
+				for (int index = 0; index < rowCount; index++) {
+					rvo = list.get(index);
+					ReturnState.add(rvo);
+				}
+			}
+		} catch (Exception e) {
+		}
 	}
 
 	// 출고확인버튼 이벤트 핸들러
@@ -236,9 +266,6 @@ public class ReturnTabController implements Initializable {
 		ReturnVO rvo2 = new ReturnVO();
 		ReturnDAO rdao = new ReturnDAO();
 		rvo2 = tableReturnState.getSelectionModel().getSelectedItem();
-		String xy = tableReturnState.getSelectionModel().getSelectedItem().getBeReleased();
-		String selectedP_name = tableReturnState.getSelectionModel().getSelectedItem().getRp_name(); // 상품명
-
 		if (rvo2 == null) {
 			Alert alert;
 			alert = new Alert(AlertType.WARNING);
@@ -249,32 +276,36 @@ public class ReturnTabController implements Initializable {
 			alert.setResizable(false);
 			// 경고창을 보여주고 기다린다
 			alert.showAndWait();
-		} else if (xy.equals("Y")) {
-
-			Alert alert;
-			alert = new Alert(AlertType.WARNING);
-			alert.setTitle("출고안내");
-			alert.setHeaderText(selectedP_name + "");
-			alert.setContentText("해당 상품은 이미 출고확인이 되었습니다.");
-			// 경고창 크기설정 불가
-			alert.setResizable(false);
-			// 경고창을 보여주고 기다린다
-			alert.showAndWait();
-
 		} else {
+			String xy = tableReturnState.getSelectionModel().getSelectedItem().getBeReleased();
 
-			String selectedP_code = tableReturnState.getSelectionModel().getSelectedItem().getRp_code();
-			int selectedP_ea = tableReturnState.getSelectionModel().getSelectedItem().getRp_ea();
+			if (xy.equals("Y")) {
+				String selectedP_name1 = tableReturnState.getSelectionModel().getSelectedItem().getRp_name(); // 상품명
+				Alert alert;
+				alert = new Alert(AlertType.WARNING);
+				alert.setTitle("출고안내");
+				alert.setHeaderText(selectedP_name1 + "");
+				alert.setContentText("해당 상품은 이미 출고확인이 되었습니다.");
+				// 경고창 크기설정 불가
+				alert.setResizable(false);
+				// 경고창을 보여주고 기다린다
+				alert.showAndWait();
 
-			rdao.SetY(today, selectedP_code);
-			rdao.setIn_Out(selectedP_ea, selectedP_code);
+			} else {
 
-			ReturnStateTotalList();
-			productTotalList();
-			try {
+				String selectedP_code = tableReturnState.getSelectionModel().getSelectedItem().getRp_code();
+				int selectedP_ea = tableReturnState.getSelectionModel().getSelectedItem().getRp_ea();
 
-			} catch (Exception e) {
-				System.out.println(e);
+				rdao.SetY(today, selectedP_code);
+				rdao.setIn_Out(selectedP_ea, selectedP_code);
+
+				ReturnStateTotalList();
+				productTotalList();
+				try {
+
+				} catch (Exception e) {
+					System.out.println(e);
+				}
 			}
 		}
 	}
@@ -427,7 +458,6 @@ public class ReturnTabController implements Initializable {
 
 					}
 				}
-
 				if (ok) {
 					Alert alert;
 					alert = new Alert(AlertType.WARNING);
@@ -494,7 +524,7 @@ public class ReturnTabController implements Initializable {
 				productDataList.add(pVo);
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+
 		}
 	}
 
