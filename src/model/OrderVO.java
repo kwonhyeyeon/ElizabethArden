@@ -60,15 +60,6 @@ public class OrderVO {
 		this.in_out = in_out;
 	}
 
-	public OrderVO(ArrayList<ProductVO> selectedItem) {
-		super();
-		this.p_code = p_code;
-		this.p_name = p_name;
-		this.or_ea = or_ea;
-		this.price = price;
-		this.or_total = or_total;
-	}
-
 	public int getNo() {
 		return no;
 	}
