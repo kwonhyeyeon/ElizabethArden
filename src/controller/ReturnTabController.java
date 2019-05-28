@@ -239,11 +239,11 @@ public class ReturnTabController implements Initializable {
 		try {
 			list = rdao.getOrderDate(selectedDay);
 			int rowCount = list.size();
-		
+
 			if (list.size() == 0) {
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
-				alert.setTitle("출고안내");
+				alert.setTitle("반품현황");
 				alert.setHeaderText("[ " + selectedDay + " ] 에 등록된 상품이 없습니다.");
 				alert.setContentText("");
 				// 경고창 크기설정 불가
@@ -266,9 +266,6 @@ public class ReturnTabController implements Initializable {
 		ReturnVO rvo2 = new ReturnVO();
 		ReturnDAO rdao = new ReturnDAO();
 		rvo2 = tableReturnState.getSelectionModel().getSelectedItem();
-		String xy = tableReturnState.getSelectionModel().getSelectedItem().getBeReleased();
-		String selectedP_name = tableReturnState.getSelectionModel().getSelectedItem().getRp_name(); // 상품명
-
 		if (rvo2 == null) {
 			Alert alert;
 			alert = new Alert(AlertType.WARNING);
@@ -279,32 +276,36 @@ public class ReturnTabController implements Initializable {
 			alert.setResizable(false);
 			// 경고창을 보여주고 기다린다
 			alert.showAndWait();
-		} else if (xy.equals("Y")) {
-
-			Alert alert;
-			alert = new Alert(AlertType.WARNING);
-			alert.setTitle("출고안내");
-			alert.setHeaderText(selectedP_name + "");
-			alert.setContentText("해당 상품은 이미 출고확인이 되었습니다.");
-			// 경고창 크기설정 불가
-			alert.setResizable(false);
-			// 경고창을 보여주고 기다린다
-			alert.showAndWait();
-
 		} else {
+			String xy = tableReturnState.getSelectionModel().getSelectedItem().getBeReleased();
 
-			String selectedP_code = tableReturnState.getSelectionModel().getSelectedItem().getRp_code();
-			int selectedP_ea = tableReturnState.getSelectionModel().getSelectedItem().getRp_ea();
+			if (xy.equals("Y")) {
+				String selectedP_name1 = tableReturnState.getSelectionModel().getSelectedItem().getRp_name(); // 상품명
+				Alert alert;
+				alert = new Alert(AlertType.WARNING);
+				alert.setTitle("출고안내");
+				alert.setHeaderText(selectedP_name1 + "");
+				alert.setContentText("해당 상품은 이미 출고확인이 되었습니다.");
+				// 경고창 크기설정 불가
+				alert.setResizable(false);
+				// 경고창을 보여주고 기다린다
+				alert.showAndWait();
 
-			rdao.SetY(today, selectedP_code);
-			rdao.setIn_Out(selectedP_ea, selectedP_code);
+			} else {
 
-			ReturnStateTotalList();
-			productTotalList();
-			try {
+				String selectedP_code = tableReturnState.getSelectionModel().getSelectedItem().getRp_code();
+				int selectedP_ea = tableReturnState.getSelectionModel().getSelectedItem().getRp_ea();
 
-			} catch (Exception e) {
-				System.out.println(e);
+				rdao.SetY(today, selectedP_code);
+				rdao.setIn_Out(selectedP_ea, selectedP_code);
+
+				ReturnStateTotalList();
+				productTotalList();
+				try {
+
+				} catch (Exception e) {
+					System.out.println(e);
+				}
 			}
 		}
 	}
@@ -457,7 +458,6 @@ public class ReturnTabController implements Initializable {
 
 					}
 				}
-
 				if (ok) {
 					Alert alert;
 					alert = new Alert(AlertType.WARNING);
