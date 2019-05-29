@@ -68,13 +68,13 @@ public class SaleDAO {
 	}
 
 	// 월별 판매현황을 가져오는 메소드
-	public ArrayList<SaleVO> getMonthDate(String month) {
+	public ArrayList<SaleVO> getEmployeeMonthDate(String month, String e_code) {
 
 		// ArrayList배열 생성
 		ArrayList<SaleVO> list = new ArrayList<>();
 		// lesson테이블에 있는 모든 정보를 일련번호로 정렬해서 가져오는 sql문
 		String sql = "select sr.p_code, p.p_name, sr.sr_state, sr.build_date, sr.sr_Ea, p.p_price, sr.sr_total "
-				+ "from sale_return sr, product p where sr.p_code = p.p_code and to_char(sr.build_Date, 'yyyy-mm') = ?";
+				+ "from sale_return sr, product p where sr.p_code = p.p_code and to_char(sr.build_Date, 'yyyy-mm') = ? and sr.e_code = ?";
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -88,6 +88,7 @@ public class SaleDAO {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, year+"-"+month);
+			pstmt.setString(1, e_code);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				SaleVO svo = new SaleVO();
