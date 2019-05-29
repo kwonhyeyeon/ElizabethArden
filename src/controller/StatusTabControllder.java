@@ -17,6 +17,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import model.EmployeeVO;
 import model.SaleVO;
 
@@ -63,7 +65,11 @@ public class StatusTabControllder implements Initializable {
 		TableColumn colProductEa = new TableColumn("수량");
 		colProductEa.setPrefWidth(97);
 		colProductEa.setStyle("-fx-alignment:CENTER");
+<<<<<<< HEAD
 		colProductEa.setCellValueFactory(new PropertyValueFactory<>("p_ea"));
+=======
+		colProductEa.setCellValueFactory(new PropertyValueFactory<>("sr_ea"));
+>>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
 
 		TableColumn colProductPrice = new TableColumn("단가");
 		colProductPrice.setPrefWidth(200);
@@ -73,7 +79,11 @@ public class StatusTabControllder implements Initializable {
 		TableColumn colProductTotal = new TableColumn("총액");
 		colProductTotal.setPrefWidth(250);
 		colProductTotal.setStyle("-fx-alignment:CENTER");
+<<<<<<< HEAD
 		colProductTotal.setCellValueFactory(new PropertyValueFactory<>("p_total"));
+=======
+		colProductTotal.setCellValueFactory(new PropertyValueFactory<>("sr_total"));
+>>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
 
 		TableColumn colProductDate = new TableColumn("등록일");
 		colProductDate.setPrefWidth(250);
@@ -124,6 +134,15 @@ public class StatusTabControllder implements Initializable {
 		empMonthSalesStatus.getColumns().addAll(colEmpPCode, colEmpPName, colEmpPEa, colEmpPPrice, colEmpPTotal,
 				colEmpPStatus);
 
+<<<<<<< HEAD
+=======
+		// 상품명 검색 버튼 이벤트 핸들러
+		btnSearch.setOnAction(event -> handlerBtnSearchAction(event));
+
+		// 엔터키 적용
+		productName.setOnKeyPressed(event -> handlerProductNamePressed(event));
+
+>>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
 		// 직원별 월별 검색 버튼이벤트 메소드
 		btnMonSearch.setOnAction(event -> handlerbtnMonSearchAction(event));
 
@@ -180,6 +199,58 @@ public class StatusTabControllder implements Initializable {
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	public void handlerProductNamePressed(KeyEvent event) {
+		// 엔터키가 발생할경우
+		if (event.getCode() == KeyCode.ENTER) {
+			productSearch(); // 검색 버튼 이벤트 메소드 호출
+		}
+	}
+
+	// 상품명 검색 버튼 이벤트
+	public void productSearch() {
+
+		String p_name = productName.getText().trim(); // productName에서 검색한 상품명
+
+		if (p_name.equals("")) { // 상품명이 공백으로 들어왔을 경우
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("제품별 판매현황");
+			alert.setHeaderText("제품명 미입력");
+			alert.setContentText("제품명을 다시 입력하세요");
+			alert.showAndWait(); // 확인 창 누르기 전까지 대기
+		} else {
+
+			productSaleData.removeAll(productSaleData); // 제품별 판매현황 테이블의 정보를 지워준다
+
+			ArrayList<SaleVO> productSale = new ArrayList<SaleVO>();
+
+			SaleDAO sdao = null;
+			SaleVO svo = null;
+
+			sdao = new SaleDAO();
+			productSale = sdao.getProductDate(p_name);
+
+			if (productSale != null) {
+				int rowCount = productSale.size();
+				productName.clear();
+
+				for (int index = 0; index < rowCount; index++) {
+					svo = productSale.get(index);
+					productSaleData.add(svo);
+				}
+			}
+
+		}
+
+	}
+
+	// 상품명 검색 버튼 이벤트 메소드
+	public void handlerBtnSearchAction(ActionEvent event) {
+		productSearch();
+	}
+
+>>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
 	// 직원명 가져오기
 	public void employeeName() {
 
@@ -195,4 +266,8 @@ public class StatusTabControllder implements Initializable {
 
 	}
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
