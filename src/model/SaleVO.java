@@ -24,7 +24,22 @@ public class SaleVO {
 	
 	
 	
-	
+	// 직원별 판매현황을 담아주는 생성자
+	public SaleVO(String p_code, String p_name, String sr_state, int sr_ea, int p_price, int sr_total,
+			String build_date) {
+		super();
+		this.p_code = p_code;
+		this.p_name = p_name;
+		this.sr_state = sr_state;
+		this.sr_ea = sr_ea;
+		this.p_price = p_price;
+		this.sr_total = sr_total;
+		this.build_date = build_date;
+	}
+
+
+
+
 	// 판매일경우 생성자
 	public SaleVO(int no, String p_code, String p_name, String sr_state, int sr_ea, int p_price, int sr_total,
 			int p_point, int sr_used_point, String build_date) {
