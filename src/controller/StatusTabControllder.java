@@ -22,13 +22,15 @@ public class StatusTabControllder implements Initializable {
 	@FXML
 	private TextField productName; // 상품명 입력
 	@FXML
-	private Button btnSearch; // 검색 버튼
+	private Button btnSearch; // 상품명 검색 버튼
 	@FXML
 	private TableView<SaleVO> productSalesStatus = new TableView<>(); // 제품별 판매현황 테이블
 	@FXML
 	private ComboBox<EmployeeVO> empName; // 직원명 콤보박스
 	@FXML
 	private ComboBox<String> month; // 월 콤보박스
+	@FXML
+	private Button btnMonSearch; // 직원별 월별 검색 버튼
 	@FXML
 	private TableView<SaleVO> empMonthSalesStatus = new TableView<>(); // 직원별 월별 판매현황 테이블
 
@@ -41,8 +43,8 @@ public class StatusTabControllder implements Initializable {
 		employeeName(); // 직원 콤보박스 설정
 
 		// 상태 콤보박스 설정
-		month.setItems(FXCollections.observableArrayList("1월", "2월", "3월", "4월", "5월", "6월", 
-				"7월", "8월", "9월", "10월", "11월", "12월"));
+		month.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", 
+				"07", "08", "09", "10", "11", "12"));
 
 		// 제품별 판매현황 테이블 컬럼 지정
 		TableColumn colProductCode = new TableColumn("상품코드");
