@@ -24,6 +24,7 @@
 	</HBox>
 	
 	<TableView fx:id="productSalesStatus"/>	
+	<Label alignment="CENTER_RIGHT" fx:id="productStatus"/>
 	
 	<VBox>
 		<padding>
@@ -40,5 +41,6 @@
 	</HBox>
 	
 	<TableView fx:id="empMonthSalesStatus"/>
+	<Label alignment="CENTER_RIGHT" fx:id="empMonthStatus"/>
 
 </VBox>

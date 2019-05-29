@@ -12,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -37,7 +38,11 @@ public class StatusTabControllder implements Initializable {
 	@FXML
 	private Button btnMonSearch; // 직원별 월별 검색 버튼
 	@FXML
-	private TableView<SaleVO> empMonthSalesStatus = new TableView<>(); // 직원별 월별 판매현황 테이블
+	private TableView<SaleVO> empMonthSalesStatus = new TableView<>(); // 직원별 월별 판매현황 테이블 
+	@FXML
+	private Label productStatus; // 제품별 총 수량, 총액 라벨
+	@FXML
+	private Label empMonthStatus; // 직원별 월별 총 수량, 총액 라벨
 
 	ObservableList<SaleVO> productSaleData = FXCollections.observableArrayList(); // 제품별 판매현황 테이블 데이터
 	ObservableList<SaleVO> empMonthData = FXCollections.observableArrayList(); // 직원별 월별 판매현황 테이블 데이터
@@ -173,12 +178,23 @@ public class StatusTabControllder implements Initializable {
 					alert.showAndWait();
 				} else {
 					empMonthData.removeAll(empMonthData);
-
+					
+					int totalEa = 0;
+					int totalPrice = 0;
+					
 					for (int index = 0; index < list.size(); index++) {
 						svo = list.get(index);
 						empMonthData.add(svo);
-
+						
+						int ea = empMonthData.get(index).getSr_ea();
+						totalEa += ea;
+						
+						int price = empMonthData.get(index).getSr_total();
+						totalPrice += price;
 					}
+					
+					// 검색된 후 라벨 보여줌
+					empMonthStatus.setText("총 수량 : " + totalEa + "개" + "\t총액 : " + totalPrice + "원");
 				}
 
 			} catch (Exception e) {
