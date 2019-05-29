@@ -56,6 +56,12 @@
                   <fx:include fx:id="customerTab" source="customerTab.fxml"/>
                </content>
             </Tab>
+            
+            <Tab text="판매 현황" fx:id="salesStatus">
+               <content>
+                  <fx:include fx:id="statusTab" source="salesstatus.fxml"/>
+               </content>
+            </Tab>
          </tabs>
       </TabPane>
    </center>
