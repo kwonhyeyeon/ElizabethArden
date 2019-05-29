@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import model.ProductVO;
 import model.SaleVO;
@@ -72,16 +74,20 @@ public class SaleDAO {
 		ArrayList<SaleVO> list = new ArrayList<>();
 		// lesson테이블에 있는 모든 정보를 일련번호로 정렬해서 가져오는 sql문
 		String sql = "select sr.p_code, p.p_name, sr.sr_state, sr.build_date, sr.sr_Ea, p.p_price, sr.sr_total "
-				+ "from sale_return sr, product p where sr.p_code = p.p_code and to_char(sr.build_Date, 'mm') = ?";
+				+ "from sale_return sr, product p where sr.p_code = p.p_code and to_char(sr.build_Date, 'yyyy-mm') = ?";
 
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
+		
+		SimpleDateFormat format12 = new SimpleDateFormat("yyyy");
+		Date time23 = new Date();
+		String year = format12.format(time23);
 
 		try {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, month);
+			pstmt.setString(1, year+"-"+month);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				SaleVO svo = new SaleVO();
