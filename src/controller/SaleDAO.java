@@ -88,7 +88,7 @@ public class SaleDAO {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, year+"-"+month);
-			pstmt.setString(1, e_code);
+			pstmt.setString(2, e_code);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
 				SaleVO svo = new SaleVO();

@@ -6,13 +6,16 @@ import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.EmployeeVO;
 import model.SaleVO;
@@ -39,12 +42,12 @@ public class StatusTabControllder implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
+
 		employeeName(); // 직원 콤보박스 설정
 
 		// 상태 콤보박스 설정
-		month.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", 
-				"07", "08", "09", "10", "11", "12"));
+		month.setItems(FXCollections.observableArrayList("01", "02", "03", "04", "05", "06", "07", "08", "09", "10",
+				"11", "12"));
 
 		// 제품별 판매현황 테이블 컬럼 지정
 		TableColumn colProductCode = new TableColumn("상품코드");
@@ -100,7 +103,7 @@ public class StatusTabControllder implements Initializable {
 		TableColumn colEmpPEa = new TableColumn("수량");
 		colEmpPEa.setPrefWidth(120);
 		colEmpPEa.setStyle("-fx-alignment:CENTER");
-		colEmpPEa.setCellValueFactory(new PropertyValueFactory<>("p_ea"));
+		colEmpPEa.setCellValueFactory(new PropertyValueFactory<>("sr_ea"));
 
 		TableColumn colEmpPPrice = new TableColumn("단가");
 		colEmpPPrice.setPrefWidth(200);
@@ -110,7 +113,7 @@ public class StatusTabControllder implements Initializable {
 		TableColumn colEmpPTotal = new TableColumn("총액");
 		colEmpPTotal.setPrefWidth(250);
 		colEmpPTotal.setStyle("-fx-alignment:CENTER");
-		colEmpPTotal.setCellValueFactory(new PropertyValueFactory<>("p_total"));
+		colEmpPTotal.setCellValueFactory(new PropertyValueFactory<>("sr_total"));
 
 		TableColumn colEmpPStatus = new TableColumn("상태");
 		colEmpPStatus.setPrefWidth(120);
@@ -121,6 +124,60 @@ public class StatusTabControllder implements Initializable {
 		empMonthSalesStatus.getColumns().addAll(colEmpPCode, colEmpPName, colEmpPEa, colEmpPPrice, colEmpPTotal,
 				colEmpPStatus);
 
+		// 직원별 월별 검색 버튼이벤트 메소드
+		btnMonSearch.setOnAction(event -> handlerbtnMonSearchAction(event));
+
+	}
+
+	// 직원별 월별 검색 버튼이벤트 메소드
+	public void handlerbtnMonSearchAction(ActionEvent event) {
+		// 콤보박스값이 설정되지 않고 이벤트가 발생했을경우
+		if (empName.getValue() == null || month.getValue() == null) {
+			empMonthData.removeAll(empMonthData);
+			Alert alert;
+			alert = new Alert(AlertType.WARNING);
+			alert.setTitle("입력오류");
+			alert.setHeaderText("검색값을 설정하십시오.");
+			alert.setContentText("");
+			// 경고창 크기설정 불가
+			alert.setResizable(false);
+			// 경고창을 보여주고 기다린다
+			alert.showAndWait();
+		} else {
+			try {
+				EmployeeDAO edao = new EmployeeDAO();
+				SaleDAO sdao = new SaleDAO();
+				SaleVO svo = new SaleVO();
+				ArrayList<SaleVO> list = new ArrayList();
+
+				String e_code = edao.getEmployeeCode(empName.getValue().toString());
+
+				list = sdao.getEmployeeMonthDate(month.getValue().toString(), e_code);
+				if (list.size() == 0) {
+					Alert alert;
+					alert = new Alert(AlertType.WARNING);
+					alert.setTitle("검색완료");
+					alert.setHeaderText("입력된 데이터가 없습니다");
+					alert.setContentText("");
+					// 경고창 크기설정 불가
+					alert.setResizable(false);
+					// 경고창을 보여주고 기다린다
+					alert.showAndWait();
+				} else {
+					empMonthData.removeAll(empMonthData);
+
+					for (int index = 0; index < list.size(); index++) {
+						svo = list.get(index);
+						empMonthData.add(svo);
+
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
 	}
 
 	// 직원명 가져오기
