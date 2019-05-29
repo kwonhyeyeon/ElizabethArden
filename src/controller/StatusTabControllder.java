@@ -65,11 +65,7 @@ public class StatusTabControllder implements Initializable {
 		TableColumn colProductEa = new TableColumn("수량");
 		colProductEa.setPrefWidth(97);
 		colProductEa.setStyle("-fx-alignment:CENTER");
-<<<<<<< HEAD
-		colProductEa.setCellValueFactory(new PropertyValueFactory<>("p_ea"));
-=======
 		colProductEa.setCellValueFactory(new PropertyValueFactory<>("sr_ea"));
->>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
 
 		TableColumn colProductPrice = new TableColumn("단가");
 		colProductPrice.setPrefWidth(200);
@@ -79,11 +75,7 @@ public class StatusTabControllder implements Initializable {
 		TableColumn colProductTotal = new TableColumn("총액");
 		colProductTotal.setPrefWidth(250);
 		colProductTotal.setStyle("-fx-alignment:CENTER");
-<<<<<<< HEAD
-		colProductTotal.setCellValueFactory(new PropertyValueFactory<>("p_total"));
-=======
 		colProductTotal.setCellValueFactory(new PropertyValueFactory<>("sr_total"));
->>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
 
 		TableColumn colProductDate = new TableColumn("등록일");
 		colProductDate.setPrefWidth(250);
@@ -134,15 +126,12 @@ public class StatusTabControllder implements Initializable {
 		empMonthSalesStatus.getColumns().addAll(colEmpPCode, colEmpPName, colEmpPEa, colEmpPPrice, colEmpPTotal,
 				colEmpPStatus);
 
-<<<<<<< HEAD
-=======
 		// 상품명 검색 버튼 이벤트 핸들러
 		btnSearch.setOnAction(event -> handlerBtnSearchAction(event));
 
 		// 엔터키 적용
 		productName.setOnKeyPressed(event -> handlerProductNamePressed(event));
 
->>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
 		// 직원별 월별 검색 버튼이벤트 메소드
 		btnMonSearch.setOnAction(event -> handlerbtnMonSearchAction(event));
 
@@ -199,8 +188,6 @@ public class StatusTabControllder implements Initializable {
 		}
 	}
 
-<<<<<<< HEAD
-=======
 	public void handlerProductNamePressed(KeyEvent event) {
 		// 엔터키가 발생할경우
 		if (event.getCode() == KeyCode.ENTER) {
@@ -250,7 +237,6 @@ public class StatusTabControllder implements Initializable {
 		productSearch();
 	}
 
->>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
 	// 직원명 가져오기
 	public void employeeName() {
 
@@ -266,8 +252,4 @@ public class StatusTabControllder implements Initializable {
 
 	}
 
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 890afcabcbbc0f9ef0718e8402133962e07fece9
