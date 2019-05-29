@@ -52,6 +52,10 @@ public class MainController implements Initializable {
 	private Tab customer; // 고객 탭
 	@FXML
 	private CustomerTabController customerTabController;
+	@FXML
+	private Tab salesStatus; // 판매현황 탭
+	@FXML
+	private StatusTabControllder statusTabControllder;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -92,6 +96,14 @@ public class MainController implements Initializable {
 						}
 
 					} else if (newValue == customer) { // 고객 탭일 경우
+
+						try {
+
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+
+					} else if (newValue == salesStatus) { // 판매현황 탭일 경우
 
 						try {
 
