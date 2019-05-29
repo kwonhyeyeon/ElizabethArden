@@ -36,7 +36,7 @@
 		<spacing>10</spacing>
 		<ComboBox fx:id="empName" promptText="직원명 선택"/>
 		<ComboBox fx:id="month" promptText="월 선택"/>
-
+		<Button fx:id="btnMonSearch" text="검 색"/>
 	</HBox>
 	
 	<TableView fx:id="empMonthSalesStatus"/>
