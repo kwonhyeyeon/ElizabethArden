@@ -58,7 +58,7 @@ public class OrderDAO {
 
 	}
 
-	// 주문 등록
+	// 주문 등록 메소드
 	public boolean getOrderInsert(String p_code, int or_ea, int or_total, String or_bad) throws Exception {
 
 		LoginController lc = new LoginController();
@@ -400,61 +400,6 @@ public class OrderDAO {
 			} catch (SQLException e) {
 			}
 		}
-
-	}
-
-	// 추가 주문 등록할 경우 상품명 중복 검사
-	public boolean getInOut(String or_date, String p_code) throws Exception {
-
-		ArrayList<OrderVO> list = new ArrayList();
-
-		boolean inoutResult = false; // 입고 확인 Y면 false
-		String sql = "select p_code from order_return where to_char(or_date, 'yyyy-mm-dd') = ? and in_out = 'Y' and or_state = '주문'";
-		Connection con = null;
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		OrderVO ovo = null;
-
-		try {
-
-			con = DBUtil.getConnection(); // DBUtil 연결
-
-			pstmt = con.prepareStatement(sql); // sql문을 prepareStatement로 실행한다
-			pstmt.setString(1, or_date);
-			pstmt.setString(2, p_code);
-			rs = pstmt.executeQuery(); // 쿼리 실행
-
-			while (rs.next()) {
-				ovo = new OrderVO();
-				ovo.setP_code(rs.getString("p_code"));
-
-				list.add(ovo);
-			}
-
-			if (ovo != null) {
-				inoutResult = true; // 중복된 값 있으면 true
-			}
-		} catch (SQLException se) {
-			System.out.println(se);
-		} catch (Exception e) {
-			System.out.println(e);
-		} finally {
-			try {
-				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
-				if (rs != null) {
-					rs.close();
-				}
-				if (pstmt != null) {
-					pstmt.close();
-				}
-				if (con != null) {
-					con.close();
-				}
-			} catch (SQLException se) {
-			}
-		}
-
-		return inoutResult;
 
 	}
 

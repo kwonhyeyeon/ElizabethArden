@@ -69,8 +69,8 @@ public class LoginController implements Initializable {
 			Scene scene = new Scene(mainView); // Scene 객체 생성
 			Stage mainStage = new Stage(); // Stage 객체 생성
 			mainStage.setTitle("매장 등록"); // 타이틀 설정
-			mainStage.initModality(Modality.WINDOW_MODAL);
-			mainStage.initOwner(btnLogin.getScene().getWindow());
+			mainStage.initModality(Modality.WINDOW_MODAL); // WINDOW_MODAL타입의 창을 염
+			mainStage.initOwner(btnLogin.getScene().getWindow()); // 스테이지의 소유자 Window를 지정
 			mainStage.setResizable(false); // 리사이즈 불가
 			mainStage.setScene(scene); // 씬 설정
 			mainStage.show(); // 로그인 창 열기
@@ -83,7 +83,7 @@ public class LoginController implements Initializable {
 
 	// 프로그램 종료 메뉴 이벤트 메소드
 	public void handlerMenuExitAction(ActionEvent event) {
-		Platform.exit();
+		Platform.exit(); // 플랫폼 종료
 	}
 
 	// 로그인버튼 이벤트
@@ -131,6 +131,7 @@ public class LoginController implements Initializable {
 				} catch (Exception e) {
 					System.out.println("오류 : " + e);
 				}
+				// 매장코드의 값이 없거나 비밀번호 값이 없으면
 			} else if (txtStoreCode.getText().equals("") || txtPassword.getText().equals("")) {
 				// 경고창을 보여준다
 				Alert alert;
@@ -170,19 +171,16 @@ public class LoginController implements Initializable {
 
 	// 패스워드 입력에서 엔터키 이벤트 적용
 	public void handerTxtPasswordKeyPressed(KeyEvent event) {
-		if (event.getCode() == KeyCode.ENTER) {
-			// 로그인 메소드 호출
-			login();
+		if (event.getCode() == KeyCode.ENTER) {		
+			login(); // 로그인 메소드 호출
 		}
 
 	}
 
 	// 아이디 입력에서 엔터키 이벤트 적용
 	public void handerTxtIdKeyPressed(KeyEvent event) {
-		// 엔터키가 발생할경우
 		if (event.getCode() == KeyCode.ENTER) {
-			// 비밀번호창으로 포커스를 준다.
-			txtPassword.requestFocus();
+			txtPassword.requestFocus(); // 비밀번호창으로 포커스를 준다.
 		}
 	}
 

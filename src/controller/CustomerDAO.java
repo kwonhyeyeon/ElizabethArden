@@ -14,6 +14,7 @@ import model.CustomerVO;
 import model.ProductVO;
 
 public class CustomerDAO {
+
 	// 고객 등록 메소드
 	public boolean customerRegiste(CustomerVO ct) throws Exception {
 
@@ -29,7 +30,7 @@ public class CustomerDAO {
 			con = DBUtil.getConnection();
 			// sql문을 담아줄 그릇
 			pstmt = con.prepareStatement(sql);
-			// jvo에서 변수들을 가져와서 sql문에 넣어준다.
+			// CustomerVO에서 변수들을 가져와서 sql문에 넣어준다.
 			pstmt.setInt(1, ct.getC_code());
 			pstmt.setString(2, ct.getC_name());
 			pstmt.setString(3, ct.getC_phoneNumber());
@@ -37,6 +38,7 @@ public class CustomerDAO {
 			pstmt.setString(5, ct.getC_birth());
 			pstmt.setString(6, ct.getC_email());
 			pstmt.setString(7, ct.getC_etc());
+			
 			// 등록 성공시 1을 반환
 			int i = pstmt.executeUpdate();
 
@@ -73,14 +75,18 @@ public class CustomerDAO {
 				System.out.println(e);
 			}
 		}
+		
 		return registeResult;
+		
 	}
 
 	// 고객 조회 메소드
 	public ArrayList<CustomerVO> getCustomerSearch(String c_name) throws Exception {
 
+		// CustomerVO Arraylist배열 생성
 		ArrayList<CustomerVO> list = new ArrayList<>();
 
+		// 고객 조회를 위한 sql문
 		String sql = "select c_code,  c_name, to_char(c_birth, 'YYYY/MM/DD') as c_birth, c_phonenumber, c_email, c_address from customer where c_name like ?";
 
 		Connection con = null;
@@ -90,12 +96,13 @@ public class CustomerDAO {
 		CustomerVO cvo = null;
 
 		try {
+			// DB 연결
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, "%" + c_name + "%");
 			rs = pstmt.executeQuery();
 
-			while (rs.next()) {
+			while (rs.next()) { // 받아온 값을 VO에 값을 설정해준 후
 				cvo = new CustomerVO();
 				cvo.setC_code(rs.getInt("c_code"));
 				cvo.setC_name(rs.getString("c_name"));
@@ -104,6 +111,7 @@ public class CustomerDAO {
 				cvo.setC_email(rs.getString("c_email"));
 				cvo.setC_address(rs.getString("c_address"));
 
+				// list에 해당 값들을 넣어준다
 				list.add(cvo);
 			}
 		} catch (SQLException se) {
@@ -131,7 +139,7 @@ public class CustomerDAO {
 
 	}
 
-	// 고객코드시퀀스를 불러와 반환하는 메소드
+	// 고객코드 시퀀스를 불러와 반환하는 메소드
 	public int getCustomerCode() throws Exception {
 
 		// 고객코드 시퀀스를 불러오는 메소드
@@ -139,7 +147,9 @@ public class CustomerDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		int customerCode = 0;
+		
+		int customerCode = 0; // 고객코드 초기화
+		
 		try {
 
 			con = DBUtil.getConnection(); // DBUtil 연결
@@ -153,7 +163,7 @@ public class CustomerDAO {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("오라클 에러" + e);
+			System.out.println("SQL 오류 " + e);
 		} catch (Exception e) {
 			System.out.println("잉?");
 		} finally {
@@ -180,7 +190,7 @@ public class CustomerDAO {
 		// ArrayList배열 생성
 		ArrayList<String> columnName = new ArrayList<String>();
 
-		// 수강테이블의 모든 정보를 가져오는 sql문
+		// 고객테이블의 모든 정보를 가져오는 sql문
 		String sql = "select * from customer";
 		Connection con = null;
 		PreparedStatement pstmt = null;
@@ -229,7 +239,7 @@ public class CustomerDAO {
 	public ArrayList<CustomerVO> getCustomerTotalList() throws Exception {
 		// ArrayList배열 생성
 		ArrayList<CustomerVO> list = new ArrayList<>();
-		// lesson테이블에 있는 모든 정보를 일련번호로 정렬해서 가져오는 sql문
+		// 고객의 전체 목록을 가져오는 sql문
 		String sql = "select c_code, c_name, c_phonenumber, c_address, to_char(c_birth, 'YYYY/MM/DD') as c_birth, c_email, c_point, c_etc from customer";
 
 		Connection con = null;
@@ -256,7 +266,6 @@ public class CustomerDAO {
 			}
 		} catch (SQLException se) {
 			System.out.println(se);
-			System.out.println("sql문 에러?");
 		} catch (Exception e) {
 			System.out.println(e);
 		} finally {
@@ -279,14 +288,15 @@ public class CustomerDAO {
 		return list;
 	}
 
-	// 고객정보 수정
-	public boolean getCustomerUpdate(String c_phoneNumber, String c_address, String c_email, String c_etc, int c_code) throws Exception {
-		
+	// 고객정보 수정 메소드
+	public boolean getCustomerUpdate(String c_phoneNumber, String c_address, String c_email, String c_etc, int c_code)
+			throws Exception {
+
 		String sql = "update customer set c_phoneNumber = ?, c_address = ?, c_email = ?, c_etc = ? where c_code = ?";
-		
+
 		Connection con = null;
 		PreparedStatement pstmt = null;
-		boolean customerUpdateSucess = false;
+		boolean customerUpdateSucess = false; // 정보 수정 결과
 
 		try {
 			con = DBUtil.getConnection(); // DBUtil 연결
@@ -332,7 +342,7 @@ public class CustomerDAO {
 		}
 
 		return customerUpdateSucess;
-		
+
 	}
-	
+
 }

@@ -48,14 +48,15 @@ public class EmployeeRegisteController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		txtEmployeeCode.setDisable(true);
+		txtEmployeeCode.setDisable(true); // 직원 코드 비활성화
 
-		// 직원 코드 자동 입력
 		EmployeeVO evo = null;
 		EmployeeDAO edao = null;
 
 		edao = new EmployeeDAO();
+		
 		try {
+			// 직원 코드 자동 입력
 			txtEmployeeCode.setText(edao.getEmployeeSequence(evo));
 		} catch (Exception e) {
 		}
@@ -86,37 +87,37 @@ public class EmployeeRegisteController implements Initializable {
 
 		// 필드 미입력 오류
 		try {
-			if (txtEmployeeName.getText().trim().equals("")) { // 직원명 입력
+			if (txtEmployeeName.getText().trim().equals("")) { // 직원명 미입력
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 등록");
 				alert.setHeaderText("직원명 미입력");
 				alert.setContentText("다시 입력해주세요");
 				alert.showAndWait();
-			} else if(txtEmployeePhone.getText().trim().equals("")) { 
+			} else if(txtEmployeePhone.getText().trim().equals("")) { // 핸드폰 번호 미입력
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 등록");
 				alert.setHeaderText("직원 핸드폰번호 미입력");
 				alert.setContentText("다시 입력해주세요");
 				alert.showAndWait();
-			} else if(dpEmployeeBirth.getValue() == null) { 
+			} else if(dpEmployeeBirth.getValue() == null) { // 생년월일 미입력
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 등록");
 				alert.setHeaderText("직원 생년월일 미입력");
 				alert.setContentText("다시 입력해주세요");
 				alert.showAndWait();
-			} else if(txtEmpolyeeAddress.getText().trim().equals("")) { 
+			} else if(txtEmpolyeeAddress.getText().trim().equals("")) { // 주소 미입력
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 등록");
 				alert.setHeaderText("직원 주소 미입력");
 				alert.setContentText("다시 입력해주세요");
 				alert.showAndWait();
-			} else if(dpEmployeeHiredate.getValue() == null) { 
+			} else if(dpEmployeeHiredate.getValue() == null) { // 입사일 미입력
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 등록");
 				alert.setHeaderText("직원 입사일 미입력");
 				alert.setContentText("다시 입력해주세요");
 				alert.showAndWait();
-			} else if(cbxEmployeeRank.getSelectionModel().getSelectedItem() == null) { 
+			} else if(cbxEmployeeRank.getSelectionModel().getSelectedItem() == null) { // 등급 미선택
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 등록");
 				alert.setHeaderText("직원 등급 미선택");
@@ -126,7 +127,6 @@ public class EmployeeRegisteController implements Initializable {
 			 
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
-			System.out.println("넘버");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -169,7 +169,7 @@ public class EmployeeRegisteController implements Initializable {
 
 	// 등록 버튼 이벤트 메소드
 	private void handlerBtnRegisteAction(ActionEvent event) {
-		employeeRegiste();
+		employeeRegiste(); // 등록 메소드 호출
 	}
 
 	public void handlerEmployeeRankPressed(KeyEvent event) {
