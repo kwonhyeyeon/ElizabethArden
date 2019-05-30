@@ -42,6 +42,7 @@
 	</HBox>
 	
 	<TableView fx:id="empMonthSalesStatus"/>
+	<Label fx:id="empMonthStatus"/>
 	<Label fx:id="empMonthStatus2"/>
 
 </VBox>

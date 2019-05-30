@@ -201,10 +201,10 @@ public class StatusTabControllder implements Initializable {
 							totalReturnEa += ea;
 							totalReturnPrice += price;
 							empMonthStatus2.setText("반품 총 수량 : " + totalReturnEa + "개" + "\t총액 : " + totalReturnPrice + "원"); // 반품
-						} else if(status.equals("판매")) {
+						} else {
 							totalEa += ea;
 							totalPrice += price;
-							empMonthStatus.setText("판매 총 수량 : " + "개" + "\t총액 : " + "원"); // 판매, 포인트사용
+							empMonthStatus.setText("판매 총 수량 : " + totalEa + "개" + "\t총액 : " + totalPrice + "원"); // 판매, 포인트사용 }
 						}
 						
 					}					
