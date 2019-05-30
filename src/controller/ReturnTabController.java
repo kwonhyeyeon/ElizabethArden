@@ -621,6 +621,7 @@ public class ReturnTabController implements Initializable {
 				// 테이블에 추가
 				insertReturn.add(rvo);
 				// 복사본도 저장
+				
 				selectedItem.add(rvo);
 
 			} catch (Exception e) {
