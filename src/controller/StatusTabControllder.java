@@ -40,9 +40,13 @@ public class StatusTabControllder implements Initializable {
 	@FXML
 	private TableView<SaleVO> empMonthSalesStatus = new TableView<>(); // 직원별 월별 판매현황 테이블 
 	@FXML
-	private Label productStatus; // 제품별 총 수량, 총액 라벨
+	private Label productStatus; // 제품별 총 수량, 총액 라벨(판매, 포인트사용)
 	@FXML
-	private Label empMonthStatus; // 직원별 월별 총 수량, 총액 라벨
+	private Label productStatus2; // 제품별 총 수량, 총액 라벨(반품)
+	@FXML
+	private Label empMonthStatus; // 직원별 월별 총 수량, 총액 라벨(판매, 포인트사용)
+	@FXML
+	private Label empMonthStatus2; // 직원별 월별 총 수량, 총액 라벨(반품)
 
 	ObservableList<SaleVO> productSaleData = FXCollections.observableArrayList(); // 제품별 판매현황 테이블 데이터
 	ObservableList<SaleVO> empMonthData = FXCollections.observableArrayList(); // 직원별 월별 판매현황 테이블 데이터
@@ -179,22 +183,32 @@ public class StatusTabControllder implements Initializable {
 				} else {
 					empMonthData.removeAll(empMonthData);
 					
-					int totalEa = 0;
-					int totalPrice = 0;
+					int totalEa = 0; // 판매, 포인트 사용 수량
+					int totalPrice = 0; // 판매, 포인트 사용 총액
+					int totalReturnEa = 0; // 반품 사용 수량
+					int totalReturnPrice = 0; // 반품 총액
 					
 					for (int index = 0; index < list.size(); index++) {
 						svo = list.get(index);
 						empMonthData.add(svo);
 						
 						int ea = empMonthData.get(index).getSr_ea();
-						totalEa += ea;
-						
 						int price = empMonthData.get(index).getSr_total();
-						totalPrice += price;
-					}
+						String status = empMonthData.get(index).getSr_state().trim();
+						System.out.println(status);
+						
+						if(status.equals("반품")) {
+							totalReturnEa += ea;
+							totalReturnPrice += price;
+							empMonthStatus2.setText("반품 총 수량 : " + totalReturnEa + "개" + "\t총액 : " + totalReturnPrice + "원"); // 반품
+						} else if(status.equals("판매")) {
+							totalEa += ea;
+							totalPrice += price;
+							empMonthStatus.setText("판매 총 수량 : " + "개" + "\t총액 : " + "원"); // 판매, 포인트사용
+						}
+						
+					}					
 					
-					// 검색된 후 라벨 보여줌
-					empMonthStatus.setText("총 수량 : " + totalEa + "개" + "\t총액 : " + totalPrice + "원");
 				}
 
 			} catch (Exception e) {
