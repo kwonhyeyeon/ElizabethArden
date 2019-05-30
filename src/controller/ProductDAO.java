@@ -39,7 +39,6 @@ public class ProductDAO {
 			}
 		} catch (SQLException se) {
 			System.out.println(se);
-			System.out.println("sql문 에러?");
 		} catch (Exception e) {
 			System.out.println(e);
 		} finally {

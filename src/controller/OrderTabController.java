@@ -364,7 +364,9 @@ public class OrderTabController implements Initializable {
 
 			// 수량이 0이거나 음수일 때
 			for (int index = 0; index < orderDataList.size(); index++) {
+				// 주문현황 테이블에서 수량을 가져와 ea에 저장
 				int ea = orderDataList.get(index).getOr_ea();
+				
 				if (ea == 0 || ea < 0) {
 					editEa = true;
 				}
@@ -383,9 +385,10 @@ public class OrderTabController implements Initializable {
 					overlap = odao.getOverLapProductName(today, orderDataList.get(index).getP_code());
 
 					if (overlap) {
-						String p_code = orderDataList.get(index).getP_code();
-						int ea = orderDataList.get(index).getOr_ea();
-						odao.updateEa(today, p_code, ea);
+						String p_code = orderDataList.get(index).getP_code(); // 상품코드
+						int ea = orderDataList.get(index).getOr_ea(); // 수량
+						// 기존 행에서 수량만 수정해준다
+						odao.updateEa(today, p_code, ea); // 등록일, 상품코드, 수량을 넣어준다
 
 						Alert alert;
 						alert = new Alert(AlertType.INFORMATION);
@@ -421,28 +424,8 @@ public class OrderTabController implements Initializable {
 
 				orderTotalList(); // 주문 등록 현황 리스트
 
-				orderDataList.removeAll(orderDataList);
-				selectedItem.removeAll(selectedItem);
-				
-				boolean inoutResult = false; // 입고확인 Y면 false 반환
-				if(inoutResult) {
-					
-					//tableOrderList.getSelectionModel().getSelectedItem().getIn_out();
-					odao.getInOut(today, tableOrderList.getSelectionModel().getSelectedItem().getIn_out());
-					
-					Alert alert = new Alert(AlertType.WARNING);
-					alert.setTitle("주문 등록");
-					alert.setHeaderText("주문 등록 실패");
-					alert.setContentText("수량을 입력하세요");
-					alert.showAndWait();
-				} else {
-					for (int index = 0; index < orderDataList.size(); index++) {
-						insertResult = odao.getOrderInsert(orderDataList.get(index).getP_code(),
-							orderDataList.get(index).getOr_ea(), orderDataList.get(index).getOr_total(),
-							orderDataList.get(index).getOr_bad());
-					}
-					inoutResult = true;
-				}
+				orderDataList.removeAll(orderDataList); // 주문등록 현황 리스트 초기화
+				selectedItem.removeAll(selectedItem); // 재고테이블 클릭시 가져온 상품의 정보 초기화
 
 			}
 		} catch (Exception e) {
@@ -454,6 +437,7 @@ public class OrderTabController implements Initializable {
 	// 삭제 버튼 이벤트 메소드
 	public void handlerBtnDeleteAction(ActionEvent event) {
 
+		// 주문 등록 테이블에서 선택한 인덱스 삭제
 		selectedOrderIndex = tableOrder.getSelectionModel().getSelectedIndex();
 		orderDataList.remove(selectedOrderIndex);
 		// 삭제시 선택했던 행을 selectedItem에서도 삭제해준다
@@ -472,18 +456,19 @@ public class OrderTabController implements Initializable {
 				selectProduct = tableProduct.getSelectionModel().getSelectedItems();
 				selectedIndex = selectProduct.get(0).getP_no();
 
+				// 상품코드, 상품명, 수량=0, 단가, 총액을 가져옴
 				String selectedP_code = selectProduct.get(0).getP_code();
 				String selectedP_name = selectProduct.get(0).getP_name();
-				// int selecetedP_ea = selectProduct.get(0).getP_ea();
 				int selecetedP_ea = 0; // 수량 초기값 0으로 설정
 				int selectedP_price = selectProduct.get(0).getP_price();
 				int selectedP_total = selecetedP_ea * selectedP_price;
 
+				// ovo에 값을 저장한다
 				OrderVO ovo = new OrderVO(selectedP_code, selectedP_name, selecetedP_ea, selectedP_price,
 						selectedP_total);
 
-				orderDataList.add(ovo);
-				selectedItem.add(ovo);
+				orderDataList.add(ovo); // 주문 등록 창에 추가
+				selectedItem.add(ovo); // 선택한 정보에 추가
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -495,6 +480,7 @@ public class OrderTabController implements Initializable {
 	// 주문 현황 리스트
 	public void orderTotalList() throws Exception {
 
+		// 주문 현황 테이블 초기화
 		OrderList.removeAll(OrderList);
 		OrderDAO odao = new OrderDAO();
 		OrderVO ovo = new OrderVO();
@@ -502,12 +488,13 @@ public class OrderTabController implements Initializable {
 		ArrayList<OrderVO> list;
 
 		try {
+			// 오늘 날짜를 넣어 주문 전체 리스트를 가져온다
 			list = odao.getOrderTotalList(today);
 			int rowCount = list.size();
 
 			for (int index = 0; index < rowCount; index++) {
 				ovo = list.get(index);
-				OrderList.add(ovo);
+				OrderList.add(ovo); // 주문 현황 테이블에 값을 넣어준다
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -518,22 +505,19 @@ public class OrderTabController implements Initializable {
 	// 재고 현황 리스트
 	public void productTotalList() throws Exception {
 
+		// 재고 현황 테이블 초기화
 		productDataList.removeAll(productDataList);
 		ProductDAO pDao = new ProductDAO();
 		ProductVO pVo = null;
 
-		ArrayList<String> title;
 		ArrayList<ProductVO> list;
 
-		title = pDao.getProductColumnName();
-		int columnCount = title.size();
-
-		list = pDao.getProductTotalList();
+		list = pDao.getProductTotalList(); // 전체 리스트를 저장
 		int rowCount = list.size();
 
 		for (int index = 0; index < rowCount; index++) {
 			pVo = list.get(index);
-			productDataList.add(pVo);
+			productDataList.add(pVo); // 재고 현황 테이블에 값을 넣어준다
 		}
 
 	}

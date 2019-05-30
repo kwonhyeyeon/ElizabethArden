@@ -35,7 +35,7 @@ public class EmployeeEditController implements Initializable {
 	@FXML
 	private Button btnEdit; // 변경 버튼
 
-	private static String selectedName;
+	private static String selectedName; // 선택된 직원명
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -77,8 +77,9 @@ public class EmployeeEditController implements Initializable {
 
 			EmployeeVO evo = new EmployeeVO();
 
-			list = edao.getEmployeeInfo(selectedName);
+			list = edao.getEmployeeInfo(selectedName); // 직원명을 배열에 넣어준다
 
+			// 핸드폰, 주소, 직원 등급의 값을 가져와 설정해준다
 			txtEmployeePhone.setText(list.get(0).getE_phonenumber());
 			txtEmployeeAddress.setText(list.get(0).getE_address());
 			cbxEmployeeRank.setValue(list.get(0).getE_rank());
@@ -95,7 +96,8 @@ public class EmployeeEditController implements Initializable {
 		ArrayList employeeName = new ArrayList<>();
 
 		try {
-			employeeName = edao.getEmployeeTotalList();
+			employeeName = edao.getEmployeeTotalList(); // 직원 전체 목록을 가져와 저장
+			// 콤보박스에 이름을 설정해준다
 			cbxEmployeeName.setItems(FXCollections.observableArrayList(employeeName));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,25 +119,25 @@ public class EmployeeEditController implements Initializable {
 
 		try {
 			// 미입력시 오류
-			if (cbxEmployeeName.getSelectionModel().getSelectedItem() == null) {
+			if (cbxEmployeeName.getSelectionModel().getSelectedItem() == null) { // 직원명 미선택
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 정보 수정");
 				alert.setHeaderText("직원명 미선택");
 				alert.setContentText("다시 선택해주세요");
 				alert.showAndWait();
-			} else if (txtEmployeePhone.getText().equals("")) {
+			} else if (txtEmployeePhone.getText().equals("")) { // 핸드폰 번호 미입력
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 정보 수정");
 				alert.setHeaderText("직원 핸드폰번호 미입력");
 				alert.setContentText("다시 입력해주세요");
 				alert.showAndWait();
-			} else if (txtEmployeeAddress.getText().equals("")) {
+			} else if (txtEmployeeAddress.getText().equals("")) { // 주소 미입력
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 정보 수정");
 				alert.setHeaderText("직원 주소 미입력");
 				alert.setContentText("다시 입력해주세요");
 				alert.showAndWait();
-			} else if (cbxEmployeeRank.getSelectionModel().getSelectedItem() == null) {
+			} else if (cbxEmployeeRank.getSelectionModel().getSelectedItem() == null) { // 직원등급 미선택
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("직원 정보 수정");
 				alert.setHeaderText("직원 등급 미선택");

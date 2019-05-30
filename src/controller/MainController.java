@@ -97,19 +97,7 @@ public class MainController implements Initializable {
 
 					} else if (newValue == customer) { // 고객 탭일 경우
 
-						try {
-
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-
 					} else if (newValue == salesStatus) { // 판매현황 탭일 경우
-
-						try {
-
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
 
 					}
 
@@ -127,7 +115,6 @@ public class MainController implements Initializable {
 			
 			
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 
 	}
@@ -179,7 +166,6 @@ public class MainController implements Initializable {
 
 		try {
 
-
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/storeInfoEdit.fxml")); // 레이아웃 불러오기
 			Parent mainView = (Parent) loader.load(); // 부모창을 login.fxml로 로드
 			Scene scene = new Scene(mainView); // Scene 객체 생성
@@ -200,10 +186,6 @@ public class MainController implements Initializable {
 	// 프로그램 종료 이벤트 메소드
 	public void handlerMenuExitAction(ActionEvent event) {
 		Platform.exit();
-		// 로그인한 매장코드를 가져오는방법
-		LoginController lc = new LoginController();
-		System.out.println(lc.loginStoreCode);
-	
 	}
 
 	// 로그아웃 이벤트 메소드
