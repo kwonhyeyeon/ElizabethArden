@@ -626,25 +626,23 @@ public class SaleTabController implements Initializable {
 				// 테이블에서 선택한 정보를 selectSubject에 저장
 				selectProduct = tableProduct.getSelectionModel().getSelectedItems();
 
-				
 				// 선택된 행의 데이터를 변수에 저장
-				String selectedP_code = selectProduct.get(0).getP_code(); 
+				String selectedP_code = selectProduct.get(0).getP_code();
 				String selectedP_name = selectProduct.get(0).getP_name();
 				int selecetedP_ea = selectProduct.get(0).getP_ea();
 				int selectedP_price = selectProduct.get(0).getP_price();
 				int selectedP_total = selecetedP_ea * selectedP_price; // 수량 * 단가로 총액 설정
 				int selectedP_point = selectedP_total / 100; // 총액 /100 으로 포인트 설정
-				
+
 				// 인스턴스 생성
 				EmployeeDAO edao = new EmployeeDAO();
-				
+
 				// 선택된 행의 데이터를 객체에 담는다
 				ProductVO pvo = new ProductVO(selectedP_code, selectedP_name, selecetedP_ea, selectedP_price,
 						selectedP_total, selectedP_point);
-				
+
 				// 객체에 담긴 데이터를 테이블에 추가한다.
 				saleInsertDataList.add(pvo);
-
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -754,17 +752,18 @@ public class SaleTabController implements Initializable {
 				CustomerDAO cdao = new CustomerDAO();
 				CustomerVO cvo = null;
 
-				ArrayList<String> title;
+				// 배열생성
 				ArrayList<CustomerVO> list;
 
-				title = cdao.getCustomerColumnName();
-				int columnCount = title.size();
-
+				// 고객전체 정보를 가져온다.
 				list = cdao.getCustomerTotalList();
+				// 배열의 사이즈 저장
 				int rowCount = list.size();
-
+				// 배열의 사이즈만큼 반복문 실행
 				for (int index = 0; index < rowCount; index++) {
+					// 객체에 list배열의 index번쨰 데이터를 담는다
 					cvo = list.get(index);
+					// 객체에 담긴 데이터 테이블에 추가
 					customerDataList.add(cvo);
 				}
 
@@ -773,36 +772,47 @@ public class SaleTabController implements Initializable {
 
 					try {
 						if (c_name.getText().equals("")) {
+							// 고객명 텍스트상자가 공백일경우
 
+							// 고객테이블 비운다.
 							customerDataList.removeAll(customerDataList);
 
+							// 인스턴스 생성
 							CustomerDAO cDao = new CustomerDAO();
 							CustomerVO cVo = null;
 
-							ArrayList<String> emptyTitle;
+							// 배열생성
 							ArrayList<CustomerVO> emptyList;
 
-							emptyTitle = cDao.getCustomerColumnName();
-							int emptyColumnCount = title.size();
-
+							// 고객정보저장
 							emptyList = cDao.getCustomerTotalList();
+							// 배열 사이즈 저장
 							int emptyRowCount = list.size();
-
+							// 배열의 사이즈만큼 반복문 실행
 							for (int index = 0; index < emptyRowCount; index++) {
+								// 배열의 데이터를 객체에 담는다
 								cVo = emptyList.get(index);
+								// 객체에 담긴 데이터 테이블에 추가
 								customerDataList.add(cVo);
 							}
 
 						} else {
+							// 테이블을 비운다.
 							customerDataList.removeAll(customerDataList);
 
+							// 배열생성
 							ArrayList<CustomerVO> newSearchList = new ArrayList<CustomerVO>();
+							// 인스턴스 선언
 							CustomerVO cVo = null;
 							CustomerDAO cDao = null;
 							boolean newSearchResult = false; // 검색 결과
+
+							// 입력받은 고객명 저장
 							String getCname = c_name.getText().trim();
 
+							// 인스턴스 생성
 							cDao = new CustomerDAO();
+							// 고객명으로 검색해서 데이터를 가져옴
 							newSearchList = cDao.getCustomerSearch(getCname);
 
 							if (newSearchList != null) {
@@ -826,11 +836,7 @@ public class SaleTabController implements Initializable {
 
 								customerDataList.removeAll(customerDataList);
 
-								ArrayList<String> emptyTitle;
 								ArrayList<CustomerVO> emptyList;
-
-								emptyTitle = cDao.getCustomerColumnName();
-								int emptyColumnCount = title.size();
 
 								emptyList = cDao.getCustomerTotalList();
 								int emptyRowCount = list.size();

@@ -64,7 +64,7 @@ public class SaleDAO {
 		return list;
 	}
 
-	// 판매일때 총수량과 총액을 뽑아내는 메소드
+	// 포인트 사용일때 데이터를 가져오는 메소드
 	public ArrayList<SaleVO> getUsed_pointDate(String p_code) {
 		// ArrayList배열 생성
 		ArrayList<SaleVO> list = new ArrayList<>();

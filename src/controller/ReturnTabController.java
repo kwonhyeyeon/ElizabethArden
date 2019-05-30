@@ -49,7 +49,7 @@ public class ReturnTabController implements Initializable {
 	private ComboBox<String> cbxbad; // 불량여부 콤보박스
 	@FXML
 	private Button btnEdit; // 수정버튼
-	private static String today;
+	private static String today; // 오늘날짜를 저장하는 변수
 	private ArrayList<ReturnVO> selectedItem = new ArrayList(); // 2 * 재고테이블에서 선택한 행의 정보만 담는 배열 생성
 
 	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
@@ -61,8 +61,10 @@ public class ReturnTabController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 
+		// 오늘날짜를 가져온다.
 		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 		Date time = new Date();
+		// 가져온값을 today변수에 저장
 		today = format1.format(time);
 		// 수량입력에 숫자만 입력할수 있게해줌
 		or_ea.textProperty().addListener(new ChangeListener<String>() {
@@ -75,10 +77,12 @@ public class ReturnTabController implements Initializable {
 			}
 
 		});
-
+		// dpDate 오늘날짜로 설정
 		dpDate.setValue(LocalDate.now());
 
+		// 재고테이블 설정
 		productTotalList();
+		// 반품현환테이블 설정
 		ReturnStateTotalList();
 		// 상태 콤보박스 설정
 		cbxbad.setItems(FXCollections.observableArrayList("Y", "N"));
@@ -207,7 +211,9 @@ public class ReturnTabController implements Initializable {
 		// 달력에서 클릭 선택 이벤트 핸들러
 		dpDate.setOnAction(event -> handlerdpDateAction(event));
 
+		// 인스턴스 생성
 		ReturnDAO rdao = new ReturnDAO();
+		// 배열생성
 		ArrayList<ReturnVO> list = new ArrayList();
 
 		// 프로그램 실행시 그날의 반품등록한 리스트를 보여준다.
@@ -218,28 +224,39 @@ public class ReturnTabController implements Initializable {
 			e.printStackTrace();
 		}
 
+		// 반품현황테이블을 지워준후
 		ReturnState.removeAll(ReturnState);
 
-		ReturnStateTotalList(); // 추가
+		// 메소드를 반품현황 테이블의 데이터를 추가한다.
+		ReturnStateTotalList();
 
 	}
 
 	// 달력에서 클릭 선택 이벤트 핸들러
 	public void handlerdpDateAction(ActionEvent event) {
 		// TODO Auto-generated method stub
+
+		// 인스턴스 생성
 		ReturnDAO rdao = new ReturnDAO();
 		ReturnVO rvo = new ReturnVO();
 
+		// dpDate에서 설정된 날짜를 저장
 		String selectedDay = dpDate.getValue().toString();
 
+		// 배열생성
 		ArrayList<ReturnVO> list = null;
+
+		// 반품현황테이블을 비운다.
 		ReturnState.removeAll(ReturnState);
 
 		try {
+			// 선택된 날짜를 매개변수에 넣어주고 해당 데이터를 가져온다.
 			list = rdao.getOrderDate(selectedDay);
+			// 배열의 사이즈 저장
 			int rowCount = list.size();
 
-			if (list.size() == 0) {
+			// 가져온 데이터가 없을경우
+			if (rowCount == 0) {
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
 				alert.setTitle("출고안내");
@@ -250,7 +267,9 @@ public class ReturnTabController implements Initializable {
 				// 경고창을 보여주고 기다린다
 				alert.showAndWait();
 			} else {
+				// 데이터가 있을경우 배열의 사이즈만큼 반복문 실행
 				for (int index = 0; index < rowCount; index++) {
+					// 테이블에 추가한다.
 					rvo = list.get(index);
 					ReturnState.add(rvo);
 				}
@@ -264,9 +283,12 @@ public class ReturnTabController implements Initializable {
 
 		ReturnVO rvo2 = new ReturnVO();
 		ReturnDAO rdao = new ReturnDAO();
+
+		// 버튼 이벤트 발생시 테이블에 선택된 행의 정보 저장
 		rvo2 = tableReturnState.getSelectionModel().getSelectedItem();
 
 		if (rvo2 == null) {
+			// 선택된 행의 정보가 없을경우
 			Alert alert;
 			alert = new Alert(AlertType.WARNING);
 			alert.setTitle("출고안내");
@@ -277,11 +299,13 @@ public class ReturnTabController implements Initializable {
 			// 경고창을 보여주고 기다린다
 			alert.showAndWait();
 		} else {
-
+			// 선택된 행의 출고값 저장
 			String xy = tableReturnState.getSelectionModel().getSelectedItem().getBeReleased();
-			String selectedP_name = tableReturnState.getSelectionModel().getSelectedItem().getRp_name(); // 상품명
+			// 선택된 행의 상품명 저장
+			String selectedP_name = tableReturnState.getSelectionModel().getSelectedItem().getRp_name();
 
 			if (xy.equals("Y")) {
+				// 선택된 행의 출고값이 Y일 경우
 
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
@@ -294,13 +318,20 @@ public class ReturnTabController implements Initializable {
 				alert.showAndWait();
 
 			} else {
+				// Y가 아닐경우
 
+				// 선택된 행의 상품코드 저장
 				String selectedP_code = tableReturnState.getSelectionModel().getSelectedItem().getRp_code();
+				// 선택된 행의 수량 저장
 				int selectedP_ea = tableReturnState.getSelectionModel().getSelectedItem().getRp_ea();
 
+				// 오늘날짜와 선택된 행의 상품코드를 매개변수로 넣고 출고값 y로 변경
 				rdao.SetY(today, selectedP_code);
+
+				// 선택된 행의 수량과 상품코드를 가져와 해당 상품의 수량 변경
 				rdao.setIn_Out(selectedP_ea, selectedP_code);
 
+				// 테이블 새로고침
 				ReturnStateTotalList();
 				productTotalList();
 
@@ -317,10 +348,11 @@ public class ReturnTabController implements Initializable {
 	public void handlerBtnDeleteAction(ActionEvent event) {
 		// TODO Auto-generated method stub
 		ReturnVO rvo = new ReturnVO();
-
+		// 선택된 행을 객체로 저장
 		rvo = tableReturn.getSelectionModel().getSelectedItem();
 
 		if (rvo == null) {
+			// 저장된 객체가 null일경우
 			Alert alert;
 			alert = new Alert(AlertType.WARNING);
 			alert.setTitle("삭제 안내");
@@ -331,7 +363,9 @@ public class ReturnTabController implements Initializable {
 			// 경고창을 보여주고 기다린다
 			alert.showAndWait();
 		} else {
+			// 선택된 행의 index 저장
 			int index = tableReturn.getSelectionModel().getSelectedIndex();
+			// index번째의 데이터 삭제
 			insertReturn.remove(index);
 			selectedItem.remove(index);
 
@@ -342,6 +376,7 @@ public class ReturnTabController implements Initializable {
 				rvo = selectedItem.get(i);
 				insertReturn.add(rvo);
 			}
+			// 복사본도 새로고침
 			selectedItem.removeAll(selectedItem);
 			for (int i = 0; i < insertReturn.size(); i++) {
 				rvo = insertReturn.get(i);
@@ -354,10 +389,13 @@ public class ReturnTabController implements Initializable {
 	public void handlerBtnEditAction(ActionEvent event) {
 		// TODO Auto-generated method stub
 
+		// 인스턴스 생성
 		ReturnVO rvo = new ReturnVO();
+		// 선택된 행의 데이터 객체로 저장
 		rvo = tableReturn.getSelectionModel().getSelectedItem();
 
 		if (selectedItem.size() == 0 || rvo == null) {
+			// 저장된 객체가 null일 경우
 			Alert alert;
 			alert = new Alert(AlertType.WARNING);
 			alert.setTitle("수정할 정보가 없습니다.");
@@ -368,6 +406,7 @@ public class ReturnTabController implements Initializable {
 			// 경고창을 보여주고 기다린다
 			alert.showAndWait();
 		} else if (or_ea.getText().trim().equals("")) {
+			// 수량입력 텍스트 상자가 비어있을경우
 			Alert alert;
 			alert = new Alert(AlertType.WARNING);
 			alert.setTitle("수정 오류");
@@ -378,6 +417,8 @@ public class ReturnTabController implements Initializable {
 			// 경고창을 보여주고 기다린다
 			alert.showAndWait();
 		} else if (cbxbad.getSelectionModel().getSelectedItem() == null) {
+			// 불령여부 콤보박스가 선택되지 않았을 경우
+
 			Alert alert;
 			alert = new Alert(AlertType.WARNING);
 			alert.setTitle("수정 오류");
@@ -404,6 +445,7 @@ public class ReturnTabController implements Initializable {
 				rvo = selectedItem.get(i);
 				insertReturn.add(rvo);
 			}
+			// 복사본 새로고침
 			selectedItem.removeAll(selectedItem);
 			for (int i = 0; i < insertReturn.size(); i++) {
 				rvo = insertReturn.get(i);
@@ -415,12 +457,18 @@ public class ReturnTabController implements Initializable {
 
 	// 등록버튼 이벤트 메소드
 	public void handlerBtnPRegiAction(ActionEvent event) {
-		boolean editEa = false;
-		boolean overlap = false;
+		boolean editEa = false; // 수량 수정여부
+		boolean overlap = false; // 중복여부
+
+		// 인스턴스 생성
 		ReturnDAO rdao = new ReturnDAO();
+		// boolean변수 선언
 		boolean ok = false;
 		try {
+
+			// 반품등록 테이블의 사이즈만큼 반복
 			for (int index = 0; index < insertReturn.size(); index++) {
+				// 입력된 수량 저장
 				int ea = insertReturn.get(index).getRp_ea();
 
 				// 반품 입력 테이블에 등록된 수량중 0이 있거나 0보다 작은값이 있을경우 true로 설정
@@ -429,6 +477,7 @@ public class ReturnTabController implements Initializable {
 				}
 
 			}
+			// 수량 수정 변수가 true일 경우
 			if (editEa) {
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
@@ -440,28 +489,35 @@ public class ReturnTabController implements Initializable {
 				// 경고창을 보여주고 기다린다
 				alert.showAndWait();
 			} else {
-
+				// 반품등록 사이즈만큼 반복
 				for (int index = 0; index < insertReturn.size(); index++) {
-
+					// 오늘날짜, 상품코드로 검색해서 중복된 상품이 있는지 boolean값 반환
 					overlap = rdao.overlapP_code(today, insertReturn.get(index).getRp_code());
 
+					// 중복검사에서 true일경우
 					if (overlap) {
+
+						// 상품코드 저장
 						String p_code = insertReturn.get(index).getRp_code();
+						// 수량저장
 						int or_ea = insertReturn.get(index).getRp_ea();
+						// 오늘날짜와 상품코드로 검색해서 수량변경
 						rdao.updateOverp_code(today, p_code, or_ea);
+						// 중복검사 false로 설정
 						overlap = false;
 					} else {
+						// 중복검사에서 false일경우 반품현황테이블에 새로 등록시켜준다.
+						// 인스턴스 생성
 						ReturnDAO rdao2 = new ReturnDAO();
 
 						// 반품입력 테이블의 레코드 갯수만큼 반복하여 iesert문에 넣어주고 DB에 저장한다.
-
 						ok = rdao2.insertOrder_Return(insertReturn.get(index).getRp_code(),
 								insertReturn.get(index).getRp_ea(), insertReturn.get(index).getRp_total(),
 								insertReturn.get(index).getRp_bad());
 
 					}
 				}
-
+				// 등록후 반환된 boolean값이 true일경우
 				if (ok) {
 					Alert alert;
 					alert = new Alert(AlertType.WARNING);
@@ -477,6 +533,7 @@ public class ReturnTabController implements Initializable {
 
 				ReturnStateTotalList(); // 테이블 새로고침
 
+				// 반품등록 테이블을 비운다.
 				insertReturn.removeAll(insertReturn);
 				selectedItem.removeAll(selectedItem);
 			}
@@ -487,17 +544,23 @@ public class ReturnTabController implements Initializable {
 
 	// 반품현황 리스트
 	public void ReturnStateTotalList() {
+		// 반품현황 테이블을 비운다.
 		ReturnState.removeAll(ReturnState);
 
+		// 인스턴스 생성
 		ReturnDAO rdao = new ReturnDAO();
 		ReturnVO rvo = null;
 
+		// 배열생성
 		ArrayList<ReturnVO> list;
 		try {
+			// 오늘날짜로 검색해서 얻어온 데이터배열 반환
 			list = rdao.getOrderDate(today);
 			int rowCount = list.size();
 
+			// 반환된 배열의 사이즈만큼 반복
 			for (int index = 0; index < rowCount; index++) {
+				// 테이블값 설정
 				rvo = list.get(index);
 				ReturnState.add(rvo);
 			}
@@ -511,19 +574,23 @@ public class ReturnTabController implements Initializable {
 	public void productTotalList() {
 		// TODO Auto-generated method stub
 		try {
+
+			// 재고테이블을 비운다.
 			productDataList.removeAll(productDataList);
+			// 인스턴스 생성
 			ProductDAO pDao = new ProductDAO();
 			ProductVO pVo = null;
 
-			ArrayList<String> title;
+			// 배열 생성
 			ArrayList<ProductVO> list;
 
-			title = pDao.getProductColumnName();
-			int columnCount = title.size();
-
+			// 재고리스트 반환
 			list = pDao.getProductTotalList();
 			int rowCount = list.size();
+
+			// 배열의 사이즈만큼 반복
 			for (int index = 0; index < rowCount; index++) {
+				// 얻어온 데이터로 테이블 설정
 				pVo = list.get(index);
 				productDataList.add(pVo);
 			}
@@ -540,17 +607,20 @@ public class ReturnTabController implements Initializable {
 				// 테이블에서 선택한 정보를 selectSubject에 저장
 				selectProduct = tableProduct.getSelectionModel().getSelectedItems();
 
+				// 선택된 행의 데이터 저장
 				String selectedP_code = selectProduct.get(0).getP_code();
 				String selectedP_name = selectProduct.get(0).getP_name();
-				int selecetedP_ea = 0;
+				int selecetedP_ea = 0; // 수량 0으로 설정
 				int selectedP_price = selectProduct.get(0).getP_price();
-				int selectedP_total = selecetedP_ea * selectedP_price;
+				int selectedP_total = selecetedP_ea * selectedP_price; // 총액 = 수량 * 단가로 설정
 
+				// 선택된행의 데이터 객체로 저장
 				ReturnVO rvo = new ReturnVO(selectedP_code, selectedP_name, selecetedP_ea, selectedP_price,
 						selectedP_total, "N", "반품");
 
+				// 테이블에 추가
 				insertReturn.add(rvo);
-				// 4 * 석택된 행의 정보를 담을떄 같이 스테이틱변수에 넣어줌
+				// 복사본도 저장
 				selectedItem.add(rvo);
 
 			} catch (Exception e) {
