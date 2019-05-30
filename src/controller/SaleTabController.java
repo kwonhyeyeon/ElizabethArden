@@ -51,15 +51,8 @@ public class SaleTabController implements Initializable {
 	@FXML
 	private TextField txtC_name; // 고객명
 	@FXML
-	private Button btnC_search;
-	// 검색 버튼
-	/*
-	 * @FXML private TextField txtAddress; // 고객주소
-	 * 
-	 * @FXML private TextField txtPhone; // 고객 핸드폰 번호
-	 * 
-	 * @FXML private TextField txtBirth; // 고객 생년월일
-	 */ @FXML
+	private Button btnC_search; // 검색 버튼
+	@FXML
 	private TableView<ProductVO> tableSaleInsert = new TableView<>(); // 판매입력 테이블
 	@FXML
 	private TableView<SaleVO> tableSaleList = new TableView<>(); // 판매현황 테이블
@@ -79,7 +72,7 @@ public class SaleTabController implements Initializable {
 	private Label lblCInfo;
 	@FXML
 	private Label lblDateSale;
-	
+
 	private static int customer_point;
 
 	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
@@ -119,7 +112,6 @@ public class SaleTabController implements Initializable {
 		});
 
 		try {
-			// tableSaleInsert.editingCellProperty(); // 테이블 수정
 			productTotalList(); // 재고 현황 리스트
 			employeeName(); // 직원명 콤보박스
 
@@ -127,16 +119,13 @@ public class SaleTabController implements Initializable {
 			cbxState.setItems(FXCollections.observableArrayList("판매", "반품", "포인트 사용"));
 			cbxReturnReason.setItems(FXCollections.observableArrayList("제조날짜초과", "변질", "트러블", "기타"));
 
-			// txtAddress.setDisable(true); // 고객정보상자 비활성화
-			// txtBirth.setDisable(true);
-			// txtPhone.setDisable(true);
 			cbxState.setDisable(true); // 상태 콤보박스 비활성화
 			txtUsedPoint.setDisable(true); // 포인트 사용금액 비활성화
 			cbxReturnReason.setDisable(true); // 반품사유 콤보박스 비활성화
 			p_ea.setDisable(false); // 수량 텍스트필드 비활성화
-			btnP_regi.setDisable(false);
-			txtC_name.setText("FREE");
-			txtC_name.setDisable(true);
+			btnP_regi.setDisable(false); // 등록버튼 비활성화
+			txtC_name.setText("FREE"); // 고객명 텍스트상자 초기값 free로 설정
+			txtC_name.setDisable(true); // 고객명 텍스트상자 비활성화
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -290,23 +279,28 @@ public class SaleTabController implements Initializable {
 
 		// 해당 날짜의 데이터를 받는 배열 생성
 		ArrayList<SaleVO> list = new ArrayList();
+		// 인스턴스 생성
 		SaleReturnDAO sdao = new SaleReturnDAO();
 		try {
-
+			// 달력에서 선택된 일을 저장하는 변수
 			String buildDate = dpDate.getValue().toString();
+			// 선택된 날짜에 판매및 반품현황을 가져오는 메소드에 입력된 날짜를 넣어준다
 			list = sdao.getSaleReturndpdate(buildDate);
-
+			// 테이블에 있던 데이터를 지운다
 			saleListDataList.removeAll(saleListDataList);
-
+			// 라벨에 선택된일로 설정
 			lblDateSale.setText("[" + buildDate + "]" + " 판매내역");
+
+			// 리턴받아온 배열의 사이즈만큼 반복문 실행
 			for (int index = 0; index < list.size(); index++) {
+				// 리턴받아온 배열의 데이터를 객체에 담아준다
 				SaleVO svo = new SaleVO(list.get(index).getNo(), list.get(index).getP_code(),
 						list.get(index).getP_name(), list.get(index).getSr_state(), list.get(index).getSr_ea(),
 						list.get(index).getP_price(), list.get(index).getSr_total(), list.get(index).getP_point(),
 						list.get(index).getSr_used_point(), list.get(index).getBuild_date());
+				// 객체에 담긴 데이터를 테이블에 추가시킨다.
 				saleListDataList.add(svo);
 			}
-			// saleReturnTotalList();
 
 		} catch (Exception e) {
 			System.out.println(e);
@@ -330,6 +324,7 @@ public class SaleTabController implements Initializable {
 				alert.showAndWait();
 
 			} else if (cbxState.getSelectionModel().getSelectedItem() == null) {
+				// 상태 콤보박스가 null일 경우
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
 				alert.setTitle("판매 등록오류");
@@ -339,8 +334,10 @@ public class SaleTabController implements Initializable {
 				alert.setResizable(false);
 				// 경고창을 보여주고 기다린다
 				alert.showAndWait();
-			} else { // 선택한 행의 인덱스
-				int index = tableSaleInsert.getSelectionModel().getSelectedIndex();
+			} else {
+				// 콤보박스의 값들이 전부 설정되었을경우
+
+				int index = tableSaleInsert.getSelectionModel().getSelectedIndex(); // 선택한 행의 인덱스저장
 
 				// 테이블에서 선택한 정보를 selectSubject에 저장
 				selectInsert = tableSaleInsert.getSelectionModel().getSelectedItems();
@@ -351,32 +348,58 @@ public class SaleTabController implements Initializable {
 				selectInsert.get(0).getP_point();
 				selectInsert.get(0).getP_total();
 				selectInsert.get(0).getP_name();
-				CustomerDAO cdao = new CustomerDAO();
-				ArrayList<CustomerVO> list = new ArrayList<>();
 
+				// 인스턴스 생성
+				CustomerDAO cdao = new CustomerDAO();
+				// 배열생성
+				ArrayList<CustomerVO> list = new ArrayList<>();
+				// 콤보박스에서 설정된 직원명 저장
 				String e_name = cbxE_name.getSelectionModel().getSelectedItem().toString();
+
+				// 직원코드, 판매유형변수 선언
 				String e_code;
 				String sr_state;
+				// 고객검색 메소드에 고객명 텍스트상자에 입력된 데이터를 공백제거후 넣어준다.
+				// 리스트배열 반환후 저장
 				list = cdao.getCustomerSearch(txtC_name.getText().trim());
+
+				// 선택된 행의 고객코드 저장
 				int c_code = list.get(0).getC_code();
 
+				// 텍스트에 입력된 수량을 int타입으로 변환후 단가와 곱하고 총액으로 저장
 				int sr_total = Integer.parseInt(p_ea.getText()) * selectInsert.get(0).getP_price();
+				// 총액에 100을 나눠주고 포인트로 저장
 				int sr_point = sr_total / 100;
+				// 사용포인트 0으로 저장
 				int used_point = 0;
+
+				// 인스턴스 생성
 				EmployeeDAO edao = new EmployeeDAO();
 				SaleReturnDAO srdao = new SaleReturnDAO();
 
+				// 시퀀스번호를 불러와 저장
 				int saleRetrunNo = srdao.getSale_returnNO();
+
+				// 직원명을 공백제거후 매개변수로 넣어주고 직원코드를 반환받아서 저장
 				e_code = edao.getEmployeeCode(e_name.trim());
+				// 콤보박스에서 설정된 Item 저장
 				sr_state = cbxState.getSelectionModel().getSelectedItem().toString();
+				// 달력에서 선택된 날짜 저장
 				String buildDate = dpDate.getValue().toString();
+				// 반품사유 콤보박스에서 선택된 Item저장
 				String returnReason = cbxReturnReason.getSelectionModel().getSelectedItem();
 
+				// 콤보박스에서 선택된 Item을 저장하는 변수가 판매일경우
 				if (sr_state.equals("판매")) {
+					// 선택되었던 행의 데이터를 가져와 SaleVO객체에 담는다
 					SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
 							selectInsert.get(0).getP_name(), sr_state.trim(), Integer.parseInt(p_ea.getText()),
 							selectInsert.get(0).getP_price(), sr_total, sr_point, 0, buildDate);
+
+					// 판매햔황테이블에 담는다.
 					saleListDataList.add(svo);
+
+					// 판매일경우 반품사유 없음으로 설정
 					returnReason = "없음";
 					// 판매등록후 테이블에 값 입력
 					srdao.insertSale_return(c_code, selectInsert.get(0).getP_code(), e_code, sr_total, sr_state,
@@ -392,7 +415,9 @@ public class SaleTabController implements Initializable {
 					saleInsertDataList.remove(index);
 
 				} else if (sr_state.equals("반품")) {
+					// 콤보박스에서 선택된 Item을 저장하는 변수가 반품일경우
 					if (returnReason == null) {
+						// 반품사유가 null일경우
 						Alert alert;
 						alert = new Alert(AlertType.WARNING);
 						alert.setTitle("반품 등록 오류");
@@ -404,9 +429,13 @@ public class SaleTabController implements Initializable {
 						alert.showAndWait();
 
 					} else {
+						// 반품사유까지 설정되었을경우 실행.
+
+						// 선택된 행의 데이터를 객체에 담는다.
 						SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
 								selectInsert.get(0).getP_name(), sr_state.trim(), Integer.parseInt(p_ea.getText()),
 								selectInsert.get(0).getP_price(), sr_total, sr_point, 0, buildDate);
+						// 판매현황 테이블에 데이터 추가
 						saleListDataList.add(svo);
 
 						// 판매등록후 테이블에 값 입력
@@ -424,7 +453,10 @@ public class SaleTabController implements Initializable {
 					}
 
 				} else if (sr_state.equals("포인트 사용")) {
-					if(txtC_name.getText().equals("FREE")) {
+					// 콤보박스에서 선택된 Item을 저장하는 변수가 포인트 사용 일경우
+
+					if (txtC_name.getText().equals("FREE")) {
+						// 고객명 초기값인 FREE는 포인트 사용으로 등록할수 없음.
 						Alert alert;
 						alert = new Alert(AlertType.WARNING);
 						alert.setTitle("포인트 사용 오류");
@@ -434,7 +466,9 @@ public class SaleTabController implements Initializable {
 						alert.setResizable(false);
 						// 경고창을 보여주고 기다린다
 						alert.showAndWait();
-					}else if (txtUsedPoint.getText().length() == 0) {
+					} else if (txtUsedPoint.getText().length() == 0) {
+						// 고객명이 FREE가 아닌데 입력된 사용포인트의 길이가 0일경우
+
 						Alert alert;
 						alert = new Alert(AlertType.WARNING);
 						alert.setTitle("포인트 오류");
@@ -445,8 +479,15 @@ public class SaleTabController implements Initializable {
 						// 경고창을 보여주고 기다린다
 						alert.showAndWait();
 					} else {
+						// 고객명과 포인트 사용금액이 정상적으로 입력되었을 경우 실행.
+
+						// 포인트 사용금액 텍스트상자에 입력된 값을 int로 변환후 저장
 						int uspoint = Integer.parseInt(txtUsedPoint.getText().trim());
-						if(customer_point < uspoint) {
+
+						// 고객명이 설정될경우 고객코드로 검색하여 고객의 포인트를 가져와 static변수에 담아주고
+						// 포인트 사용시 가져와서 비교한다.
+						if (customer_point < uspoint) {
+							// 고객의 포인트가 사용하려는 포인트보다 적을경우
 							Alert alert;
 							alert = new Alert(AlertType.WARNING);
 							alert.setTitle("포인트 부족");
@@ -456,62 +497,78 @@ public class SaleTabController implements Initializable {
 							alert.setResizable(false);
 							// 경고창을 보여주고 기다린다
 							alert.showAndWait();
-						}else {
-						// 포인트 사용금액이 총액보다 같거나 작을경우
-						if(uspoint <= sr_total) {
-						returnReason = "없음";
-						sr_total = sr_total - uspoint; // 총액에 사용한 포인트만큼 차감
-						sr_point = sr_total /100;
-						SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
-								selectInsert.get(0).getP_name(), sr_state.trim(), Integer.parseInt(p_ea.getText()),
-								selectInsert.get(0).getP_price(), sr_total, sr_point, uspoint, buildDate);
-						saleListDataList.add(svo);
+						} else {
+							// 고객의 포인트가 사용하려는 금액보다 많을경우.
+							if (uspoint <= sr_total) {
+								// 사용포인트가 구매 총액보다 작을경우.
 
-						// 판매등록후 테이블에 값 입력
-						srdao.insertSale_return_used_point(c_code, selectInsert.get(0).getP_code(), e_code, sr_total,
-								sr_state, Integer.parseInt(p_ea.getText()), returnReason, uspoint, buildDate);
-						// 판매등록후 재고테이블 수량변경
-						srdao.setProductTable(-Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_code());
-						// 재고테이블 새로고침
-						productTotalList();
-						// 판매등록후 고객 포인트 변경
-						srdao.setCustomerPoint(sr_point, c_code);
-						// 사용한 포인트만큼 차감
-						srdao.setCustomerPoint(-uspoint, c_code);
+								returnReason = "없음"; // 반품사유 없음으로 설정
+								sr_total = sr_total - uspoint; // 총액에 사용한 포인트만큼 차감
+								sr_point = sr_total / 100; // 차감된 총액에서 100을 나눠준후 적립될 포인트로 설정
 
-						// 선택한 행의 정보 삭제
-						saleInsertDataList.remove(index);
-						}else {
-							// 포인트 사용 금액이 총액보다 클경우
-							returnReason = "없음";
-							uspoint = sr_total;
-							sr_total = 0; // 총액에 사용한 포인트만큼 차감
-							sr_point = 0;
-							
-							
-							SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
-									selectInsert.get(0).getP_name(), sr_state.trim(), Integer.parseInt(p_ea.getText()),
-									selectInsert.get(0).getP_price(), sr_total, sr_point, uspoint, buildDate);
-							saleListDataList.add(svo);
+								// 선택된 행의 데이터를 객체에 담는다.
+								SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
+										selectInsert.get(0).getP_name(), sr_state.trim(),
+										Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), sr_total,
+										sr_point, uspoint, buildDate);
 
-							// 판매등록후 테이블에 값 입력
-							srdao.insertSale_return_used_point(c_code, selectInsert.get(0).getP_code(), e_code, sr_total,
-									sr_state, Integer.parseInt(p_ea.getText()), returnReason, uspoint, buildDate);
-							// 판매등록후 재고테이블 수량변경
-							srdao.setProductTable(-Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_code());
-							// 재고테이블 새로고침
-							productTotalList();
-							// 사용한 포인트만큼 차감
-							srdao.setCustomerPoint(-uspoint, c_code);
+								// 객체에 담긴 데이터를 판매현황 테이블에 추가한다.
+								saleListDataList.add(svo);
 
-							// 선택한 행의 정보 삭제
-							saleInsertDataList.remove(index);
-						}
+								// 판매등록후 테이블에 값 입력
+								srdao.insertSale_return_used_point(c_code, selectInsert.get(0).getP_code(), e_code,
+										sr_total, sr_state, Integer.parseInt(p_ea.getText()), returnReason, uspoint,
+										buildDate);
+								// 판매등록후 재고테이블 수량변경
+								srdao.setProductTable(-Integer.parseInt(p_ea.getText()),
+										selectInsert.get(0).getP_code());
+								// 재고테이블 새로고침
+								productTotalList();
+								// 판매등록후 고객 포인트 변경
+								srdao.setCustomerPoint(sr_point, c_code);
+								// 사용한 포인트만큼 차감
+								srdao.setCustomerPoint(-uspoint, c_code);
+
+								// 선택한 행의 정보 삭제
+								saleInsertDataList.remove(index);
+							} else {
+								// 포인트 사용 금액이 총액보다 클경우
+								returnReason = "없음";
+								// 사용하려는 포인트를 총액과 같은 값으로 설정.
+								uspoint = sr_total;
+								sr_total = 0; // 총액에 사용한 포인트만큼 차감
+								sr_point = 0; // 적립될 포인트 0으로 설정
+
+								// 선택된 행의 데이터를 객체에 담는다
+								SaleVO svo = new SaleVO(saleRetrunNo, selectInsert.get(0).getP_code(),
+										selectInsert.get(0).getP_name(), sr_state.trim(),
+										Integer.parseInt(p_ea.getText()), selectInsert.get(0).getP_price(), sr_total,
+										sr_point, uspoint, buildDate);
+
+								// 객체에 담긴 데이터를 테이블에 추가한다.
+								saleListDataList.add(svo);
+
+								// 판매등록후 테이블에 값 입력
+								srdao.insertSale_return_used_point(c_code, selectInsert.get(0).getP_code(), e_code,
+										sr_total, sr_state, Integer.parseInt(p_ea.getText()), returnReason, uspoint,
+										buildDate);
+								// 판매등록후 재고테이블 수량변경
+								srdao.setProductTable(-Integer.parseInt(p_ea.getText()),
+										selectInsert.get(0).getP_code());
+								// 재고테이블 새로고침
+								productTotalList();
+								// 사용한 포인트만큼 차감
+								srdao.setCustomerPoint(-uspoint, c_code);
+
+								// 선택한 행의 정보 삭제
+								saleInsertDataList.remove(index);
+							}
 						}
 					}
 				}
 			}
 		} catch (Exception e) {
+
 			Alert alert;
 			alert = new Alert(AlertType.WARNING);
 			alert.setTitle("정보가 없습니다");
@@ -541,7 +598,7 @@ public class SaleTabController implements Initializable {
 
 	// 상태 콤보박스 이벤트 메소드
 	public void handlerCbxStateAction(ActionEvent event) {
-
+		// 상태 콤보박스에서 선택된 Item저장
 		String state = cbxState.getSelectionModel().getSelectedItem();
 
 		if (state.equals("판매")) {
@@ -568,27 +625,26 @@ public class SaleTabController implements Initializable {
 
 				// 테이블에서 선택한 정보를 selectSubject에 저장
 				selectProduct = tableProduct.getSelectionModel().getSelectedItems();
-				selectedIndex = selectProduct.get(0).getP_no();
 
-				String selectedP_code = selectProduct.get(0).getP_code();
+				
+				// 선택된 행의 데이터를 변수에 저장
+				String selectedP_code = selectProduct.get(0).getP_code(); 
 				String selectedP_name = selectProduct.get(0).getP_name();
 				int selecetedP_ea = selectProduct.get(0).getP_ea();
 				int selectedP_price = selectProduct.get(0).getP_price();
-				int selectedP_total = selecetedP_ea * selectedP_price;
-				int selectedP_point = selectedP_total / 100;
+				int selectedP_total = selecetedP_ea * selectedP_price; // 수량 * 단가로 총액 설정
+				int selectedP_point = selectedP_total / 100; // 총액 /100 으로 포인트 설정
+				
+				// 인스턴스 생성
 				EmployeeDAO edao = new EmployeeDAO();
-				// edao.getemployeeCode(cbx)
-				// saleInsertDataList.removeAll();
+				
+				// 선택된 행의 데이터를 객체에 담는다
 				ProductVO pvo = new ProductVO(selectedP_code, selectedP_name, selecetedP_ea, selectedP_price,
 						selectedP_total, selectedP_point);
-
+				
+				// 객체에 담긴 데이터를 테이블에 추가한다.
 				saleInsertDataList.add(pvo);
 
-				/*
-				 * ArrayList<SaleVO> selectedInfo = new ArrayList(); selectedInfo.add(svo);
-				 * 
-				 * selected = selectedInfo;
-				 */
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -671,9 +727,10 @@ public class SaleTabController implements Initializable {
 						String selectedCustomerPhonenumber = tableCustomerList.getSelectionModel().getSelectedItem()
 								.getC_phoneNumber();
 						String seletedCustomerEtc = tableCustomerList.getSelectionModel().getSelectedItem().getC_etc();
-						
-						int selectedCustomerPoint = tableCustomerList.getSelectionModel().getSelectedItem().getC_point();
-						
+
+						int selectedCustomerPoint = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_point();
+
 						if (!(selectedCustomerName.contentEquals(""))) {
 							dialog.close();
 
@@ -863,7 +920,8 @@ public class SaleTabController implements Initializable {
 						String selectedCustomerPhonenumber = tableCustomerList.getSelectionModel().getSelectedItem()
 								.getC_phoneNumber();
 						String seletedCustomerEtc = tableCustomerList.getSelectionModel().getSelectedItem().getC_etc();
-						int selectedCustomerPoint = tableCustomerList.getSelectionModel().getSelectedItem().getC_point();
+						int selectedCustomerPoint = tableCustomerList.getSelectionModel().getSelectedItem()
+								.getC_point();
 						customer_point = selectedCustomerPoint;
 						if (!(selectedCustomerName.contentEquals(""))) {
 							dialog.close();
@@ -1062,7 +1120,7 @@ public class SaleTabController implements Initializable {
 
 		EmployeeDAO edao = new EmployeeDAO();
 		ArrayList employeeName = new ArrayList<>();
-		
+
 		try {
 			employeeName = edao.getEmployeeTotalList();
 			cbxE_name.setItems(FXCollections.observableArrayList(employeeName));

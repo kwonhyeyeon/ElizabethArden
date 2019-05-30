@@ -85,41 +85,47 @@ public class StoreInfoEditController implements Initializable {
 		// TODO Auto-generated method stub
 		// sdao인스턴스 생성
 		StoreDAO sdao = new StoreDAO();
+		// svo객체 인스턴스 생성
 		StoreVO svo = new StoreVO();
 		try {
-			if (txtStoreName.getText().trim().equals("")) {
-				// 비밀번호 크기가 4보다 크거나 공백일 때
+			// 비어있는 상자마다 다른 경고창을 출력하기 위해 조건문을 나누었다.
+			// 2개 이상의 텍스트 상자에서 조건문에 걸릴시 경고창이 한번만 보여주기 위해 else if를 사용.
 
+			if (txtStoreName.getText().trim().equals("")) {
+				// 매장명 텍스트 상자가 비어있을경우
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("매장 정보 변경 실패");
 				alert.setHeaderText("매장명 미입력");
 				alert.setContentText("매장명을 입력하십시오");
 				alert.showAndWait();
 			} else if (txtPwEdit.getText().trim().length() > 4 || txtPwEdit.getText().trim().equals("")) { // 매장명이 공백이면
-
+				// 비밀번호 텍스트 상자의 길이가 4보다 크거나, 비어있을경우
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("매장 정보 변경 실패");
 				alert.setHeaderText("패스워드입력 오류");
 				alert.setContentText("숫자 4자리로 입력하십시오");
 				alert.showAndWait();
 			} else if (txtStoreTel.getText().trim().equals("")) { // 매장주소가 공백이면
-
+				// 매장번호 텍스트 상자가 비어있을경우
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("매장 정보 변경 실패");
 				alert.setHeaderText("매장번호 미입력");
 				alert.setContentText("매장번호를 입력해주세요");
 				alert.showAndWait();
 			} else if (txtStoreAddress.getText().trim().equals("")) { // 매장번호가 공백이면
-
+				// 매장주소가 비어있을경우
 				Alert alert = new Alert(AlertType.WARNING);
 				alert.setTitle("매장 정보 변경 실패");
 				alert.setHeaderText("매장주소 미입력");
 				alert.setContentText("매장주소를 입력해주세요");
 				alert.showAndWait();
-			} else if (!(txtPwEdit.getText().trim().length() > 4 && txtPwEdit.getText().trim().equals(""))) {
+			}
+			// 비밀번호 텍스트 상자가 4보다 크지않고 비어있지 않을경우
+			else if (!(txtPwEdit.getText().trim().length() > 4 && txtPwEdit.getText().trim().equals(""))) {
+				// 객체에 입력된 정보들을 담는다
 				svo = new StoreVO(txtStoreAddress.getText().trim(), txtStoreName.getText().trim(),
 						Integer.parseInt(txtPwEdit.getText().trim()), Integer.parseInt(txtStoreTel.getText().trim()));
-
+				// sdao의 update메소드에 입력된 정보가 담겨진 객체를 넣어준다.
 				sdao.InfoEdit(svo);
 
 				// 변경후 등록창닫기 이벤트 호출
@@ -137,7 +143,9 @@ public class StoreInfoEditController implements Initializable {
 
 	// 수정창 닫기 이벤트 메소드
 	public void handlerBtnCancelAction(ActionEvent event) {
+		// Cancle버튼에 이벤트 발생시 현재 스테이지를 현재 모달창을 스테이지에 넣어준다.
 		Stage stage = (Stage) btnCancle.getScene().getWindow();
+		// 스테이지를 닫아준다.
 		stage.close();
 	}
 
