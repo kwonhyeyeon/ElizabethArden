@@ -20,6 +20,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import model.EmployeeVO;
 import model.SaleVO;
 
@@ -38,7 +39,9 @@ public class StatusTabControllder implements Initializable {
 	@FXML
 	private Button btnMonSearch; // 직원별 월별 검색 버튼
 	@FXML
-	private TableView<SaleVO> empMonthSalesStatus = new TableView<>(); // 직원별 월별 판매현황 테이블 
+	private TableView<SaleVO> empMonthSalesStatus = new TableView<>(); // 직원별 월별 판매현황 테이블
+	@FXML
+	private Label productname; // 상품명
 	@FXML
 	private Label productStatus; // 제품별 총 수량, 총액 라벨(판매, 포인트사용)
 	@FXML
@@ -143,7 +146,62 @@ public class StatusTabControllder implements Initializable {
 
 		// 직원별 월별 검색 버튼이벤트 메소드
 		btnMonSearch.setOnAction(event -> handlerbtnMonSearchAction(event));
+		// 상품 판매현황 테이블 클릭 선택 이벤트 핸들러
+		productSalesStatus.setOnMouseClicked(event -> handlerproductSalesStatusAction(event));
 
+	}
+
+	// 상품 판매현황 테이블 클릭 선택 이벤트 핸들러
+	public void handlerproductSalesStatusAction(MouseEvent event) {
+		// TODO Auto-generated method stub
+		if (event.getClickCount() == 1) {
+			int seletedIndex = productSalesStatus.getSelectionModel().getSelectedIndex();
+
+			if (seletedIndex >= 0) {
+				SaleVO svo = new SaleVO();
+				SaleDAO sdao = new SaleDAO();
+				int sale_ea = 0; // 판매및 포인트사용의 수량
+				int sale_total = 0; // 판매및 포인트 사용의 총액
+
+				int return_ea = 0; // 반품 수량
+				int return_total = 0; // 반품총액
+
+				ArrayList<SaleVO> list = new ArrayList();
+
+				String selectedP_code = productSalesStatus.getSelectionModel().getSelectedItem().getP_code();
+				String selectedP_name = productSalesStatus.getSelectionModel().getSelectedItem().getP_name();
+
+				list = sdao.getSaleDate(selectedP_code);
+				if (list.size() != 0) {
+					sale_ea = list.get(0).getSr_ea();
+					sale_total = list.get(0).getSr_total();
+
+					list.remove(0);
+				}
+
+				list = sdao.getUsed_pointDate(selectedP_code);
+				if (list.size() != 0) {
+					sale_ea = sale_ea + list.get(0).getSr_ea();
+					sale_total = sale_total + list.get(0).getSr_total();
+
+					list.remove(0);
+				}
+
+				list = sdao.getReturnDate(selectedP_code);
+
+				if (list.size() != 0) {
+					return_ea = list.get(0).getSr_ea();
+					return_total = list.get(0).getSr_total();
+
+					list.remove(0);
+				}
+				productname.setText("[ " + selectedP_name + " ]");
+				productStatus.setText("판매 : 수량 : " + sale_ea + "개             총액 : " + sale_total + "원");
+				productStatus2.setText("반품 : 수량 : " + return_ea + "개             총액 : " + return_total + "원");
+
+			}
+
+		}
 	}
 
 	// 직원별 월별 검색 버튼이벤트 메소드
@@ -182,33 +240,36 @@ public class StatusTabControllder implements Initializable {
 					alert.showAndWait();
 				} else {
 					empMonthData.removeAll(empMonthData);
-					
+
 					int totalEa = 0; // 판매, 포인트 사용 수량
 					int totalPrice = 0; // 판매, 포인트 사용 총액
 					int totalReturnEa = 0; // 반품 사용 수량
 					int totalReturnPrice = 0; // 반품 총액
-					
+
 					for (int index = 0; index < list.size(); index++) {
 						svo = list.get(index);
 						empMonthData.add(svo);
-						
+
 						int ea = empMonthData.get(index).getSr_ea();
 						int price = empMonthData.get(index).getSr_total();
 						String status = empMonthData.get(index).getSr_state().trim();
 						System.out.println(status);
-						
-						if(status.equals("반품")) {
+
+						if (status.equals("반품")) {
 							totalReturnEa += ea;
 							totalReturnPrice += price;
-							empMonthStatus2.setText("반품 총 수량 : " + totalReturnEa + "개" + "\t총액 : " + totalReturnPrice + "원"); // 반품
+							empMonthStatus2
+									.setText("반품 총 수량 : " + totalReturnEa + "개" + "\t총액 : " + totalReturnPrice + "원"); // 반품
 						} else {
 							totalEa += ea;
 							totalPrice += price;
-							empMonthStatus.setText("판매 총 수량 : " + totalEa + "개" + "\t총액 : " + totalPrice + "원"); // 판매, 포인트사용 }
+							empMonthStatus.setText("판매 총 수량 : " + totalEa + "개" + "\t총액 : " + totalPrice + "원"); // 판매,
+																													// 포인트사용
+																													// }
 						}
-						
-					}					
-					
+
+					}
+
 				}
 
 			} catch (Exception e) {

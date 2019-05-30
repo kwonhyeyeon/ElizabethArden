@@ -13,6 +13,157 @@ import model.ProductVO;
 import model.SaleVO;
 
 public class SaleDAO {
+
+	// 판매일때 총수량과 총액을 뽑아내는 메소드
+	public ArrayList<SaleVO> getReturnDate(String p_code) {
+		// ArrayList배열 생성
+		ArrayList<SaleVO> list = new ArrayList<>();
+		// lesson테이블에 있는 모든 정보를 일련번호로 정렬해서 가져오는 sql문
+		String sql = "select sum(sr.sr_Ea) sr_ea, sum(sr.sr_total) sr_total "
+				+ "from (select * from sale_return where sr_state = '반품') sr "
+				+ "group by sr.p_code having sr.p_code = ?";
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, p_code);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				SaleVO svo = new SaleVO();
+				svo.setSr_ea(rs.getInt("sr_Ea"));
+				svo.setSr_total(rs.getInt("sr_total"));
+
+				list.add(svo);
+			}
+		} catch (SQLException se) {
+			System.out.println(se);
+			System.out.println("sql문 에러?");
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException se) {
+			}
+
+		}
+
+		return list;
+	}
+
+	// 판매일때 총수량과 총액을 뽑아내는 메소드
+	public ArrayList<SaleVO> getUsed_pointDate(String p_code) {
+		// ArrayList배열 생성
+		ArrayList<SaleVO> list = new ArrayList<>();
+		// lesson테이블에 있는 모든 정보를 일련번호로 정렬해서 가져오는 sql문
+		String sql = "select sum(sr.sr_Ea) sr_ea, sum(sr.sr_total) sr_total "
+				+ "from (select * from sale_return where sr_state = '포인트 사용') sr "
+				+ "group by sr.p_code having sr.p_code = ?";
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, p_code);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				SaleVO svo = new SaleVO();
+				svo.setSr_ea(rs.getInt("sr_Ea"));
+				svo.setSr_total(rs.getInt("sr_total"));
+
+				list.add(svo);
+			}
+		} catch (SQLException se) {
+			System.out.println(se);
+			System.out.println("sql문 에러?");
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException se) {
+			}
+
+		}
+
+		return list;
+	}
+
+	// 판매일때 총수량과 총액을 뽑아내는 메소드
+	public ArrayList<SaleVO> getSaleDate(String p_code) {
+		// ArrayList배열 생성
+		ArrayList<SaleVO> list = new ArrayList<>();
+		// lesson테이블에 있는 모든 정보를 일련번호로 정렬해서 가져오는 sql문
+		String sql = "select sum(sr.sr_Ea) sr_ea, sum(sr.sr_total) sr_total "
+				+ "from (select * from sale_return where sr_state = '판매') sr "
+				+ "group by sr.p_code having sr.p_code = ?";
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		try {
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, p_code);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				SaleVO svo = new SaleVO();
+				svo.setSr_ea(rs.getInt("sr_Ea"));
+				svo.setSr_total(rs.getInt("sr_total"));
+
+				list.add(svo);
+			}
+		} catch (SQLException se) {
+			System.out.println(se);
+			System.out.println("sql문 에러?");
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException se) {
+			}
+
+		}
+
+		return list;
+	}
+
 	// 제품별 판매현황을 가져오는 메소드
 	public ArrayList<SaleVO> getProductDate(String p_name) {
 		// ArrayList배열 생성
@@ -79,7 +230,7 @@ public class SaleDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		SimpleDateFormat format12 = new SimpleDateFormat("yyyy");
 		Date time23 = new Date();
 		String year = format12.format(time23);
@@ -87,7 +238,7 @@ public class SaleDAO {
 		try {
 			con = DBUtil.getConnection();
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1, year+"-"+month);
+			pstmt.setString(1, year + "-" + month);
 			pstmt.setString(2, e_code);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {

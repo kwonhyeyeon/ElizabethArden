@@ -24,6 +24,7 @@
 	</HBox>
 	
 	<TableView fx:id="productSalesStatus"/>	
+	<Label fx:id="productname"/>
 	<Label fx:id="productStatus"/>
 	<Label fx:id="productStatus2"/>
 	

@@ -23,7 +23,15 @@ public class SaleVO {
 	}
 	
 	
-	
+	// 수량과 총액을 받는 생성자
+	public SaleVO(int sr_ea, int sr_total) {
+		super();
+		this.sr_ea = sr_ea;
+		this.sr_total = sr_total;
+	}
+
+
+
 	// 직원별 판매현황을 담아주는 생성자
 	public SaleVO(String p_code, String p_name, String sr_state, int sr_ea, int p_price, int sr_total,
 			String build_date) {
