@@ -231,7 +231,7 @@ public class OrderTabController implements Initializable {
 			OrderVO ovo = null;
 			for (int index = 0; index < list.size(); index++) {
 				ovo = new OrderVO(list.get(index).getP_code(), list.get(index).getP_name(), list.get(index).getOr_ea(),
-						list.get(index).getPrice(), list.get(index).getOr_total());
+						list.get(index).getPrice(), list.get(index).getOr_total(), list.get(index).getIn_out());
 				OrderList.addAll(ovo);
 			}
 
@@ -263,9 +263,6 @@ public class OrderTabController implements Initializable {
 
 		OrderDAO odao = new OrderDAO();
 		try {
-			odao.setProductTable(in_pea, in_pcode); // 테이블 수량 변경
-			odao.setY(today, in_pcode); // 입고 확인 변경
-
 			if (in_out.equals("Y")) {
 				Alert alert;
 				alert = new Alert(AlertType.WARNING);
@@ -286,6 +283,9 @@ public class OrderTabController implements Initializable {
 				alert.setResizable(false);
 				// 경고창을 보여주고 기다린다
 				alert.showAndWait();
+				
+				odao.setProductTable(in_pea, in_pcode); // 테이블 수량 변경
+				odao.setY(today, in_pcode); // 입고 확인 변경
 			}
 
 			productTotalList(); // 재고현황리스트

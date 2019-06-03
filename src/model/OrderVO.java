@@ -14,7 +14,7 @@ public class OrderVO {
 	String or_state; // 주문, 반품 상태
 	String or_date; // 주문 등록일자
 	String in_out; // 입출고
-	
+
 	public OrderVO() {
 		super();
 	}
@@ -32,7 +32,7 @@ public class OrderVO {
 		this.or_state = or_state;
 		this.or_date = or_date;
 		this.in_out = in_out;
-	}	
+	}
 
 	public OrderVO(String p_code) {
 		super();
@@ -47,7 +47,18 @@ public class OrderVO {
 		this.or_ea = or_ea;
 		this.price = price;
 		this.or_total = or_total;
-	}	
+	}
+
+	// 상품코드, 상품명, 수량, 단가, 총액, 입출고
+	public OrderVO(String p_code, String p_name, int or_ea, int price, int or_total, String in_out) {
+		super();
+		this.p_code = p_code;
+		this.p_name = p_name;
+		this.or_ea = or_ea;
+		this.price = price;
+		this.or_total = or_total;
+		this.in_out = in_out;
+	}
 
 	public OrderVO(String p_code, String p_name, int or_ea, int price, String or_bad, String or_date, String in_out) {
 		super();
@@ -146,5 +157,5 @@ public class OrderVO {
 				+ price + ", or_total=" + or_total + ", or_bad=" + or_bad + ", or_state=" + or_state + ", or_date="
 				+ or_date + ", in_out=" + in_out + "]";
 	}
-	
+
 }
