@@ -59,7 +59,7 @@
 		</padding>
 		<spacing>30</spacing>
 		<Button prefWidth="50" prefHeight="30" text="취 소" fx:id="btnCancle" />
-		<Button prefWidth="50" prefHeight="30" text="등 록" fx:id="btnEdit" />
+		<Button prefWidth="50" prefHeight="30" text="변 경" fx:id="btnEdit" />
 
 	</HBox>
 </VBox>
