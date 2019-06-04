@@ -256,7 +256,7 @@ public class StatusTabControllder implements Initializable {
 				// 콤보박스에서 선택된 월과 반환받은 직원코드를 매개변수에 넣고 리턴된 배열 list를 새로 생성한 배열에 넣어준다.
 				list = sdao.getEmployeeMonthDate(month.getValue().toString(), e_code);
 				if (list.size() == 0) {
-					
+
 					// 테이블에 있던 데이터를 지운다.
 					empMonthData.removeAll(empMonthData);
 					// 배열의 사이즈가 0일경우 (리턴된 데이터가 없다)
