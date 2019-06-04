@@ -75,6 +75,8 @@ public class SaleTabController implements Initializable {
 
 	private static int customer_point;
 
+	private int customerNo; // 선택된 고객의 고객코드
+
 	ObservableList<ProductVO> productDataList = FXCollections.observableArrayList(); // 재고현황 테이블
 	ObservableList<ProductVO> saleInsertDataList = FXCollections.observableArrayList(); // 판매입력 테이블
 	ObservableList<SaleVO> saleListDataList = FXCollections.observableArrayList(); // 판매내역 테이블
@@ -110,7 +112,6 @@ public class SaleTabController implements Initializable {
 			}
 
 		});
-
 		try {
 			productTotalList(); // 재고 현황 리스트
 			employeeName(); // 직원명 콤보박스
@@ -309,7 +310,6 @@ public class SaleTabController implements Initializable {
 
 	// 등록 버튼 이벤트 메소드
 	public void handlerBtnPRegiAction(ActionEvent event) {
-
 		try {
 			if (cbxE_name.getSelectionModel().getSelectedItem() == null) {
 				// 직원선택을 안하고 했을경우
@@ -520,7 +520,7 @@ public class SaleTabController implements Initializable {
 										sr_total, sr_state, Integer.parseInt(p_ea.getText()), returnReason, uspoint,
 										buildDate);
 								// 판매등록후 재고테이블 수량변경
-								srdao.setProductTable(-Integer.parseInt(p_ea.getText()),
+								srdao.setProductTable(Integer.parseInt(p_ea.getText()),
 										selectInsert.get(0).getP_code());
 								// 재고테이블 새로고침
 								productTotalList();
@@ -565,6 +565,17 @@ public class SaleTabController implements Initializable {
 							}
 						}
 					}
+				}
+				// tableCustomerList.setOnMouseClicked(event);
+				System.out.println(txtC_name.getText());
+				System.out.println(customerNo);
+				if (!(txtC_name.getText().equals("FREE"))) {
+					ArrayList<CustomerVO> list2 = new ArrayList();
+					list2 = cdao.customerInfo(customerNo);
+
+					lblCInfo.setText("주소 : " + list2.get(0).getC_address() + "\t생년월일 : " + list2.get(0).getC_birth()
+							+ "\t핸드폰번호 : " + list2.get(0).getC_phoneNumber() + "\t포인트 : " + list2.get(0).getC_point());
+
 				}
 			}
 		} catch (Exception e) {
@@ -619,7 +630,7 @@ public class SaleTabController implements Initializable {
 
 	// 재고 테이블뷰 더블 클릭 이벤트 메소드
 	public void handlerTableProductAction(MouseEvent event) {
-
+		employeeName();
 		if (event.getClickCount() == 2) { // 더블클릭시
 			try {
 
@@ -728,7 +739,7 @@ public class SaleTabController implements Initializable {
 
 						int selectedCustomerPoint = tableCustomerList.getSelectionModel().getSelectedItem()
 								.getC_point();
-
+						customerNo = tableCustomerList.getSelectionModel().getSelectedItem().getC_code();
 						if (!(selectedCustomerName.contentEquals(""))) {
 							dialog.close();
 
@@ -908,9 +919,8 @@ public class SaleTabController implements Initializable {
 				CustomerVO cvo = null;
 				CustomerDAO cdao = null;
 				boolean searchResult = false; // 검색 결과
-
 				cdao = new CustomerDAO();
-				searchList = cdao.getCustomerSearch(SearchName);
+				searchList = cdao.getCustomerSearch("");
 
 				// 여기다 복붙해
 				tableCustomerList.setOnMouseClicked(e -> {
@@ -929,20 +939,20 @@ public class SaleTabController implements Initializable {
 						int selectedCustomerPoint = tableCustomerList.getSelectionModel().getSelectedItem()
 								.getC_point();
 						customer_point = selectedCustomerPoint;
+						customerNo = tableCustomerList.getSelectionModel().getSelectedItem().getC_code();
+						CustomerDAO cdao2 = new CustomerDAO();
+						ArrayList<CustomerVO> list2 = new ArrayList();
+						list2 = cdao2.customerInfo(customerNo);
 						if (!(selectedCustomerName.contentEquals(""))) {
 							dialog.close();
 
 							txtC_name.setText(selectedCustomerName);
 							// 선택된 고객정보로 라벨과 텍스트상자 설정
 							lblCInfo.setText("주소 : " + selectedCustomerAddress + "\t생년월일 : " + selectedCustomerBirth
-									+ "\t핸드폰번호 : " + selectedCustomerPhonenumber + "\t포인트 : " + selectedCustomerPoint);
-							/*
-							 * txtC_name.setText(selectedCustomerName);
-							 * txtBirth.setText(selectedCustomerBirth);
-							 * txtPhone.setText(selectedCustomerPhonenumber);
-							 * txtAddress.setText(selectedCustomerAddress);
-							 */
-							taBigo.setText(seletedCustomerEtc);
+									+ "\t핸드폰번호 : " + selectedCustomerPhonenumber + "\t포인트 : "
+									+ list2.get(0).getC_point());
+
+							taBigo.setText(list2.get(0).getC_etc());
 
 						}
 					}
@@ -1105,7 +1115,6 @@ public class SaleTabController implements Initializable {
 	// 판매 내역 리스트
 	public void saleReturnTotalList() throws Exception {
 		saleListDataList.removeAll(productDataList);
-
 		SaleReturnDAO sdao = new SaleReturnDAO();
 		SaleVO svo = null;
 
@@ -1129,6 +1138,7 @@ public class SaleTabController implements Initializable {
 
 		try {
 			employeeName = edao.getEmployeeTotalList();
+			System.out.println("123");
 			cbxE_name.setItems(FXCollections.observableArrayList(employeeName));
 		} catch (Exception e) {
 			e.printStackTrace();

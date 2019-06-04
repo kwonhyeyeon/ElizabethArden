@@ -15,6 +15,66 @@ import model.ProductVO;
 
 public class CustomerDAO {
 
+	// 고객코드로 검색하여 고객정보를 뽑아내는 메소드
+	public ArrayList<CustomerVO> customerInfo(int customerNo) {
+		// CustomerVO Arraylist배열 생성
+		ArrayList<CustomerVO> list = new ArrayList<>();
+
+		// 고객 조회를 위한 sql문
+		String sql = "select c_code, c_name, to_char(c_birth, 'YYYY/MM/DD') as c_birth, c_phonenumber, c_email, c_address, c_point, c_etc from customer where c_code = ?";
+
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+
+		CustomerVO cvo = null;
+
+		try {
+			// DB 연결
+			con = DBUtil.getConnection();
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, customerNo);
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) { // 받아온 값을 VO에 값을 설정해준 후
+				cvo = new CustomerVO();
+				cvo.setC_code(rs.getInt("c_code"));
+				cvo.setC_name(rs.getString("c_name"));
+				cvo.setC_birth(rs.getString("c_birth"));
+				cvo.setC_phoneNumber(rs.getString("c_phonenumber"));
+				cvo.setC_email(rs.getString("c_email"));
+				cvo.setC_address(rs.getString("c_address"));
+				cvo.setC_point(rs.getInt("c_point"));
+				cvo.setC_etc(rs.getString("c_etc"));
+
+				// list에 해당 값들을 넣어준다
+				list.add(cvo);
+			}
+		} catch (SQLException se) {
+			System.out.println(se);
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+			try {
+				// 데이터베이스와의 연결에 사용되었던 오브젝트를 해제
+				if (rs != null) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException se) {
+			}
+
+		}
+
+		return list;
+
+	}
+
 	// 고객 등록 메소드
 	public boolean customerRegiste(CustomerVO ct) throws Exception {
 
@@ -38,7 +98,7 @@ public class CustomerDAO {
 			pstmt.setString(5, ct.getC_birth());
 			pstmt.setString(6, ct.getC_email());
 			pstmt.setString(7, ct.getC_etc());
-			
+
 			// 등록 성공시 1을 반환
 			int i = pstmt.executeUpdate();
 
@@ -75,9 +135,9 @@ public class CustomerDAO {
 				System.out.println(e);
 			}
 		}
-		
+
 		return registeResult;
-		
+
 	}
 
 	// 고객 조회 메소드
@@ -147,9 +207,9 @@ public class CustomerDAO {
 		Connection con = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
-		
+
 		int customerCode = 0; // 고객코드 초기화
-		
+
 		try {
 
 			con = DBUtil.getConnection(); // DBUtil 연결

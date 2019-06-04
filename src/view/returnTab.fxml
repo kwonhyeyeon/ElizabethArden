@@ -28,7 +28,7 @@ fx:controller="controller.ReturnTabController">
 	
 	<VBox>
 		<spacing>10</spacing>
-		<Label text="반품 등록" />
+		<Label text="출고 등록" />
 
 
 		<TableView prefWidth="972" prefHeight="300"
@@ -47,7 +47,7 @@ fx:controller="controller.ReturnTabController">
 			
 
 		</HBox>
-		<Label text="반품 현황" />
+		<Label text="출고 현황" />
 		<DatePicker fx:id="dpDate" />
 		<TableView prefWidth="840" prefHeight="300"
 			fx:id="tableReturnState"></TableView>

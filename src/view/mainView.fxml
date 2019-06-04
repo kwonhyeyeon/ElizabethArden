@@ -45,7 +45,7 @@
                </content>
             </Tab>
             
-            <Tab text="반 품" fx:id="rtrn">
+            <Tab text="출 고" fx:id="rtrn">
                <content>
                   <fx:include fx:id="returnTab" source="returnTab.fxml"/>
                </content>
