@@ -187,58 +187,66 @@ public class CustomerTabController implements Initializable {
 		// 고객 리스트 더블 클릭시 이벤트 핸들러
 		tableCustomer.setOnMouseClicked(event -> handlerTableCustomerAction(event));
 
+		
+		customerSearch();
 	}
 
 	// 수정 버튼 이벤트 메소드
 	public void handlerBtnEditAction(ActionEvent event) {
+		// 고객명 값이 없거나 길이가 5이상일 때
+		 if (txtCustomerCodePhone.getText().trim().equals("")) { // 핸드폰번호를 입력하지 않았을 때
+			Alert alert = new Alert(AlertType.WARNING);
+			alert.setTitle("고객 등록");
+			alert.setHeaderText("고객 핸드폰 번호 미입력");
+			alert.setContentText("다시 입력해주세요");
+			alert.showAndWait();
+		} else { // 모든 값이 들어가면
+			CustomerVO cvo = new CustomerVO();
+			CustomerDAO cdao = new CustomerDAO();
+			boolean customerUpdateSucess = false; // 고객 정보 수정 결과값
 
-		CustomerVO cvo = new CustomerVO();
-		CustomerDAO cdao = new CustomerDAO();
-		boolean customerUpdateSucess = false; // 고객 정보 수정 결과값
+			try {
 
-		try {
+				// 텍스트필드에서 각 값들을 가져와 cvo에 저장
+				cvo.setC_phoneNumber(txtCustomerCodePhone.getText());
+				cvo.setC_address(txtCustomerAddress.getText());
+				cvo.setC_email(txtCustomerEmail.getText());
+				cvo.setC_etc(txtAreaEtc.getText());
+				cvo.setC_code(Integer.parseInt(txtCustomerCode.getText()));
 
-			// 텍스트필드에서 각 값들을 가져와 cvo에 저장
-			cvo.setC_phoneNumber(txtCustomerCodePhone.getText());
-			cvo.setC_address(txtCustomerAddress.getText());
-			cvo.setC_email(txtCustomerEmail.getText());
-			cvo.setC_etc(txtAreaEtc.getText());
-			cvo.setC_code(Integer.parseInt(txtCustomerCode.getText()));
+				// 저장된 값을 dao에 넣어 return값 반환
+				customerUpdateSucess = cdao.getCustomerUpdate(cvo.getC_phoneNumber(), cvo.getC_address(),
+						cvo.getC_email(), cvo.getC_etc(), cvo.getC_code());
 
-			// 저장된 값을 dao에 넣어 return값 반환
-			customerUpdateSucess = cdao.getCustomerUpdate(cvo.getC_phoneNumber(), cvo.getC_address(), cvo.getC_email(),
-					cvo.getC_etc(), cvo.getC_code());
+				// 등록이 성공하였을 경우
+				if (customerUpdateSucess) {
+					// 닫기 버튼을 호출하여 창을 닫아준다
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("고객 정보 수정");
+					alert.setHeaderText("고객 정보 수정 성공");
+					alert.setContentText(txtCustomerName.getText() + "고객의 정보가 수정되었습니다");
+					alert.showAndWait();
+				}
 
-			// 등록이 성공하였을 경우
-			if (customerUpdateSucess) {
-				// 닫기 버튼을 호출하여 창을 닫아준다
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("고객 정보 수정");
-				alert.setHeaderText("고객 정보 수정 성공");
-				alert.setContentText(txtCustomerName.getText() + "고객의 정보가 수정되었습니다");
-				alert.showAndWait();
+				// 고객조회, 구매내역 테이블 초기화
+				customerDataList.removeAll(customerDataList);
+				buyDataList.removeAll(buyDataList);
+
+				txtCustomerCode.clear(); // 고객 코드 텍스트필드 비워줌
+				handlerBtnCancleAction(event); // 취소 버튼 메소드 호출
+
+				// 다음 고객 등록을 위해 각 창들을 활성화 시켜준다
+				txtCustomerName.setDisable(false); // 고객명 텍스트필드 활성화
+				dpCustomerBirth.setDisable(false); // 생년월일 데이트피커 활성화
+
+				// 다음 고객 등록을 위해 다시 고객시퀀스를 받아 텍스트필드에 설정해준다
+				txtCustomerCode.setText(cdao.getCustomerCode() + "");
+
+				btnEdit.setDisable(true); // 수정 버튼 비활성화
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			// 고객조회, 구매내역 테이블 초기화
-			customerDataList.removeAll(customerDataList);
-			buyDataList.removeAll(buyDataList);
-
-			txtCustomerCode.clear(); // 고객 코드 텍스트필드 비워줌
-			handlerBtnCancleAction(event); // 취소 버튼 메소드 호출
-
-			// 다음 고객 등록을 위해 각 창들을 활성화 시켜준다
-			txtCustomerName.setDisable(false); // 고객명 텍스트필드 활성화
-			dpCustomerBirth.setDisable(false); // 생년월일 데이트피커 활성화
-
-			// 다음 고객 등록을 위해 다시 고객시퀀스를 받아 텍스트필드에 설정해준다
-			txtCustomerCode.setText(cdao.getCustomerCode() + "");
-
-			btnEdit.setDisable(true); // 수정 버튼 비활성화
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-
 	}
 
 	// 고객 리스트 더블 클릭 이벤트
@@ -354,7 +362,7 @@ public class CustomerTabController implements Initializable {
 			}
 
 		} else { // 검색어가 있으면
-			
+
 			customerDataList.removeAll(customerDataList);
 
 			// ArrayList 배열 생성
@@ -370,7 +378,7 @@ public class CustomerTabController implements Initializable {
 
 				if (searchList != null) { // null값이 아니면
 					// 배열의 사이즈를 rowCount에 저장
-					int rowCount = searchList.size(); 
+					int rowCount = searchList.size();
 					txtC_name.clear(); // 검색어 필드 비워줌
 
 					for (int index = 0; index < rowCount; index++) {
@@ -421,12 +429,6 @@ public class CustomerTabController implements Initializable {
 				alert.setHeaderText("고객 핸드폰 번호 미입력");
 				alert.setContentText("다시 입력해주세요");
 				alert.showAndWait();
-			} else if (txtCustomerAddress.getText().trim().equals("")) { // 주소를 입력하지 않았을 때
-				Alert alert = new Alert(AlertType.WARNING);
-				alert.setTitle("고객 등록");
-				alert.setHeaderText("고객 주소 미입력");
-				alert.setContentText("다시 입력해주세요");
-				alert.showAndWait();
 			} else { // 모든 값이 들어가면
 				// 각 값들을 cvo 넣어 저장
 				cvo = new CustomerVO(Integer.parseInt(txtCustomerCode.getText().trim()),
@@ -439,6 +441,7 @@ public class CustomerTabController implements Initializable {
 				handlerBtnCancleAction(event); // 취소 버튼 이벤트 호출
 				txtCustomerCode.setText(cdao.getCustomerCode() + ""); // 다음 고객코드를 필드에 설정해준다
 			}
+			customerSearch();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
