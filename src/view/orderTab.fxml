@@ -31,7 +31,7 @@
 
 	<VBox>
 		<spacing>10</spacing>
-		<Label text="주문 등록" />
+		<Label text="입고 등록" />
 
 		<TableView prefWidth="972" prefHeight="300"
 			fx:id="tableOrder"></TableView>
@@ -48,7 +48,7 @@
 
 		</HBox>
 
-		<Label text="주문 현황" />
+		<Label text="입고 현황" />
 		<DatePicker fx:id="dpDate" />
 		<TableView prefWidth="840" prefHeight="300"
 			fx:id="tableOrderList"></TableView>

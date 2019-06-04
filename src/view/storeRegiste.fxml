@@ -27,14 +27,14 @@
 		<padding>
 			<Insets top="20" />
 		</padding>
-		<Label text="매장코드     " />
+		<Label prefWidth="80" text="매장코드" />
 		<TextField fx:id="txtStoreCode" />
 	</HBox>
 	<HBox alignment="CENTER">
 		<padding>
 			<Insets top="20" />
 		</padding>
-		<Label text="비밀번호     " />
+		<Label prefWidth="80" text="비밀번호" />
 		<PasswordField promptText="숫자 4자리" fx:id="txtPassword" />
 	</HBox>
 
@@ -42,7 +42,7 @@
 		<padding>
 			<Insets top="20" />
 		</padding>
-		<Label text="매장명        " />
+		<Label prefWidth="80" text="매장명" />
 		<TextField fx:id="txtStoreName" />
 	</HBox>
 
@@ -50,7 +50,7 @@
 		<padding>
 			<Insets top="20" />
 		</padding>
-		<Label text="주 소           " />
+		<Label prefWidth="80" text="주 소" />
 		<TextField fx:id="txtStoreAddress" />
 	</HBox>
 
@@ -59,7 +59,7 @@
 		<padding>
 			<Insets top="20" />
 		</padding>
-		<Label text="매장번호     " />
+		<Label prefWidth="80" text="매장 전화번호" />
 		<TextField promptText="-제외 숫자만 입력" fx:id="txtStoreTel" />
 	</HBox>
 
@@ -68,7 +68,7 @@
 			<Insets top="30" />
 		</padding>
 		<spacing>50</spacing>
-		<Button text="취   소" fx:id="btnCancle" />
+		<Button text="취  소" fx:id="btnCancle" />
 		<Button text="등  록" fx:id="btnRegiste" />
 
 	</HBox>

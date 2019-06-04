@@ -39,7 +39,7 @@
                </content>
             </Tab>
             
-            <Tab text="주 문" fx:id="order">
+            <Tab text="입 고" fx:id="order">
                <content>
                   <fx:include fx:id="orderTab" source="orderTab.fxml"/>
                </content>
